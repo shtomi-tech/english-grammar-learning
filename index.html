@@ -39,6 +39,16 @@
     .step:hover:not(.current) { background:#e2e7ee; }
     .step.current { background:var(--blue); color:#fff; cursor:default; }
     .step.done { background:#dce9fa; color:var(--blue-dark); }
+    .dashboard-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin:0 0 28px; }
+    .kpi-card { padding:16px 18px; border:1px solid var(--line); border-radius:12px; background:var(--soft); }
+    .kpi-card .kpi-value { margin:0 0 4px; font-size:1.5rem; font-weight:800; color:var(--blue-dark); line-height:1.25; }
+    .kpi-card .kpi-value .kpi-unit { font-size:.85rem; font-weight:700; color:var(--muted); }
+    .kpi-card .kpi-label { margin:0; font-size:.85rem; font-weight:700; color:var(--muted); }
+    .kpi-card.kpi-primary { background:var(--blue); border-color:var(--blue); }
+    .kpi-card.kpi-primary .kpi-value, .kpi-card.kpi-primary .kpi-value .kpi-unit { color:#fff; }
+    .kpi-card.kpi-primary .kpi-label { color:#dbe6fb; }
+    .kpi-card.kpi-ok { background:var(--ok-bg); border-color:var(--ok); }
+    .kpi-card.kpi-ok .kpi-value { color:var(--ok); }
     .formula, blockquote { margin:20px 0; padding:16px 18px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 10px 10px 0; }
     .formula { font-family:ui-monospace,"Cascadia Mono",monospace; font-weight:700; overflow-wrap:anywhere; }
     blockquote p:last-child { margin-bottom:0; }

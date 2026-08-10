@@ -213,6 +213,23 @@ function courseMastered(course) {
   return course.lessons.every(lessonMastered);
 }
 
+function courseProgressStats(course) {
+  const total = course.lessons.length;
+  const completed = course.lessons.filter(lessonCompleted).length;
+  const mastered = course.lessons.filter(lessonMastered).length;
+  return { total, completed, mastered };
+}
+
+function finalStatusFor(course) {
+  if (!courseMastered(course)) {
+    const remaining = course.lessons.length - course.lessons.filter(lessonMastered).length;
+    return { label: "未解放", detail: `あと${remaining}単元でマスター`, tone: "" };
+  }
+  const record = state.finalChecks[course.id];
+  if (record?.cleared) return { label: "CLEAR", detail: `過去最高 ${record.bestScore}/${record.bestTotal}問`, tone: "ok" };
+  return { label: "挑戦可能", detail: "修了テストに挑戦できます", tone: "" };
+}
+
 function allCourseQuestions(course) {
   return course.lessons.flatMap(lesson => lesson.questions.map(question => ({ lesson, question })));
 }
@@ -468,7 +485,24 @@ function render(resetScroll = false) {
 
 function renderOverview(content) {
   const course = currentCourse();
+  const { total, completed, mastered } = courseProgressStats(course);
+  const finalStatus = finalStatusFor(course);
   content.innerHTML = `
+    <p class="eyebrow">${course.title}の学習状況</p>
+    <div class="dashboard-kpis">
+      <div class="kpi-card kpi-primary">
+        <p class="kpi-value">${completed} <span class="kpi-unit">/ ${total}単元</span></p>
+        <p class="kpi-label">学習が完了した単元</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-value">${mastered} <span class="kpi-unit">/ ${total}単元</span></p>
+        <p class="kpi-label">全問正解でマスター済み</p>
+      </div>
+      <div class="kpi-card ${finalStatus.tone === "ok" ? "kpi-ok" : ""}">
+        <p class="kpi-value">${finalStatus.label}</p>
+        <p class="kpi-label">修了テスト・${finalStatus.detail}</p>
+      </div>
+    </div>
     <h2>${course.overview.title}</h2>
     ${course.overview.html}
     <div class="actions"><button class="primary" data-action="next">${course.lessons[0].title}へ</button></div>`;
