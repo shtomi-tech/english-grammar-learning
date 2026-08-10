@@ -9,9 +9,10 @@
     * { box-sizing: border-box; }
     body { margin:0; min-height:100vh; background:#f1f4f8; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.75; }
     main { width:min(720px, calc(100% - 32px)); margin:32px auto; }
-    header, article { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 30px rgb(24 36 59 / .07); }
+    header, article, footer.page-nav { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 30px rgb(24 36 59 / .07); }
     header { padding:18px 48px 14px; margin-bottom:12px; }
-    article { padding:clamp(24px, 5vw, 48px); }
+    article { padding:clamp(24px, 5vw, 48px); margin-bottom:12px; }
+    footer.page-nav { padding:14px 48px; }
     h1 { margin:0 0 8px; font-size:clamp(1.15rem, 3.5vw, 1.4rem); line-height:1.3; text-wrap:balance; }
     h2 { margin:0 0 20px; font-size:clamp(1.35rem, 4vw, 1.7rem); line-height:1.45; text-wrap:balance; }
     p { margin:0 0 1em; }
@@ -105,7 +106,8 @@
     @media (max-width:520px) {
       main { margin:16px auto; }
       header { padding:14px 20px 10px; margin-bottom:10px; }
-      article { padding:24px 20px; }
+      article { padding:24px 20px; margin-bottom:10px; }
+      footer.page-nav { padding:12px 20px; }
       .progress-details > summary { display:list-item; min-height:44px; padding:8px 0; }
       .actions { flex-direction:column-reverse; }
       .actions button { width:100%; }
@@ -121,6 +123,9 @@
       <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
       <p id="current-path" class="current-path"></p>
       <p id="save-status" class="save-status">端末に自動保存済み</p>
+    </header>
+    <article id="content" tabindex="-1"></article>
+    <footer class="page-nav">
       <div id="review-banner" class="review-banner" hidden>
         <div id="review-due-row" class="review-due-row">
           <span data-review-count></span>
@@ -136,8 +141,7 @@
         <summary>学習の構成を見る</summary>
         <ol id="steps" class="steps" aria-label="学習の構成と進捗"></ol>
       </details>
-    </header>
-    <article id="content" tabindex="-1"></article>
+    </footer>
   </main>
   <script src="content.js"></script>
   <script src="vendor/harness/cloud.js"></script>
