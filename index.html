@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>仮定法を学ぶ</title>
+  <style>
+    :root { color-scheme: light; --ink:#18243b; --muted:#5c687a; --line:#d9e0ea; --blue:#2459a9; --blue-dark:#18417f; --soft:#eef3fa; --ok:#176b45; --ok-bg:#e9f7ef; --ng:#9b2c2c; --ng-bg:#fff0f0; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; background:#f1f4f8; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.75; }
+    main { width:min(720px, calc(100% - 32px)); margin:32px auto; }
+    header, article { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 30px rgb(24 36 59 / .07); }
+    header { padding:24px 48px 20px; margin-bottom:16px; }
+    article { padding:clamp(24px, 5vw, 48px); }
+    h1 { margin:0 0 14px; font-size:clamp(1.55rem, 5vw, 2rem); line-height:1.35; text-wrap:balance; }
+    h2 { margin:0 0 20px; font-size:clamp(1.35rem, 4vw, 1.7rem); line-height:1.45; text-wrap:balance; }
+    p { margin:0 0 1em; }
+    .eyebrow { margin:0 0 4px; color:var(--blue); font-weight:700; font-size:.88rem; }
+    .current-path { margin:0 0 2px; font-weight:800; }
+    .save-status { margin:0 0 14px; color:var(--muted); font-size:.88rem; }
+    .progress-details summary { display:none; color:var(--blue); font-weight:700; cursor:pointer; }
+    .progress-details:not([open]) > .steps { display:block; }
+    .steps, .steps ol { margin:0; padding:0; list-style:none; }
+    .steps ol { margin:6px 0 6px 12px; padding-left:16px; border-left:2px solid var(--line); }
+    .branch-label { display:block; margin-top:6px; color:var(--ink); font-weight:800; }
+    .step { display:block; margin:5px 0; padding:7px 10px; border-radius:8px; background:#edf0f4; color:var(--muted); font-size:.88rem; font-weight:700; }
+    .step.current { background:var(--blue); color:#fff; }
+    .step.done { background:#dce9fa; color:var(--blue-dark); }
+    .formula, blockquote { margin:20px 0; padding:16px 18px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 10px 10px 0; }
+    .formula { font-family:ui-monospace,"Cascadia Mono",monospace; font-weight:700; overflow-wrap:anywhere; }
+    blockquote p:last-child { margin-bottom:0; }
+    .note { color:var(--muted); font-size:.95rem; }
+    .actions { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:30px; }
+    button { min-height:48px; padding:10px 20px; border:2px solid transparent; border-radius:10px; font:inherit; font-weight:700; cursor:pointer; }
+    button:focus-visible, summary:focus-visible { outline:3px solid #e0a400; outline-offset:3px; }
+    .primary { margin-left:auto; background:var(--blue); color:#fff; }
+    .primary:hover { background:var(--blue-dark); }
+    .secondary { background:#fff; color:var(--blue); border-color:var(--blue); }
+    .choices { display:grid; gap:10px; margin:22px 0; }
+    .choice { width:100%; text-align:left; background:#fff; color:var(--ink); border-color:var(--line); }
+    .choice:hover:not(:disabled) { border-color:var(--blue); background:var(--soft); }
+    .choice:disabled { cursor:default; opacity:1; }
+    .choice.correct { border-color:var(--ok); background:var(--ok-bg); color:var(--ok); }
+    .choice.wrong { border-color:var(--ng); background:var(--ng-bg); color:var(--ng); }
+    .feedback { padding:16px 18px; border-radius:10px; }
+    .feedback.ok { background:var(--ok-bg); color:#104c33; }
+    .feedback.ng { background:var(--ng-bg); color:#732020; }
+    .feedback strong { display:block; margin-bottom:4px; }
+    .question-count { color:var(--muted); font-weight:700; }
+    .score { font-size:2.25rem; font-weight:800; color:var(--blue); }
+    .review-summary { margin:20px 0; padding:16px 18px; background:var(--soft); border-radius:10px; }
+    .review-summary h3 { margin:0 0 10px; font-size:1rem; }
+    .review-list { margin:0; padding-left:22px; }
+    .review-list li + li { margin-top:10px; }
+    .review-list span { display:block; }
+    @media (max-width:520px) {
+      main { margin:16px auto; }
+      header, article { padding:24px 20px; }
+      .progress-details summary { display:list-item; min-height:44px; padding:8px 0; }
+      .progress-details:not([open]) > .steps { display:none; }
+      .actions { flex-direction:column-reverse; }
+      .actions button { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">英文法ミニレッスン</p>
+      <h1>仮定法</h1>
+      <p id="current-path" class="current-path"></p>
+      <p class="save-status">端末に自動保存済み</p>
+      <details class="progress-details">
+        <summary>学習の構成を見る</summary>
+        <ol id="steps" class="steps" aria-label="学習の構成と進捗"></ol>
+      </details>
+    </header>
+    <article id="content" tabindex="-1"></article>
+  </main>
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
