@@ -14,6 +14,7 @@ const FINAL_PASS_RATE = 0.8;
 
 const APP_ID = "english-grammar-learning";
 const CONFIG_PATH = "config.json";
+const CLOUD_STUDENT_STAMP_KEY = storageKey + ".cloudStudent";
 let cloud = null;
 
 let questionIndex = {};
@@ -770,9 +771,20 @@ async function boot() {
     onStatus: (message, tone) => updateSaveStatus(message, tone),
   });
   const session = await cloud.init();
-  if (session.enabled && mergeCloudProgress(loadedFromCloud)) {
-    render(true);
+  if (!session.enabled) return;
+
+  // 空のクラウド保存＝端末側を保持、で正しいのは「同じ生徒が続きから」の場合だけ。
+  // 直前に別の生徒として同期していた端末なら、その生徒の進捗を新しい生徒に
+  // 付け替えてしまうため、既定状態から始め直す（取り違え防止）。
+  let changed = mergeCloudProgress(loadedFromCloud);
+  const stampedStudentId = localStorage.getItem(CLOUD_STUDENT_STAMP_KEY);
+  if (!changed && stampedStudentId && stampedStudentId !== session.studentId) {
+    state = { ...defaultState };
+    stages = stagesFor(currentCourse());
+    changed = true;
   }
+  localStorage.setItem(CLOUD_STUDENT_STAMP_KEY, session.studentId);
+  if (changed) render(true);
 }
 
 boot();
