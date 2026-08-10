@@ -50,6 +50,7 @@
 
 - 共有URL（`?s=<id>&t=<token>`）があり `config.json` が揃うときだけ有効にする。無ければ完全にLocalStorageのみの匿名動作のままにする（`vendor/harness/cloud.js` は無回帰を前提に設計されている）。
 - クラウドから届いた進捗は、そのまま `state` に差し替えない。`defaultState` で欠損フィールドを埋めたうえで、通常のロード直後と同じ正規化（`clampStage` → `backfillVisitedLessons` → `sanitizePersistedSessions` → `syncContentVersions`）を通す。これを省くと、今回追加した `review` / `finalChecks` 等を持たない古いクラウド保存データを読み込んだときに未定義参照でクラッシュする。
+- クラウドに保存履歴が無い（新規発行の生徒URL）場合、`app_load_progress` は空オブジェクトを返す。この場合は端末側の状態をそのまま保持し、`state` を差し替えない。差し替えてしまうと、匿名時代に端末へ貯めていた進捗を空状態で上書きしてしまう。クラウドへの反映は次の `saveState()`（＝生徒の次の操作）を待つ。
 - クラウド保存のトリガーは `saveState()` の1箇所にまとめる。呼び出し側（各アクションハンドラ）はクラウドの有無を意識しない。
 - 進捗保存の表示（ヘッダーの `#save-status`）は、共有URLで有効な間は harness の `onStatus` が渡す文言（保存中・保存済み・失敗）にその場で置き換える。共有URLが無い匿名時は「端末に自動保存済み」のまま変更しない。
 - 端末内のLocalStorageは生徒ごとに分離しない（生徒プロファイル切替UIは持たない）。同じ端末を複数の生徒で使う場合は、各生徒の共有URLでアクセスする運用を前提にする。

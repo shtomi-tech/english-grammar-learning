@@ -519,16 +519,23 @@ const curriculum = {
 };
 
 if (typeof process !== "undefined" && process.argv.includes("--check")) {
+  const failures = [];
+  const check = (condition, message) => { if (!condition) failures.push(message); };
   const courses = curriculum.courses;
   const lessons = courses.flatMap(course => course.lessons);
-  console.assert(courses.length > 0, "文法カテゴリが1件以上あること");
-  console.assert(new Set(courses.map(course => course.id)).size === courses.length, "カテゴリIDが重複しないこと");
-  console.assert(lessons.length > 0, "単元が1件以上あること");
-  console.assert(new Set(lessons.map(lesson => lesson.id)).size === lessons.length, "単元IDが重複しないこと");
-  console.assert(lessons.every(lesson => lesson.questions.length > 0), "各単元に問題があること");
-  console.assert(lessons.flatMap(lesson => lesson.questions).every(question => question.choices.length === 4 && question.answer >= 0 && question.answer < 4), "全問が有効な4択であること");
+  check(courses.length > 0, "文法カテゴリが1件以上あること");
+  check(new Set(courses.map(course => course.id)).size === courses.length, "カテゴリIDが重複しないこと");
+  check(lessons.length > 0, "単元が1件以上あること");
+  check(new Set(lessons.map(lesson => lesson.id)).size === lessons.length, "単元IDが重複しないこと");
+  check(lessons.every(lesson => lesson.questions.length > 0), "各単元に問題があること");
+  check(lessons.flatMap(lesson => lesson.questions).every(question => question.choices.length === 4 && question.answer >= 0 && question.answer < 4), "全問が有効な4択であること");
   const allQuestions = lessons.flatMap(lesson => lesson.questions);
-  console.assert(allQuestions.every(question => typeof question.id === "string" && question.id.length > 0), "全問にIDがあること");
-  console.assert(new Set(allQuestions.map(question => question.id)).size === allQuestions.length, "問題IDが重複しないこと");
-  console.log("CONTENT_CHECK_OK");
+  check(allQuestions.every(question => typeof question.id === "string" && question.id.length > 0), "全問にIDがあること");
+  check(new Set(allQuestions.map(question => question.id)).size === allQuestions.length, "問題IDが重複しないこと");
+  if (failures.length > 0) {
+    failures.forEach(message => console.error(`CONTENT_CHECK_NG: ${message}`));
+    process.exitCode = 1;
+  } else {
+    console.log("CONTENT_CHECK_OK");
+  }
 }
