@@ -12,6 +12,10 @@ const LEITNER_LADDER = [1, 3, 7, 14]; // 正解のたびに進む復習間隔（
 const REVIEW_SESSION_SIZE = 10;
 const FINAL_PASS_RATE = 0.8;
 
+const APP_ID = "english-grammar-learning";
+const CONFIG_PATH = "config.json";
+let cloud = null;
+
 let questionIndex = {};
 function buildQuestionIndex() {
   questionIndex = {};
@@ -108,6 +112,28 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
+  if (cloud && cloud.isEnabled()) cloud.queueSave();
+}
+
+function updateSaveStatus(message, tone) {
+  const el = document.querySelector("#save-status");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.toggle("save-status-ng", tone === "ng");
+}
+
+// クラウドから届いた進捗をそのまま state に差し替えない。今週追加した review / finalChecks /
+// reviewSession / finalRun 等のフィールドを欠いた古い保存データが来た場合、
+// defaultState でまず欠損を埋めてから、既存のロード直後と同じ正規化（クランプ・破棄・版チェック）を通す。
+function mergeCloudProgress(raw) {
+  const source = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+  const courseId = validCourseId(source.courseId);
+  state = { ...defaultState, ...source, courseId };
+  state.stage = clampStage(state.stage, courseId);
+  stages = stagesFor(currentCourse());
+  backfillVisitedLessons();
+  sanitizePersistedSessions();
+  syncContentVersions();
 }
 
 function currentCourse() {
@@ -723,5 +749,26 @@ document.addEventListener("click", event => {
   }
 });
 
-syncContentVersions();
-render();
+async function boot() {
+  syncContentVersions();
+  render();
+
+  // 共有URL（?s=&t=）があるときだけクラウド同期を試みる。無ければ完全に
+  // ローカル動作のまま（harness の設計どおり no-op）。
+  if (typeof window.createCloud !== "function") return;
+  let loadedFromCloud = null;
+  cloud = window.createCloud({
+    appId: APP_ID,
+    configPath: CONFIG_PATH,
+    getPayload: () => state,
+    applyLoaded: (progress) => { loadedFromCloud = progress; },
+    onStatus: (message, tone) => updateSaveStatus(message, tone),
+  });
+  const session = await cloud.init();
+  if (session.enabled) {
+    mergeCloudProgress(loadedFromCloud);
+    render(true);
+  }
+}
+
+boot();

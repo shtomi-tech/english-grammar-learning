@@ -18,6 +18,7 @@
     .eyebrow { margin:0 0 4px; color:var(--blue); font-weight:700; font-size:.88rem; }
     .current-path { margin:0 0 2px; font-weight:800; }
     .save-status { margin:0 0 14px; color:var(--muted); font-size:.88rem; }
+    .save-status-ng { color:var(--ng); font-weight:700; }
     .course-selector { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 14px; }
     .course-selector-label { color:var(--muted); font-size:.88rem; font-weight:700; }
     .course-tab { min-height:44px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--blue); font-size:.88rem; }
@@ -95,7 +96,7 @@
       <h1 id="course-title">仮定法</h1>
       <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
       <p id="current-path" class="current-path"></p>
-      <p class="save-status">端末に自動保存済み</p>
+      <p id="save-status" class="save-status">端末に自動保存済み</p>
       <div id="review-banner" class="review-banner" hidden>
         <span data-review-count></span>
         <button type="button" class="secondary" data-action="start-review">復習を始める</button>
@@ -108,6 +109,7 @@
     <article id="content" tabindex="-1"></article>
   </main>
   <script src="content.js"></script>
+  <script src="vendor/harness/cloud.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

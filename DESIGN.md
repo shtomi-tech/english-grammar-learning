@@ -46,6 +46,14 @@
 
 - 保存キー（`englishGrammarLearning.v3`）はこの機能追加で変更しない。`review` `reviewSession` `finalChecks` `finalRun` は新規の追加フィールドとして扱い、既存の保存データはそのまま読み込める。
 
+## 生徒別進捗（クラウド同期）
+
+- 共有URL（`?s=<id>&t=<token>`）があり `config.json` が揃うときだけ有効にする。無ければ完全にLocalStorageのみの匿名動作のままにする（`vendor/harness/cloud.js` は無回帰を前提に設計されている）。
+- クラウドから届いた進捗は、そのまま `state` に差し替えない。`defaultState` で欠損フィールドを埋めたうえで、通常のロード直後と同じ正規化（`clampStage` → `backfillVisitedLessons` → `sanitizePersistedSessions` → `syncContentVersions`）を通す。これを省くと、今回追加した `review` / `finalChecks` 等を持たない古いクラウド保存データを読み込んだときに未定義参照でクラッシュする。
+- クラウド保存のトリガーは `saveState()` の1箇所にまとめる。呼び出し側（各アクションハンドラ）はクラウドの有無を意識しない。
+- 進捗保存の表示（ヘッダーの `#save-status`）は、共有URLで有効な間は harness の `onStatus` が渡す文言（保存中・保存済み・失敗）にその場で置き換える。共有URLが無い匿名時は「端末に自動保存済み」のまま変更しない。
+- 端末内のLocalStorageは生徒ごとに分離しない（生徒プロファイル切替UIは持たない）。同じ端末を複数の生徒で使う場合は、各生徒の共有URLでアクセスする運用を前提にする。
+
 ## 教材データ
 
 - 教材本文と問題は `content.js`、画面遷移と採点は `app.js` に分ける。
