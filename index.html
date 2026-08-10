@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>仮定法を学ぶ</title>
+  <title>英文法を学ぶ</title>
   <style>
     :root { color-scheme: light; --ink:#18243b; --muted:#5c687a; --line:#d9e0ea; --blue:#2459a9; --blue-dark:#18417f; --soft:#eef3fa; --ok:#176b45; --ok-bg:#e9f7ef; --ng:#9b2c2c; --ng-bg:#fff0f0; }
     * { box-sizing: border-box; }
@@ -18,6 +18,10 @@
     .eyebrow { margin:0 0 4px; color:var(--blue); font-weight:700; font-size:.88rem; }
     .current-path { margin:0 0 2px; font-weight:800; }
     .save-status { margin:0 0 14px; color:var(--muted); font-size:.88rem; }
+    .course-selector { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 14px; }
+    .course-selector-label { color:var(--muted); font-size:.88rem; font-weight:700; }
+    .course-tab { min-height:44px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--blue); font-size:.88rem; }
+    .course-tab.current { border-color:var(--blue); background:var(--blue); color:#fff; cursor:default; }
     .progress-details > summary { display:none; color:var(--blue); font-weight:700; cursor:pointer; }
     .steps, .steps ol { margin:0; padding:0; list-style:none; }
     .steps ol { margin:6px 0 6px 12px; padding-left:16px; border-left:2px solid var(--line); }
@@ -86,7 +90,8 @@
   <main>
     <header>
       <p class="eyebrow">英文法ミニレッスン</p>
-      <h1>仮定法</h1>
+      <h1 id="course-title">仮定法</h1>
+      <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
       <p id="current-path" class="current-path"></p>
       <p class="save-status">端末に自動保存済み</p>
       <details class="progress-details">

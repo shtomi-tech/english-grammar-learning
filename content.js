@@ -1,4 +1,4 @@
-const curriculum = {
+const subjunctiveCourse = {
   overview: {
     title: "仮定法とは",
     html: `
@@ -345,10 +345,151 @@ const curriculum = {
   ]
 };
 
+const curriculum = {
+  courses: [
+    {
+      id: "subjunctive",
+      title: "仮定法",
+      overview: subjunctiveCourse.overview,
+      lessons: subjunctiveCourse.lessons
+    },
+    {
+      id: "participles",
+      title: "分詞",
+      overview: {
+        title: "分詞とは",
+        html: `
+          <p>分詞は、動詞の性質を残しながら、名詞を説明したり、状態や感情を表したりする形です。</p>
+          <p>現在分詞は <code>動詞の原形 + -ing</code>、過去分詞は動詞ごとの過去分詞形を使います。名詞が動作をする側なら現在分詞、動作をされる側なら過去分詞を選ぶのが基本です。</p>
+          <blockquote><p>a sleeping baby（眠っている赤ちゃん）<br>a broken window（壊れた窓）</p></blockquote>
+          <p>分詞の形容詞的用法では、分詞だけでなく、分詞に続く語句全体で名詞を説明することもあります。まず「分詞と名詞の関係」を確認してから形を選びます。</p>
+          <p class="note">分詞は動名詞や進行形と同じ <code>-ing</code> の形になることがあります。文中で何を説明・補足しているかを見分けることが大切です。</p>`
+      },
+      lessons: [
+        {
+          id: "participles-as-adjectives-present",
+          version: 1,
+          title: "分詞の形容詞的用法（現在分詞）",
+          html: `
+            <p>現在分詞は、動詞の原形に <code>-ing</code> を付けた形で、名詞を説明する形容詞のように使われます。説明される名詞が、その動作を「する側」であることがポイントです。</p>
+            <h3>名詞の前に置く場合</h3>
+            <p>現在分詞だけで名詞を説明するときは、通常、名詞の前に置きます。</p>
+            <blockquote><p>a sleeping baby<br>眠っている赤ちゃん</p></blockquote>
+            <blockquote><p>a barking dog<br>ほえている犬</p></blockquote>
+            <h3>名詞の後ろに置く場合</h3>
+            <p>現在分詞に目的語や副詞などが伴う場合は、名詞の後ろに置きます。</p>
+            <blockquote><p>the girl dancing on the stage<br>ステージで踊っている少女</p></blockquote>
+            <blockquote><p>the man standing by the door<br>ドアのそばに立っている男性</p></blockquote>
+            <p>名詞の後ろに置かれた現在分詞は、関係代名詞を使った文に戻せます。</p>
+            <blockquote><p>the girl dancing on the stage<br>= the girl who is dancing on the stage</p></blockquote>
+            <h3>動名詞や進行形との違い</h3>
+            <p><code>Swimming is fun.</code> の <code>Swimming</code> は動名詞、<code>The boy is swimming.</code> の <code>swimming</code> は進行形、<code>the swimming boy</code> の <code>swimming</code> は <code>boy</code> を説明する現在分詞です。</p>
+            <p class="note">現在分詞を見つけたら、説明されている名詞がその動作をしているかを確認します。</p>`,
+          questions: [
+            {
+              text: "Look at the baby (　　) in the crib.",
+              choices: ["slept", "sleeping", "sleep", "to sleep"],
+              answer: 1,
+              explanation: "baby が「眠っている」ので、現在分詞 sleeping を使って名詞を説明します。"
+            },
+            {
+              text: "The man (　　) by the door is my uncle.",
+              choices: ["stood", "standing", "stand", "to stand"],
+              answer: 1,
+              explanation: "standing by the door は「ドアのそばに立っている」という意味で、the man を後ろから説明しています。who is standing by the door を短くした形です。"
+            },
+            {
+              text: "次のうち、現在分詞が形容詞的に使われている文を選びなさい。",
+              choices: ["Swimming is fun.", "The boy is swimming.", "The swimming boy waved at me.", "He enjoys swimming."],
+              answer: 2,
+              explanation: "swimming が boy を説明しているため、現在分詞の形容詞的用法です。1と4は動名詞、2は進行形です。"
+            }
+          ]
+        },
+        {
+          id: "participles-as-adjectives-past",
+          version: 1,
+          title: "分詞の形容詞的用法（過去分詞）",
+          html: `
+            <p>過去分詞は、名詞を説明する形容詞のように使われます。説明される名詞が、動作を「される側」であることや、動作が完了した状態であることを表します。</p>
+            <p>過去分詞は <code>-ed</code> 形だけでなく、不規則変化もあります。</p>
+            <blockquote><p>broken（壊れた）・written（書かれた）・stolen（盗まれた）</p></blockquote>
+            <h3>名詞の前に置く場合</h3>
+            <blockquote><p>a broken window<br>壊れた窓</p></blockquote>
+            <blockquote><p>a stolen bicycle<br>盗まれた自転車</p></blockquote>
+            <h3>名詞の後ろに置く場合</h3>
+            <p>過去分詞に修飾語句が伴う場合は、名詞の後ろに置きます。</p>
+            <blockquote><p>a picture painted by my father<br>父によって描かれた絵</p></blockquote>
+            <blockquote><p>the books written in English<br>英語で書かれた本</p></blockquote>
+            <p>名詞の後ろに置かれた過去分詞は、<code>that was ～</code> や <code>that were ～</code> を使った文に戻せます。</p>
+            <blockquote><p>the books written in English<br>= the books that were written in English</p></blockquote>
+            <p class="note">名詞が動作をする側なら現在分詞、動作をされる側なら過去分詞を使います。</p>`,
+          questions: [
+            {
+              text: "The children found a (　　) window.",
+              choices: ["breaking", "broken", "broke", "break"],
+              answer: 1,
+              explanation: "窓は「壊す側」ではなく「壊される側」なので、過去分詞 broken を使います。"
+            },
+            {
+              text: "The books (　　) in English are on the desk.",
+              choices: ["writing", "wrote", "written", "write"],
+              answer: 2,
+              explanation: "written in English は「英語で書かれた」という意味で、the books を後ろから説明しています。that were written in English を短くした形です。"
+            },
+            {
+              text: "I found a bicycle (　　) near the station.",
+              choices: ["stealing", "stole", "stolen", "steal"],
+              answer: 2,
+              explanation: "自転車は「盗む側」ではなく「盗まれる側」なので、過去分詞 stolen を使います。"
+            }
+          ]
+        },
+        {
+          id: "emotion-verb-participles",
+          version: 1,
+          title: "感情動詞の分詞化",
+          html: `
+            <p>感情を表す動詞から作られた現在分詞・過去分詞は、形容詞として使われます。現在分詞は感情を引き起こす側、過去分詞は感情を感じる側を表します。</p>
+            <blockquote><p>The movie was exciting.<br>その映画はわくわくさせるものでした。</p></blockquote>
+            <blockquote><p>I was excited by the movie.<br>私はその映画にわくわくしました。</p></blockquote>
+            <p>よく使われる組み合わせには、<code>interesting / interested</code>、<code>boring / bored</code>、<code>surprising / surprised</code>、<code>confusing / confused</code> などがあります。</p>
+            <blockquote><p>I am interesting.（私は興味深い人です。）<br>I am interested in English.（私は英語に興味があります。）</p></blockquote>
+            <p class="note">「自分が感情を感じている」と言いたいときは過去分詞、人や物が感情を起こす側なら現在分詞を使います。</p>`,
+          questions: [
+            {
+              text: "The movie was very (　　).",
+              choices: ["excited", "exciting", "excite", "excites"],
+              answer: 1,
+              explanation: "映画は人をわくわくさせる側なので、現在分詞 exciting を使います。"
+            },
+            {
+              text: "I was (　　) by the complicated instructions.",
+              choices: ["confusing", "confuse", "confused", "confuses"],
+              answer: 2,
+              explanation: "「私」は混乱させられた側なので、過去分詞 confused を使います。"
+            },
+            {
+              text: "The lecture was boring, so the students felt (　　).",
+              choices: ["bored", "boring", "bore", "bores"],
+              answer: 0,
+              explanation: "講義は退屈させる側なので boring、学生は退屈を感じる側なので bored を使います。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 if (typeof process !== "undefined" && process.argv.includes("--check")) {
-  console.assert(curriculum.lessons.length > 0, "単元が1件以上あること");
-  console.assert(new Set(curriculum.lessons.map(lesson => lesson.id)).size === curriculum.lessons.length, "単元IDが重複しないこと");
-  console.assert(curriculum.lessons.every(lesson => lesson.questions.length > 0), "各単元に問題があること");
-  console.assert(curriculum.lessons.flatMap(lesson => lesson.questions).every(question => question.choices.length === 4 && question.answer >= 0 && question.answer < 4), "全問が有効な4択であること");
+  const courses = curriculum.courses;
+  const lessons = courses.flatMap(course => course.lessons);
+  console.assert(courses.length > 0, "文法カテゴリが1件以上あること");
+  console.assert(new Set(courses.map(course => course.id)).size === courses.length, "カテゴリIDが重複しないこと");
+  console.assert(lessons.length > 0, "単元が1件以上あること");
+  console.assert(new Set(lessons.map(lesson => lesson.id)).size === lessons.length, "単元IDが重複しないこと");
+  console.assert(lessons.every(lesson => lesson.questions.length > 0), "各単元に問題があること");
+  console.assert(lessons.flatMap(lesson => lesson.questions).every(question => question.choices.length === 4 && question.answer >= 0 && question.answer < 4), "全問が有効な4択であること");
   console.log("CONTENT_CHECK_OK");
 }

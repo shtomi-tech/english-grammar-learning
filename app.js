@@ -1,15 +1,34 @@
-const stages = [
-  { type: "overview", label: "概論" },
-  ...curriculum.lessons.flatMap((lesson, lessonIndex) => [
-    { type: "lesson", label: lesson.title, lesson, lessonIndex },
-    { type: "practice", label: `${lesson.title} 練習`, lesson, lessonIndex }
-  ])
-];
+const courses = curriculum.courses;
+const defaultCourseId = courses[0].id;
+const storageKey = "englishGrammarLearning.v3";
+const legacyStorageKey = "englishGrammarLearning.v2";
+const veryLegacyStorageKey = "englishGrammarLearning.subjunctivePast.v1";
+const defaultState = { courseId: defaultCourseId, stage: 0, question: 0, answers: {}, versions: {}, branchOpen: false, visitedLessons: [] };
 
-const storageKey = "englishGrammarLearning.v2";
-const legacyStorageKey = "englishGrammarLearning.subjunctivePast.v1";
-const defaultState = { stage: 0, question: 0, answers: {}, versions: {}, branchOpen: false, visitedLessons: [] };
+function courseFor(courseId) {
+  return courses.find(course => course.id === courseId) || courses[0];
+}
+
+function stagesFor(course) {
+  return [
+    { type: "overview", label: "概論", course },
+    ...course.lessons.flatMap((lesson, lessonIndex) => [
+      { type: "lesson", label: lesson.title, lesson, lessonIndex, course },
+      { type: "practice", label: `${lesson.title} 練習`, lesson, lessonIndex, course }
+    ])
+  ];
+}
+
+function validCourseId(courseId) {
+  return courses.some(course => course.id === courseId) ? courseId : defaultCourseId;
+}
+
+function clampStage(stage, courseId) {
+  return Math.min(Math.max(Number.isInteger(stage) ? stage : 0, 0), stagesFor(courseFor(courseId)).length - 1);
+}
+
 let state = loadState();
+let stages = stagesFor(courseFor(state.courseId));
 backfillVisitedLessons();
 const progressMedia = matchMedia("(max-width: 520px)");
 
@@ -24,14 +43,20 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
     if (saved && Number.isInteger(saved.stage) && saved.answers && !Array.isArray(saved.answers)) {
-      return { ...defaultState, ...saved, stage: Math.min(saved.stage, stages.length - 1) };
+      const courseId = validCourseId(saved.courseId);
+      return { ...defaultState, ...saved, courseId, stage: clampStage(saved.stage, courseId) };
     }
     const legacy = JSON.parse(localStorage.getItem(legacyStorageKey));
-    if (legacy && Number.isInteger(legacy.step)) {
+    if (legacy && Number.isInteger(legacy.stage) && legacy.answers && !Array.isArray(legacy.answers)) {
+      return { ...defaultState, ...legacy, courseId: defaultCourseId, stage: clampStage(legacy.stage, defaultCourseId) };
+    }
+    const veryLegacy = JSON.parse(localStorage.getItem(veryLegacyStorageKey));
+    if (veryLegacy && Number.isInteger(veryLegacy.step)) {
       return {
-        stage: Math.min(legacy.step, 2),
-        question: Number.isInteger(legacy.question) ? legacy.question : 0,
-        answers: { "past-subjunctive": Array.isArray(legacy.answers) ? legacy.answers : [] },
+        ...defaultState,
+        stage: Math.min(veryLegacy.step, 2),
+        question: Number.isInteger(veryLegacy.question) ? veryLegacy.question : 0,
+        answers: { "past-subjunctive": Array.isArray(veryLegacy.answers) ? veryLegacy.answers : [] },
         versions: {}
       };
     }
@@ -43,12 +68,33 @@ function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
+function currentCourse() {
+  return courseFor(state.courseId);
+}
+
+function switchCourse(courseId) {
+  state.courseId = validCourseId(courseId);
+  stages = stagesFor(currentCourse());
+  state.stage = 0;
+  state.question = 0;
+  state.branchOpen = false;
+  backfillVisitedLessons();
+  saveState();
+  render(true);
+}
+
 function backfillVisitedLessons() {
   state.visitedLessons ||= [];
-  curriculum.lessons.forEach((lesson, lessonIndex) => {
+  const course = courseFor(state.courseId);
+  course.lessons.forEach((lesson, lessonIndex) => {
     const alreadyPast = state.stage > lessonIndex * 2 + 1;
     const hasAnswers = lessonAnsweredCount(lesson) > 0;
     if ((alreadyPast || hasAnswers) && !state.visitedLessons.includes(lesson.id)) {
+      state.visitedLessons.push(lesson.id);
+    }
+  });
+  courses.flatMap(courseItem => courseItem.lessons).forEach(lesson => {
+    if (lessonAnsweredCount(lesson) > 0 && !state.visitedLessons.includes(lesson.id)) {
       state.visitedLessons.push(lesson.id);
     }
   });
@@ -57,7 +103,7 @@ function backfillVisitedLessons() {
 function syncContentVersions() {
   state.versions ||= {};
   let changed = false;
-  for (const lesson of curriculum.lessons) {
+  for (const lesson of courses.flatMap(course => course.lessons)) {
     if (lesson.version && state.versions[lesson.id] !== lesson.version) {
       state.answers[lesson.id] = [];
       state.versions[lesson.id] = lesson.version;
@@ -93,6 +139,7 @@ function resumeQuestionIndex(lesson) {
 }
 
 function setStage(stage, resetQuestion = false) {
+  stages = stagesFor(currentCourse());
   state.stage = Math.max(0, Math.min(stage, stages.length - 1));
   if (resetQuestion) state.question = 0;
   saveState();
@@ -108,22 +155,28 @@ function resultLabel() {
 }
 
 function currentPath(stage) {
-  if (stage.type === "overview") return "仮定法 ＞ 概論";
-  if (stage.type === "lesson") return `仮定法 ＞ ${stage.lesson.title} ＞ 各論`;
+  const course = currentCourse();
+  if (stage.type === "overview") return `${course.title} ＞ 概論`;
+  if (stage.type === "lesson") return `${course.title} ＞ ${stage.lesson.title} ＞ 各論`;
   const result = state.question >= stage.lesson.questions.length;
-  return `仮定法 ＞ ${stage.lesson.title} ＞ ${result ? resultLabel() : "練習問題"}`;
+  return `${course.title} ＞ ${stage.lesson.title} ＞ ${result ? resultLabel() : "練習問題"}`;
 }
 
 function branchStatus(stage) {
-  const total = curriculum.lessons.length;
+  const total = currentCourse().lessons.length;
   if (stage.type === "overview") return `全${total}単元`;
   return `${stage.lessonIndex + 1} / ${total}　${stage.lesson.title}`;
 }
 
 function render(resetScroll = false) {
   const stage = stages[state.stage];
+  const course = currentCourse();
   const showingResult = stage.type === "practice" && state.question >= stage.lesson.questions.length;
   const stepMarkup = (index, done) => `<button type="button" class="step ${done ? "done" : ""} ${index === state.stage ? "current" : ""}" data-stage="${index}" ${index === state.stage ? 'aria-current="step"' : ""}>`;
+  document.querySelector("#course-title").textContent = course.title;
+  document.querySelector("#course-selector").innerHTML = `
+    <span class="course-selector-label">文法カテゴリ</span>
+    ${courses.map(courseItem => `<button type="button" class="course-tab ${courseItem.id === course.id ? "current" : ""}" data-course="${courseItem.id}" ${courseItem.id === course.id ? 'aria-current="page" disabled' : ""}>${courseItem.title}</button>`).join("")}`;
   document.querySelector("#current-path").textContent = currentPath(stage);
   document.querySelector("#steps").innerHTML = `
     <li>${stepMarkup(0, state.stage > 0)}概論</button></li>
@@ -131,7 +184,7 @@ function render(resetScroll = false) {
       <details class="branch" ${state.branchOpen ? "open" : ""}>
       <summary><span class="branch-label">各論</span><span class="branch-status">${branchStatus(stage)}</span></summary>
       <ol>
-        ${curriculum.lessons.map((lesson, lessonIndex) => {
+        ${course.lessons.map((lesson, lessonIndex) => {
           const lessonStage = lessonIndex * 2 + 1;
           const practiceStage = lessonStage + 1;
           const answeredCount = lessonAnsweredCount(lesson);
@@ -161,10 +214,11 @@ function render(resetScroll = false) {
 }
 
 function renderOverview(content) {
+  const course = currentCourse();
   content.innerHTML = `
-    <h2>${curriculum.overview.title}</h2>
-    ${curriculum.overview.html}
-    <div class="actions"><button class="primary" data-action="next">${curriculum.lessons[0].title}へ</button></div>`;
+    <h2>${course.overview.title}</h2>
+    ${course.overview.html}
+    <div class="actions"><button class="primary" data-action="next">${course.lessons[0].title}へ</button></div>`;
 }
 
 function renderLesson(content, lesson) {
@@ -173,7 +227,8 @@ function renderLesson(content, lesson) {
     saveState();
   }
   const stage = stages[state.stage];
-  const backLabel = stage.lessonIndex === 0 ? "概論へ戻る" : `${curriculum.lessons[stage.lessonIndex - 1].title}の結果へ戻る`;
+  const course = currentCourse();
+  const backLabel = stage.lessonIndex === 0 ? "概論へ戻る" : `${course.lessons[stage.lessonIndex - 1].title}の結果へ戻る`;
   content.innerHTML = `
     <h2>${lesson.title}</h2>
     ${lesson.html}
@@ -199,12 +254,13 @@ function renderPractice(content, lesson) {
 
 function renderResult(content, lesson) {
   const stage = stages[state.stage];
+  const course = currentCourse();
   const answers = currentAnswers(lesson);
   const score = lessonScore(lesson);
   const wrongIndexes = lesson.questions.map((question, index) => answers[index] === question.answer ? -1 : index).filter(index => index >= 0);
   const hasNextLesson = state.stage + 1 < stages.length;
   const forwardAction = hasNextLesson ? "next-lesson" : "overview";
-  const forwardLabel = hasNextLesson ? `次の単元へ：${curriculum.lessons[stage.lessonIndex + 1].title}` : "概論へ戻る";
+  const forwardLabel = hasNextLesson ? `次の単元へ：${course.lessons[stage.lessonIndex + 1].title}` : "概論へ戻る";
   const decisionButtons = wrongIndexes.length
     ? `<button class="secondary" data-action="${forwardAction}">${forwardLabel}</button><button class="primary" data-action="retry-wrong">間違えた${wrongIndexes.length}問を解き直す</button>`
     : `<button class="primary" data-action="${forwardAction}">${forwardLabel}</button>`;
@@ -231,12 +287,13 @@ function renderResult(content, lesson) {
 }
 
 function renderCourseSummary() {
-  const total = curriculum.lessons.length;
-  const totalQuestions = curriculum.lessons.reduce((sum, l) => sum + l.questions.length, 0);
-  const totalScore = curriculum.lessons.reduce((sum, l) => sum + lessonScore(l), 0);
-  const completedUnits = curriculum.lessons.filter(lessonCompleted);
+  const lessons = currentCourse().lessons;
+  const total = lessons.length;
+  const totalQuestions = lessons.reduce((sum, l) => sum + l.questions.length, 0);
+  const totalScore = lessons.reduce((sum, l) => sum + lessonScore(l), 0);
+  const completedUnits = lessons.filter(lessonCompleted);
   const weakUnits = completedUnits.filter(l => lessonScore(l) < l.questions.length);
-  const notStarted = curriculum.lessons.filter(l => lessonAnsweredCount(l) === 0);
+  const notStarted = lessons.filter(l => lessonAnsweredCount(l) === 0);
   let statusMessage = "";
   if (weakUnits.length) {
     statusMessage = `<p>復習をおすすめする単元：${weakUnits.map(l => `${l.title}（${lessonScore(l)}/${l.questions.length}）`).join("・")}</p>`;
@@ -255,7 +312,7 @@ function renderCourseSummary() {
 
 function goBack(stage) {
   if (stage.type === "lesson" && stage.lessonIndex > 0) {
-    const previousLesson = curriculum.lessons[stage.lessonIndex - 1];
+    const previousLesson = currentCourse().lessons[stage.lessonIndex - 1];
     state.question = previousLesson.questions.length;
   }
   setStage(state.stage - 1);
@@ -264,6 +321,10 @@ function goBack(stage) {
 document.addEventListener("click", event => {
   const button = event.target.closest("button");
   if (!button) return;
+  if (button.dataset.course) {
+    switchCourse(button.dataset.course);
+    return;
+  }
   const stage = stages[state.stage];
   if (button.dataset.action === "next") setStage(state.stage + 1, stage.type === "lesson");
   if (button.dataset.action === "back") goBack(stage);
