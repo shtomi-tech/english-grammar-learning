@@ -123,15 +123,11 @@ function updateSaveStatus(message, tone) {
   el.classList.toggle("save-status-ng", tone === "ng");
 }
 
-// クラウドから届いた進捗をそのまま state に差し替えない。今週追加した review / finalChecks /
-// reviewSession / finalRun 等のフィールドを欠いた古い保存データが来た場合、
-// defaultState でまず欠損を埋めてから、既存のロード直後と同じ正規化（クランプ・破棄・版チェック）を通す。
-// クラウドに保存履歴が無い（新規発行の生徒URL）場合、RPCは空オブジェクトを返す。ここで空判定せずに
-// 差し替えると、端末に残っていた匿名時代の進捗を空状態で上書きしてしまう。空なら何もせず、
-// 次の saveState() で今の端末側の状態をそのままクラウドへ書き込ませる。
-function mergeCloudProgress(raw) {
-  const source = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
-  if (Object.keys(source).length === 0) return false;
+// 欠損フィールドを defaultState で埋めてから、通常のロード直後と同じ正規化
+// （クランプ → 破棄セッション除去 → 版チェック）を通す。版チェックまで通さないと、
+// version 付きの単元で state.versions が未初期化のまま残り、次回起動時に
+// 「内容が更新された」と誤判定してその単元の回答を消してしまう。
+function applyNormalizedState(source) {
   const courseId = validCourseId(source.courseId);
   state = { ...defaultState, ...source, courseId };
   state.stage = clampStage(state.stage, courseId);
@@ -139,6 +135,18 @@ function mergeCloudProgress(raw) {
   backfillVisitedLessons();
   sanitizePersistedSessions();
   syncContentVersions();
+}
+
+// クラウドから届いた進捗をそのまま state に差し替えない。今週追加した review / finalChecks /
+// reviewSession / finalRun 等のフィールドを欠いた古い保存データが来た場合、
+// defaultState でまず欠損を埋めてから、既存のロード直後と同じ正規化を通す。
+// クラウドに保存履歴が無い（新規発行の生徒URL）場合、RPCは空オブジェクトを返す。ここで空判定せずに
+// 差し替えると、端末に残っていた匿名時代の進捗を空状態で上書きしてしまう。空なら何もせず、
+// 次の saveState() で今の端末側の状態をそのままクラウドへ書き込ませる。
+function mergeCloudProgress(raw) {
+  const source = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+  if (Object.keys(source).length === 0) return false;
+  applyNormalizedState(source);
   return true;
 }
 
@@ -779,8 +787,7 @@ async function boot() {
   let changed = mergeCloudProgress(loadedFromCloud);
   const stampedStudentId = localStorage.getItem(CLOUD_STUDENT_STAMP_KEY);
   if (!changed && stampedStudentId && stampedStudentId !== session.studentId) {
-    state = { ...defaultState };
-    stages = stagesFor(currentCourse());
+    applyNormalizedState({});
     changed = true;
   }
   localStorage.setItem(CLOUD_STUDENT_STAMP_KEY, session.studentId);
