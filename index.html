@@ -77,8 +77,21 @@
     .review-list li + li { margin-top:10px; }
     .review-list span { display:block; }
     .course-summary .total-score { margin:0 0 10px; font-size:1.5rem; font-weight:800; color:var(--blue); }
-    .review-banner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin:0 0 14px; padding:10px 14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
-    .review-banner span { font-size:.92rem; font-weight:700; color:var(--blue-dark); }
+    .review-banner { display:flex; flex-direction:column; gap:8px; margin:0 0 14px; padding:10px 14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
+    .review-banner[hidden] { display:none; }
+    .review-due-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; }
+    .review-due-row[hidden] { display:none; }
+    .review-due-row span { font-size:.92rem; font-weight:700; color:var(--blue-dark); }
+    .review-breakdown > summary { min-height:44px; padding:6px 0; color:var(--blue); font-weight:700; font-size:.88rem; cursor:pointer; list-style:none; }
+    .review-breakdown > summary::-webkit-details-marker { display:none; }
+    .review-breakdown > summary::before { content:"▸ "; }
+    .review-breakdown[open] > summary::before { content:"▾ "; }
+    .review-breakdown-help { margin:4px 0 8px; color:var(--muted); font-size:.85rem; line-height:1.5; }
+    .review-breakdown-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(70px, 1fr)); gap:6px; }
+    .review-breakdown-cell { padding:4px 6px; border-left:1px solid var(--line); text-align:center; }
+    .review-breakdown-cell:first-child { border-left:0; }
+    .review-breakdown-cell strong { display:block; font-size:1.1rem; line-height:1.3; color:var(--ink); }
+    .review-breakdown-cell span { display:block; margin-top:2px; font-size:.78rem; color:var(--muted); white-space:nowrap; }
     @media (max-width:520px) {
       main { margin:16px auto; }
       header, article { padding:24px 20px; }
@@ -98,8 +111,15 @@
       <p id="current-path" class="current-path"></p>
       <p id="save-status" class="save-status">端末に自動保存済み</p>
       <div id="review-banner" class="review-banner" hidden>
-        <span data-review-count></span>
-        <button type="button" class="secondary" data-action="start-review">復習を始める</button>
+        <div id="review-due-row" class="review-due-row">
+          <span data-review-count></span>
+          <button type="button" class="secondary" data-action="start-review">復習を始める</button>
+        </div>
+        <details class="review-breakdown">
+          <summary>状態・復習間隔別内訳を見る</summary>
+          <p id="review-breakdown-help" class="review-breakdown-help"></p>
+          <div id="review-breakdown-grid" class="review-breakdown-grid"></div>
+        </details>
       </div>
       <details class="progress-details">
         <summary>学習の構成を見る</summary>

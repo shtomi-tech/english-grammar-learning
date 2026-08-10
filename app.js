@@ -10,6 +10,12 @@ const defaultState = {
 
 const LEITNER_LADDER = [1, 3, 7, 14]; // 正解のたびに進む復習間隔（日）
 const REVIEW_SESSION_SIZE = 10;
+// 復習対象の状態区分。LEITNER_LADDERの各間隔から生成する（eiken-q1-practiceの内訳表示と同じ区分）。
+const REVIEW_INTERVALS = [
+  { label: "未実施" },
+  { label: "要再確認" },
+  ...LEITNER_LADDER.map(days => ({ days, label: `${days}日後` })),
+];
 const FINAL_PASS_RATE = 0.8;
 
 const APP_ID = "english-grammar-learning";
@@ -255,6 +261,12 @@ function addDaysKey(key, days) {
   return dateKey(date);
 }
 
+function daysBetween(fromKey, toKey) {
+  const [fy, fm, fd] = fromKey.split("-").map(Number);
+  const [ty, tm, td] = toKey.split("-").map(Number);
+  return Math.round((new Date(ty, tm - 1, td) - new Date(fy, fm - 1, fd)) / (24 * 60 * 60 * 1000));
+}
+
 function recordReviewResult(question, correct) {
   state.review ||= {};
   const s = state.review[question.id] || (state.review[question.id] = { wrongCount: 0, leitnerStage: 0, nextReviewAt: null, lastAnsweredAt: null });
@@ -286,6 +298,21 @@ function reviewCandidates() {
   return items;
 }
 
+// 復習対象の問題を、直前の復習間隔でREVIEW_INTERVALSの区分に分類する。
+function reviewIntervalLabel(question) {
+  const s = state.review && state.review[question.id];
+  if (!s || !s.lastAnsweredAt) return "未実施";
+  if (!s.nextReviewAt) return "要再確認";
+  const elapsedDays = daysBetween(s.lastAnsweredAt, s.nextReviewAt);
+  return REVIEW_INTERVALS.find(({ days }) => days === elapsedDays)?.label || "要再確認";
+}
+
+function reviewIntervalBreakdown(items) {
+  const counts = Object.fromEntries(REVIEW_INTERVALS.map(({ label }) => [label, 0]));
+  items.forEach(item => { counts[reviewIntervalLabel(item.question)] += 1; });
+  return counts;
+}
+
 function dueReviewCount() {
   return reviewCandidates().filter(item => isQuestionDue(item.question)).length;
 }
@@ -314,9 +341,21 @@ function updateReviewBanner() {
   const banner = document.querySelector("#review-banner");
   if (!banner) return;
   if (state.reviewSession) { banner.hidden = true; return; }
+  const candidates = reviewCandidates();
+  banner.hidden = candidates.length === 0;
+  if (candidates.length === 0) return;
+
   const due = dueReviewCount();
-  banner.hidden = due === 0;
+  banner.querySelector("#review-due-row").hidden = due === 0;
   if (due > 0) banner.querySelector("[data-review-count]").textContent = `今日の復習：${due}問`;
+
+  const total = Object.keys(questionIndex).length;
+  banner.querySelector("#review-breakdown-help").textContent =
+    `通常学習済みの問題（対象 ${candidates.length} / ${total}問）の現在の状態です。「今日の復習」は未実施・要再確認・期限到来を合計した件数です。`;
+  const counts = reviewIntervalBreakdown(candidates);
+  banner.querySelector("#review-breakdown-grid").innerHTML = REVIEW_INTERVALS.map(({ label }) =>
+    `<div class="review-breakdown-cell"><strong>${counts[label]}</strong><span>${label}</span></div>`
+  ).join("");
 }
 
 function lessonAnswers(lesson) {
