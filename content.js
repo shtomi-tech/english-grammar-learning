@@ -185,18 +185,24 @@ const curriculum = {
       html: `
         <p>仮定法では、if節から <code>if</code> を省略し、助動詞やbe動詞を主語の前に出すことがあります。意味は通常の仮定法と同じですが、文章語的で改まった表現です。</p>
         <p>倒置できるのは、if節に <code>had</code>、<code>were</code>、<code>should</code> がある場合です。</p>
-        <h3>had の倒置</h3>
+        <details class="section" open>
+        <summary>had の倒置</summary>
         <p>仮定法過去完了では、<code>if</code> を省略して <code>had</code> を主語の前に出します。</p>
         <div class="formula">If + 主語 + had + 過去分詞 → Had + 主語 + 過去分詞</div>
         <blockquote><p>If I had known the truth, I would have told you.<br>Had I known the truth, I would have told you.<br>もし真実を知っていたら、あなたに伝えていたでしょう。</p></blockquote>
-        <h3>were の倒置</h3>
+        </details>
+        <details class="section">
+        <summary>were の倒置</summary>
         <p>仮定法過去のbe動詞や、<code>were to</code> を使う仮定法未来でも倒置できます。</p>
         <blockquote><p>If I were you, I would accept the offer.<br>Were I you, I would accept the offer.<br>もし私があなたなら、その申し出を受け入れるでしょう。</p></blockquote>
         <blockquote><p>If he were to change his mind, we would reconsider the plan.<br>Were he to change his mind, we would reconsider the plan.<br>仮に彼が考えを変えるとしたら、私たちは計画を再検討するでしょう。</p></blockquote>
-        <h3>should の倒置</h3>
+        </details>
+        <details class="section">
+        <summary>should の倒置</summary>
         <p><code>should</code> を使う仮定法未来では、<code>if</code> を省略して <code>should</code> を主語の前に出します。</p>
         <div class="formula">If + 主語 + should + 動詞の原形 → Should + 主語 + 動詞の原形</div>
         <blockquote><p>If you should need any help, please contact me.<br>Should you need any help, please contact me.<br>万一助けが必要になったら、私に連絡してください。</p></blockquote>
+        </details>
         <p class="note">倒置では疑問文と同じ語順になりますが、疑問ではありません。文頭の Had / Were / Should の後ろに主語が続いていれば、省略された if を補って考えます。</p>`,
       questions: [
         {
@@ -261,16 +267,20 @@ const curriculum = {
       title: "as if + 仮定法",
       html: `
         <p><code>as if + 仮定法</code> は、「まるで～であるかのように」「まるで～したかのように」という意味を表します。実際の事実とは異なることや、話し手が事実ではないと考えていることを表す表現です。<code>as though</code> もほぼ同じ意味で使えます。</p>
-        <h3>as if + 仮定法過去</h3>
+        <details class="section" open>
+        <summary>as if + 仮定法過去</summary>
         <p>現在の事実に反することや、主節と同じ時点の状況を表す場合は、<code>as if + 主語 + 過去形</code> を使います。</p>
         <blockquote><p>He talks as if he knew everything.<br>彼はまるですべてを知っているかのように話します。</p></blockquote>
         <p>実際には「彼はすべてを知っているわけではない」という含みがあります。be動詞は、仮定法では主語にかかわらず <code>were</code> を使うのが基本です。</p>
         <blockquote><p>She treats me as if I were a child.<br>彼女は私をまるで子どもであるかのように扱います。</p></blockquote>
-        <h3>as if + 仮定法過去完了</h3>
+        </details>
+        <details class="section">
+        <summary>as if + 仮定法過去完了</summary>
         <p>主節よりも前に起きた、事実とは異なることを表す場合は、<code>as if + 主語 + had + 過去分詞</code> を使います。</p>
         <blockquote><p>She looked as if she had seen a ghost.<br>彼女はまるで幽霊を見たかのような顔をしていました。</p></blockquote>
         <p>「幽霊を見た」という仮定上の出来事は、「そのような顔をしていた」時点より前にあります。</p>
         <blockquote><p>He speaks English as if he had lived in the United States.<br>彼はまるでアメリカに住んでいたことがあるかのように英語を話します。</p></blockquote>
+        </details>
         <p class="note">主節と同じ時点の仮定なら仮定法過去、主節より前の仮定なら仮定法過去完了を使います。主節の形だけでなく、二つの出来事の時間関係を確認します。</p>`,
       questions: [
         {
@@ -304,11 +314,13 @@ const curriculum = {
         <p><code>went</code> は過去の出来事を表しているのではありません。「今はまだ寝ていないが、もう寝るべき時間だ」という現在の状況を、仮定法過去によって表しています。</p>
         <blockquote><p>It is time we started the meeting.<br>そろそろ会議を始める時間です。</p></blockquote>
         <p>この表現には、単に時刻を示すだけでなく、「もう実行してもよいころなのに、まだ実行していない」という含みがあります。</p>
-        <h3>about time・high time</h3>
+        <details class="section">
+        <summary>about time・high time</summary>
         <p><code>time</code> の前に <code>about</code> や <code>high</code> を置くと、遅れているという気持ちが強くなります。</p>
         <blockquote><p>It is about time you cleaned your room.<br>そろそろ部屋を掃除してもよいころです。</p></blockquote>
         <blockquote><p>It is high time he found a job.<br>彼はもう仕事を見つけるべきころです。</p></blockquote>
-        <p class="note">It is high time は「とっくに～してもよいころだ」という、強い催促や不満を表します。</p>`,
+        <p class="note">It is high time は「とっくに～してもよいころだ」という、強い催促や不満を表します。</p>
+        </details>`,
       questions: [
         {
           text: "It is time you (　　) to bed.",

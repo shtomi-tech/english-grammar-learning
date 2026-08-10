@@ -18,22 +18,40 @@
     .eyebrow { margin:0 0 4px; color:var(--blue); font-weight:700; font-size:.88rem; }
     .current-path { margin:0 0 2px; font-weight:800; }
     .save-status { margin:0 0 14px; color:var(--muted); font-size:.88rem; }
-    .progress-details summary { display:none; color:var(--blue); font-weight:700; cursor:pointer; }
-    .progress-details:not([open]) > .steps { display:block; }
+    .progress-details > summary { display:none; color:var(--blue); font-weight:700; cursor:pointer; }
     .steps, .steps ol { margin:0; padding:0; list-style:none; }
     .steps ol { margin:6px 0 6px 12px; padding-left:16px; border-left:2px solid var(--line); }
-    .branch-label { display:block; margin-top:6px; color:var(--ink); font-weight:800; }
-    .step { display:block; margin:5px 0; padding:7px 10px; border-radius:8px; background:#edf0f4; color:var(--muted); font-size:.88rem; font-weight:700; }
-    .step.current { background:var(--blue); color:#fff; }
+    .branch { margin-top:6px; }
+    .branch > summary { display:flex; align-items:center; gap:8px; min-height:44px; padding:6px 8px; border-radius:8px; list-style:none; cursor:pointer; }
+    .branch > summary::-webkit-details-marker { display:none; }
+    .branch > summary::before { content:"▸"; color:var(--blue); font-weight:700; }
+    .branch[open] > summary::before { content:"▾"; }
+    .branch > summary:hover { background:var(--soft); }
+    .branch-label { color:var(--ink); font-weight:800; }
+    .branch-status { color:var(--muted); font-size:.88rem; font-weight:700; }
+    .branch[open] > summary .branch-status { color:var(--blue-dark); }
+    .step { display:block; width:100%; min-height:44px; margin:5px 0; padding:10px; border:none; border-radius:8px; background:#edf0f4; color:var(--muted); font-family:inherit; font-size:.88rem; font-weight:700; text-align:left; cursor:pointer; }
+    .step:hover:not(.current) { background:#e2e7ee; }
+    .step.current { background:var(--blue); color:#fff; cursor:default; }
     .step.done { background:#dce9fa; color:var(--blue-dark); }
     .formula, blockquote { margin:20px 0; padding:16px 18px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 10px 10px 0; }
     .formula { font-family:ui-monospace,"Cascadia Mono",monospace; font-weight:700; overflow-wrap:anywhere; }
     blockquote p:last-child { margin-bottom:0; }
     .note { color:var(--muted); font-size:.95rem; }
+    details.section { margin:20px 0; border:1px solid var(--line); border-radius:10px; padding:0 18px; }
+    details.section[open] { padding-bottom:18px; }
+    details.section > summary { display:flex; align-items:center; gap:8px; min-height:44px; margin:0 -18px; padding:10px 18px; border-radius:10px; font-size:1.1rem; font-weight:800; cursor:pointer; list-style:none; }
+    details.section > summary::-webkit-details-marker { display:none; }
+    details.section > summary::before { content:"▸"; color:var(--blue); }
+    details.section[open] > summary::before { content:"▾"; }
+    details.section > summary:hover { background:var(--soft); }
+    details.section > summary + * { margin-top:0; }
     .actions { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:30px; }
+    .actions > .primary { margin-left:auto; }
+    .actions-decision { display:flex; flex-wrap:wrap; gap:12px; margin-left:auto; justify-content:flex-end; }
     button { min-height:48px; padding:10px 20px; border:2px solid transparent; border-radius:10px; font:inherit; font-weight:700; cursor:pointer; }
     button:focus-visible, summary:focus-visible { outline:3px solid #e0a400; outline-offset:3px; }
-    .primary { margin-left:auto; background:var(--blue); color:#fff; }
+    .primary { background:var(--blue); color:#fff; }
     .primary:hover { background:var(--blue-dark); }
     .secondary { background:#fff; color:var(--blue); border-color:var(--blue); }
     .choices { display:grid; gap:10px; margin:22px 0; }
@@ -53,13 +71,14 @@
     .review-list { margin:0; padding-left:22px; }
     .review-list li + li { margin-top:10px; }
     .review-list span { display:block; }
+    .course-summary .total-score { margin:0 0 10px; font-size:1.5rem; font-weight:800; color:var(--blue); }
     @media (max-width:520px) {
       main { margin:16px auto; }
       header, article { padding:24px 20px; }
-      .progress-details summary { display:list-item; min-height:44px; padding:8px 0; }
-      .progress-details:not([open]) > .steps { display:none; }
+      .progress-details > summary { display:list-item; min-height:44px; padding:8px 0; }
       .actions { flex-direction:column-reverse; }
       .actions button { width:100%; }
+      .actions-decision { flex-direction:column; width:100%; margin-left:0; }
     }
   </style>
 </head>
