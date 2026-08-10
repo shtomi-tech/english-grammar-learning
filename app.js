@@ -722,12 +722,17 @@ function renderReviewSession(content) {
 }
 
 function renderReviewResult(content, session) {
+  const remaining = dueReviewCount();
   content.innerHTML = `
     <p class="eyebrow">今日の復習</p>
     <h2>復習が完了しました</h2>
     <p class="score">${session.correctCount} / ${session.order.length} 問正解</p>
     <p>正解した問題は次の復習日まで表示されません。間違えた問題はまた近いうちに出題されます。</p>
-    <div class="actions"><button class="primary" data-action="review-exit">学習に戻る</button></div>`;
+    ${remaining > 0
+      ? `<p class="note">今日の復習：残り${remaining}問</p>
+         <div class="actions"><button class="secondary" data-action="review-exit">学習に戻る</button><button class="primary" data-action="review-continue">続けて復習する</button></div>`
+      : `<p class="note">今日の復習はすべて終わりました。</p>
+         <div class="actions"><button class="primary" data-action="review-exit">学習に戻る</button></div>`}`;
 }
 
 function goBack(stage) {
@@ -765,6 +770,10 @@ document.addEventListener("click", event => {
       state.reviewSession = null;
       saveState();
       render(true);
+      return;
+    }
+    if (button.dataset.action === "review-continue") {
+      startReviewSession();
       return;
     }
     // 復習セッション中に他の操作（コース切替・単元移動など）が押された場合は、

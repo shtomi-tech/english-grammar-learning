@@ -399,18 +399,24 @@ const curriculum = {
           title: "分詞の形容詞的用法（現在分詞）",
           html: `
             <p>現在分詞は、動詞の原形に <code>-ing</code> を付けた形で、名詞を説明する形容詞のように使われます。説明される名詞が、その動作を「する側」であることがポイントです。</p>
-            <h3>名詞の前に置く場合</h3>
+            <details class="section" open>
+            <summary>名詞の前に置く場合</summary>
             <p>現在分詞だけで名詞を説明するときは、通常、名詞の前に置きます。</p>
             <blockquote><p>a sleeping baby<br>眠っている赤ちゃん</p></blockquote>
             <blockquote><p>a barking dog<br>ほえている犬</p></blockquote>
-            <h3>名詞の後ろに置く場合</h3>
+            </details>
+            <details class="section">
+            <summary>名詞の後ろに置く場合</summary>
             <p>現在分詞に目的語や副詞などが伴う場合は、名詞の後ろに置きます。</p>
             <blockquote><p>the girl dancing on the stage<br>ステージで踊っている少女</p></blockquote>
             <blockquote><p>the man standing by the door<br>ドアのそばに立っている男性</p></blockquote>
             <p>名詞の後ろに置かれた現在分詞は、関係代名詞を使った文に戻せます。</p>
             <blockquote><p>the girl dancing on the stage<br>= the girl who is dancing on the stage</p></blockquote>
-            <h3>動名詞や進行形との違い</h3>
+            </details>
+            <details class="section">
+            <summary>動名詞や進行形との違い</summary>
             <p><code>Swimming is fun.</code> の <code>Swimming</code> は動名詞、<code>The boy is swimming.</code> の <code>swimming</code> は進行形、<code>the swimming boy</code> の <code>swimming</code> は <code>boy</code> を説明する現在分詞です。</p>
+            </details>
             <p class="note">現在分詞を見つけたら、説明されている名詞がその動作をしているかを確認します。</p>`,
           questions: [
             {
@@ -444,15 +450,19 @@ const curriculum = {
             <p>過去分詞は、名詞を説明する形容詞のように使われます。説明される名詞が、動作を「される側」であることや、動作が完了した状態であることを表します。</p>
             <p>過去分詞は <code>-ed</code> 形だけでなく、不規則変化もあります。</p>
             <blockquote><p>broken（壊れた）・written（書かれた）・stolen（盗まれた）</p></blockquote>
-            <h3>名詞の前に置く場合</h3>
+            <details class="section" open>
+            <summary>名詞の前に置く場合</summary>
             <blockquote><p>a broken window<br>壊れた窓</p></blockquote>
             <blockquote><p>a stolen bicycle<br>盗まれた自転車</p></blockquote>
-            <h3>名詞の後ろに置く場合</h3>
+            </details>
+            <details class="section">
+            <summary>名詞の後ろに置く場合</summary>
             <p>過去分詞に修飾語句が伴う場合は、名詞の後ろに置きます。</p>
             <blockquote><p>a picture painted by my father<br>父によって描かれた絵</p></blockquote>
             <blockquote><p>the books written in English<br>英語で書かれた本</p></blockquote>
             <p>名詞の後ろに置かれた過去分詞は、<code>that was ～</code> や <code>that were ～</code> を使った文に戻せます。</p>
             <blockquote><p>the books written in English<br>= the books that were written in English</p></blockquote>
+            </details>
             <p class="note">名詞が動作をする側なら現在分詞、動作をされる側なら過去分詞を使います。</p>`,
           questions: [
             {
