@@ -76,6 +76,8 @@
     .review-list li + li { margin-top:10px; }
     .review-list span { display:block; }
     .course-summary .total-score { margin:0 0 10px; font-size:1.5rem; font-weight:800; color:var(--blue); }
+    .review-banner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin:0 0 14px; padding:10px 14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
+    .review-banner span { font-size:.92rem; font-weight:700; color:var(--blue-dark); }
     @media (max-width:520px) {
       main { margin:16px auto; }
       header, article { padding:24px 20px; }
@@ -94,6 +96,10 @@
       <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
       <p id="current-path" class="current-path"></p>
       <p class="save-status">端末に自動保存済み</p>
+      <div id="review-banner" class="review-banner" hidden>
+        <span data-review-count></span>
+        <button type="button" class="secondary" data-action="start-review">復習を始める</button>
+      </div>
       <details class="progress-details">
         <summary>学習の構成を見る</summary>
         <ol id="steps" class="steps" aria-label="学習の構成と進捗"></ol>

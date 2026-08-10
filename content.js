@@ -22,18 +22,21 @@ const subjunctiveCourse = {
         <p class="note">判断するときは、①いつの話か、②事実か反実仮想か、③条件節と結果節の形が対応しているか、の順に確認します。</p>`,
       questions: [
         {
+          id: "past-subjunctive-q1",
           text: "If I (　　) you, I would accept the offer.",
           choices: ["am", "was", "have been", "were"],
           answer: 3,
           explanation: "現在の事実に反する仮定です。仮定法過去のbe動詞は、主語が I でも基本的に were を使います。"
         },
         {
+          id: "past-subjunctive-q2",
           text: "If I had enough money, I (　　) a new bicycle.",
           choices: ["plan buy", "could buy", "might had", "happily buy"],
           answer: 1,
           explanation: "現在は十分なお金がないという仮定に対し、could + 動詞の原形で「買えるのに」と表します。"
         },
         {
+          id: "past-subjunctive-q3",
           text: "If I lost my key, I (　　) able to lock the door.",
           choices: ["will not be", "will not have been", "wouldn’t be", "am not"],
           answer: 2,
@@ -56,18 +59,21 @@ const subjunctiveCourse = {
         <p class="note">仮定法過去は現在・未来、仮定法過去完了は過去の事実に反する仮定です。まず変えたい出来事の時点を確かめます。</p>`,
       questions: [
         {
+          id: "past-perfect-subjunctive-q1",
           text: "If she (　　) earlier, she would have caught the train.",
           choices: ["leaves", "left", "would leave", "had left"],
           answer: 3,
           explanation: "過去の事実に反する仮定なので、if + 主語 + had + 過去分詞を使います。"
         },
         {
+          id: "past-perfect-subjunctive-q2",
           text: "If he had listened to the advice, he (　　) the mistake.",
           choices: ["would avoid", "will avoid", "would have avoided", "avoided"],
           answer: 2,
           explanation: "過去の事実に反する条件の結果は、would have + 過去分詞で表します。"
         },
         {
+          id: "past-perfect-subjunctive-q3",
           text: "If I had won the lottery, I (　　) a new car.",
           choices: ["would buy", "bought", "would have bought", "would have been buying"],
           answer: 2,
@@ -89,18 +95,21 @@ const subjunctiveCourse = {
         <p class="note">if節が had + 過去分詞でも、結果が現在なら主節を would have + 過去分詞にはしません。now、today、at present などが現在の結果を示す手掛かりになります。</p>`,
       questions: [
         {
+          id: "mixed-subjunctive-q1",
           text: "If I had taken that job, I (　　) in London now.",
           choices: ["live", "lived", "would be living", "would have lived"],
           answer: 2,
           explanation: "過去にその仕事を選ばなかったという仮定から、現在の生活について述べています。結果は現在なので、would be living を使います。"
         },
         {
+          id: "mixed-subjunctive-q2",
           text: "If I had taken your advice then, I (　　) happier now.",
           choices: ["am", "can be", "would be", "might have been"],
           answer: 2,
           explanation: "then が過去の条件、now が現在の結果を示しています。過去の条件には had taken、現在の結果には would be を使います。"
         },
         {
+          id: "mixed-subjunctive-q3",
           text: "If she had gone to bed earlier, she (　　) so tired now.",
           choices: ["would not be", "would not have been", "is not", "had not been"],
           answer: 0,
@@ -124,18 +133,21 @@ const subjunctiveCourse = {
         <p class="note">判断するときは、if節の should を義務の意味で訳さず、「万一」と考えます。should の後ろには必ず動詞の原形を置きます。</p>`,
       questions: [
         {
+          id: "future-subjunctive-should-q1",
           text: "If you (　　) any help, please contact me.",
           choices: ["should need", "should needed", "would need", "had needed"],
           answer: 0,
           explanation: "should の後ろには動詞の原形を置きます。「万一助けが必要になれば」という、可能性の低い未来の条件です。"
         },
         {
+          id: "future-subjunctive-should-q2",
           text: "If the weather should (　　) worse, we will cancel the game.",
           choices: ["gets", "got", "get", "getting"],
           answer: 2,
           explanation: "仮定法未来のif節は should + 動詞の原形です。主語が the weather でも、gets ではなく原形の get を使います。"
         },
         {
+          id: "future-subjunctive-should-q3",
           text: "If the train should be delayed, please (　　) me.",
           choices: ["called", "calling", "to call", "call"],
           answer: 3,
@@ -159,18 +171,21 @@ const subjunctiveCourse = {
         <p class="note">判断するときは、were to の後ろに動詞の原形が置かれていることと、主節に would / could / might などが使われていることを確認します。</p>`,
       questions: [
         {
+          id: "future-subjunctive-were-to-q1",
           text: "If I (　　) abroad, I would choose Canada.",
           choices: ["were to live", "were living", "should lived", "had lived"],
           answer: 0,
           explanation: "if + 主語 + were to + 動詞の原形で、「仮に外国で暮らすとしたら」という可能性の低い未来を表します。"
         },
         {
+          id: "future-subjunctive-were-to-q2",
           text: "If she were to (　　) her job, she might move to another city.",
           choices: ["changed", "changing", "change", "changes"],
           answer: 2,
           explanation: "were to の後ろには動詞の原形を置くため、change が正解です。"
         },
         {
+          id: "future-subjunctive-were-to-q3",
           text: "If the sun were to disappear, life on Earth (　　) not survive.",
           choices: ["will", "would", "did", "has"],
           answer: 1,
@@ -206,18 +221,21 @@ const subjunctiveCourse = {
         <p class="note">倒置では疑問文と同じ語順になりますが、疑問ではありません。文頭の Had / Were / Should の後ろに主語が続いていれば、省略された if を補って考えます。</p>`,
       questions: [
         {
+          id: "subjunctive-inversion-q1",
           text: "(　　) I known the truth, I would have told you.",
           choices: ["Were", "Had", "Should", "Would"],
           answer: 1,
           explanation: "If I had known ... から if を省略し、had を主語の前に出した仮定法過去完了の倒置です。"
         },
         {
+          id: "subjunctive-inversion-q2",
           text: "(　　) I you, I would accept the offer.",
           choices: ["Had", "Was", "Were", "Should"],
           answer: 2,
           explanation: "If I were you ... の if を省略すると、Were I you ... となります。"
         },
         {
+          id: "subjunctive-inversion-q3",
           text: "(　　) you need any help, please contact me.",
           choices: ["Had", "Would", "Were", "Should"],
           answer: 3,
@@ -242,18 +260,21 @@ const subjunctiveCourse = {
         <p class="note">現在についての仮定なら were not for、過去についての仮定なら had not been for と区別します。</p>`,
       questions: [
         {
+          id: "if-it-were-not-for-q1",
           text: "If it (　　) for your help, I could not finish this work.",
           choices: ["is not", "were not", "had not", "would not be"],
           answer: 1,
           explanation: "現在の事実に反する仮定なので、If it were not for + 名詞を使います。「もしあなたの助けがなければ」という意味です。"
         },
         {
+          id: "if-it-were-not-for-q2",
           text: "If it were not for the sun, nothing (　　) live on Earth.",
           choices: ["can", "has", "could", "did"],
           answer: 2,
           explanation: "If it were not for は仮定法過去の表現です。主節では通常、would / could / might + 動詞の原形を使います。"
         },
         {
+          id: "if-it-were-not-for-q3",
           text: "If it (　　) your advice, I would have made a serious mistake.",
           choices: ["were not for", "had not been for", "would not be for", "has not been for"],
           answer: 1,
@@ -284,18 +305,21 @@ const subjunctiveCourse = {
         <p class="note">主節と同じ時点の仮定なら仮定法過去、主節より前の仮定なら仮定法過去完了を使います。主節の形だけでなく、二つの出来事の時間関係を確認します。</p>`,
       questions: [
         {
+          id: "as-if-subjunctive-q1",
           text: "He talks as if he (　　) everything, but in fact he does not.",
           choices: ["knows", "knew", "had known", "will know"],
           answer: 1,
           explanation: "現在の事実に反して「まるですべてを知っているかのように」と表すため、as if + 仮定法過去を使います。"
         },
         {
+          id: "as-if-subjunctive-q2",
           text: "She treats me as if I (　　) a child, but I am an adult.",
           choices: ["am", "was", "were", "had been"],
           answer: 2,
           explanation: "実際には子どもではないという現在の事実に反する仮定です。仮定法では、主語が I でも基本的に were を使います。"
         },
         {
+          id: "as-if-subjunctive-q3",
           text: "She looked as if she (　　) a ghost, but she had not.",
           choices: ["sees", "saw", "has seen", "had seen"],
           answer: 3,
@@ -323,18 +347,21 @@ const subjunctiveCourse = {
         </details>`,
       questions: [
         {
+          id: "it-is-time-subjunctive-past-q1",
           text: "It is time you (　　) to bed.",
           choices: ["go", "went", "have gone", "will go"],
           answer: 1,
           explanation: "It is time + 主語 + 過去形で、「もう～する時間だ」という意味を表します。過去形ですが、現在の状況について述べています。"
         },
         {
+          id: "it-is-time-subjunctive-past-q2",
           text: "It is time we (　　) the meeting.",
           choices: ["start", "will start", "started", "have started"],
           answer: 2,
           explanation: "「そろそろ会議を始める時間だ」という、現在の状況を表す仮定法過去です。we の後ろには過去形の started を置きます。"
         },
         {
+          id: "it-is-time-subjunctive-past-q3",
           text: "It is high time he (　　) a job.",
           choices: ["finds", "found", "has found", "will find"],
           answer: 1,
@@ -387,18 +414,21 @@ const curriculum = {
             <p class="note">現在分詞を見つけたら、説明されている名詞がその動作をしているかを確認します。</p>`,
           questions: [
             {
+              id: "participles-as-adjectives-present-q1",
               text: "Look at the baby (　　) in the crib.",
               choices: ["slept", "sleeping", "sleep", "to sleep"],
               answer: 1,
               explanation: "baby が「眠っている」ので、現在分詞 sleeping を使って名詞を説明します。"
             },
             {
+              id: "participles-as-adjectives-present-q2",
               text: "The man (　　) by the door is my uncle.",
               choices: ["stood", "standing", "stand", "to stand"],
               answer: 1,
               explanation: "standing by the door は「ドアのそばに立っている」という意味で、the man を後ろから説明しています。who is standing by the door を短くした形です。"
             },
             {
+              id: "participles-as-adjectives-present-q3",
               text: "次のうち、現在分詞が形容詞的に使われている文を選びなさい。",
               choices: ["Swimming is fun.", "The boy is swimming.", "The swimming boy waved at me.", "He enjoys swimming."],
               answer: 2,
@@ -426,18 +456,21 @@ const curriculum = {
             <p class="note">名詞が動作をする側なら現在分詞、動作をされる側なら過去分詞を使います。</p>`,
           questions: [
             {
+              id: "participles-as-adjectives-past-q1",
               text: "The children found a (　　) window.",
               choices: ["breaking", "broken", "broke", "break"],
               answer: 1,
               explanation: "窓は「壊す側」ではなく「壊される側」なので、過去分詞 broken を使います。"
             },
             {
+              id: "participles-as-adjectives-past-q2",
               text: "The books (　　) in English are on the desk.",
               choices: ["writing", "wrote", "written", "write"],
               answer: 2,
               explanation: "written in English は「英語で書かれた」という意味で、the books を後ろから説明しています。that were written in English を短くした形です。"
             },
             {
+              id: "participles-as-adjectives-past-q3",
               text: "I found a bicycle (　　) near the station.",
               choices: ["stealing", "stole", "stolen", "steal"],
               answer: 2,
@@ -458,18 +491,21 @@ const curriculum = {
             <p class="note">「自分が感情を感じている」と言いたいときは過去分詞、人や物が感情を起こす側なら現在分詞を使います。</p>`,
           questions: [
             {
+              id: "emotion-verb-participles-q1",
               text: "The movie was very (　　).",
               choices: ["excited", "exciting", "excite", "excites"],
               answer: 1,
               explanation: "映画は人をわくわくさせる側なので、現在分詞 exciting を使います。"
             },
             {
+              id: "emotion-verb-participles-q2",
               text: "I was (　　) by the complicated instructions.",
               choices: ["confusing", "confuse", "confused", "confuses"],
               answer: 2,
               explanation: "「私」は混乱させられた側なので、過去分詞 confused を使います。"
             },
             {
+              id: "emotion-verb-participles-q3",
               text: "The lecture was boring, so the students felt (　　).",
               choices: ["bored", "boring", "bore", "bores"],
               answer: 0,
@@ -491,5 +527,8 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
   console.assert(new Set(lessons.map(lesson => lesson.id)).size === lessons.length, "単元IDが重複しないこと");
   console.assert(lessons.every(lesson => lesson.questions.length > 0), "各単元に問題があること");
   console.assert(lessons.flatMap(lesson => lesson.questions).every(question => question.choices.length === 4 && question.answer >= 0 && question.answer < 4), "全問が有効な4択であること");
+  const allQuestions = lessons.flatMap(lesson => lesson.questions);
+  console.assert(allQuestions.every(question => typeof question.id === "string" && question.id.length > 0), "全問にIDがあること");
+  console.assert(new Set(allQuestions.map(question => question.id)).size === allQuestions.length, "問題IDが重複しないこと");
   console.log("CONTENT_CHECK_OK");
 }
