@@ -4,7 +4,7 @@ const storageKey = "englishGrammarLearning.v3";
 const legacyStorageKey = "englishGrammarLearning.v2";
 const veryLegacyStorageKey = "englishGrammarLearning.subjunctivePast.v1";
 const defaultState = {
-  courseId: defaultCourseId, stage: 0, question: 0, answers: {}, versions: {}, branchOpen: false, visitedLessons: [],
+  courseId: defaultCourseId, stage: 0, question: 0, answers: {}, versions: {}, visitedLessons: [],
   review: {}, reviewSession: null, finalChecks: {}, finalRun: null
 };
 
@@ -72,7 +72,7 @@ let state = loadState();
 let stages = stagesFor(courseFor(state.courseId));
 backfillVisitedLessons();
 sanitizePersistedSessions();
-const progressMedia = matchMedia("(max-width: 520px)");
+const progressMedia = matchMedia("(max-width: 640px)");
 
 // content.js の編集で問題IDが削除・変更されていた場合、保存済みの復習・修了テストの
 // 途中状態が存在しない問題を参照してクラッシュしないよう、対象がなければ破棄する。
@@ -165,7 +165,6 @@ function switchCourse(courseId) {
   stages = stagesFor(currentCourse());
   state.stage = 0;
   state.question = 0;
-  state.branchOpen = false;
   backfillVisitedLessons();
   saveState();
   render(true);
@@ -392,6 +391,15 @@ function lessonCompleted(lesson) {
   return lessonAnsweredCount(lesson) === lesson.questions.length;
 }
 
+// サイドバーの単元グループ見出しに出す1行要約。
+function lessonGroupSummary(lesson) {
+  const total = lesson.questions.length;
+  const answered = lessonAnsweredCount(lesson);
+  if (answered === total) return lessonScore(lesson) === total ? `全問正解（${total}/${total}）` : `練習問題 ${lessonScore(lesson)}/${total}`;
+  if (answered > 0) return `練習問題 ${answered}/${total} 途中`;
+  return state.visitedLessons.includes(lesson.id) ? "各論：済" : "未着手";
+}
+
 function resumeQuestionIndex(lesson) {
   const answers = lessonAnswers(lesson);
   const firstUnanswered = lesson.questions.findIndex((question, index) => !Number.isInteger(answers[index]));
@@ -428,49 +436,37 @@ function currentPath(stage) {
   return `${course.title} ＞ ${stage.lesson.title} ＞ ${result ? resultLabel() : "練習問題"}`;
 }
 
-function branchStatus(stage) {
-  const total = currentCourse().lessons.length;
-  if (stage.type === "overview" || stage.type === "final") return `全${total}単元`;
-  return `${stage.lessonIndex + 1} / ${total}　${stage.lesson.title}`;
-}
-
 function render(resetScroll = false) {
   const stage = stages[state.stage];
   const course = currentCourse();
   const showingResult = stage.type === "practice" && state.question >= stage.lesson.questions.length;
-  const stepMarkup = (index, done) => `<button type="button" class="step ${done ? "done" : ""} ${index === state.stage ? "current" : ""}" data-stage="${index}" ${index === state.stage ? 'aria-current="step"' : ""}>`;
-  document.querySelector("#course-title").textContent = course.title;
+  // サイドバーの行(概論/各論/練習問題/修了テスト)は共通で「済み表示」「現在地」の2状態を持つ。
+  const rowAttrs = (className, index, done, extra = "") => `class="${className} ${done ? "done" : ""} ${extra} ${index === state.stage ? "current" : ""}" data-stage="${index}" ${index === state.stage ? 'aria-current="step"' : ""}`;
   document.querySelector("#course-selector").innerHTML = `
     <span class="course-selector-label">文法カテゴリ</span>
     ${courses.map(courseItem => `<button type="button" class="course-tab ${courseItem.id === course.id ? "current" : ""}" data-course="${courseItem.id}" ${courseItem.id === course.id ? 'aria-current="page" disabled' : ""}>${courseItem.title}</button>`).join("")}`;
   document.querySelector("#current-path").textContent = currentPath(stage);
-  document.querySelector("#steps").innerHTML = `
-    <li>${stepMarkup(0, state.stage > 0)}概論</button></li>
-    <li>
-      <details class="branch" ${state.branchOpen ? "open" : ""}>
-      <summary><span class="branch-label">各論</span><span class="branch-status">${branchStatus(stage)}</span></summary>
-      <ol>
-        ${course.lessons.map((lesson, lessonIndex) => {
-          const lessonStage = lessonIndex * 2 + 1;
-          const practiceStage = lessonStage + 1;
-          const answeredCount = lessonAnsweredCount(lesson);
-          const scoreLabel = answeredCount === 0 ? "" : answeredCount === lesson.questions.length ? `（${lessonScore(lesson)}/${lesson.questions.length}）` : `（${answeredCount}/${lesson.questions.length} 途中）`;
-          const practiceLabel = showingResult && state.stage === practiceStage ? resultLabel() : `練習問題${scoreLabel}`;
-          return `<li>
-            ${stepMarkup(lessonStage, state.visitedLessons.includes(lesson.id))}${lesson.title}</button>
-            <ol><li>${stepMarkup(practiceStage, lessonCompleted(lesson))}${practiceLabel}</button></li></ol>
-          </li>`;
-        }).join("")}
-      </ol>
-      </details>
-    </li>
-    <li>${stepMarkup(stages.length - 1, Boolean(state.finalChecks[course.id]?.cleared))}修了テスト</button></li>`;
 
-  const branch = document.querySelector("#steps .branch");
-  branch.addEventListener("toggle", () => {
-    state.branchOpen = branch.open;
-    saveState();
-  });
+  const finalStatus = finalStatusFor(course);
+  document.querySelector("#steps").innerHTML = `
+    <li><button type="button" ${rowAttrs("overview-item", 0, state.stage > 0)}><strong>概論</strong><em>${state.stage > 0 ? "済" : ""}</em></button></li>
+    ${course.lessons.map((lesson, lessonIndex) => {
+      const lessonStage = lessonIndex * 2 + 1;
+      const practiceStage = lessonStage + 1;
+      const isCurrentGroup = (stage.type === "lesson" || stage.type === "practice") && stage.lessonIndex === lessonIndex;
+      const answeredCount = lessonAnsweredCount(lesson);
+      const practiceLabel = showingResult && state.stage === practiceStage ? resultLabel() : "練習問題";
+      return `<li>
+        <details class="lesson-group ${isCurrentGroup ? "current" : ""} ${lessonMastered(lesson) ? "mastered" : ""}" ${isCurrentGroup ? "open" : ""}>
+          <summary><span class="lt"><strong>${lesson.title}</strong><small>${lessonGroupSummary(lesson)}</small></span></summary>
+          <div class="lesson-items">
+            <button type="button" ${rowAttrs("lesson-item", lessonStage, state.visitedLessons.includes(lesson.id))}>各論 <span class="badge">${state.visitedLessons.includes(lesson.id) ? "済" : "未"}</span></button>
+            <button type="button" ${rowAttrs("lesson-item", practiceStage, lessonCompleted(lesson))}>${practiceLabel} <span class="badge">${answeredCount}/${lesson.questions.length}</span></button>
+          </div>
+        </details>
+      </li>`;
+    }).join("")}
+    <li><button type="button" ${rowAttrs("final-item", stages.length - 1, finalStatus.tone === "ok", !courseMastered(course) ? "locked" : "")}><strong>修了テスト</strong><em>${finalStatus.label}</em></button></li>`;
 
   const content = document.querySelector("#content");
   if (state.reviewSession) renderReviewSession(content);

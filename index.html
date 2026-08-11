@@ -3,112 +3,156 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>英文法を学ぶ</title>
+  <title>英文法ミニレッスン</title>
   <style>
-    :root { color-scheme: light; --ink:#18243b; --muted:#5c687a; --line:#d9e0ea; --blue:#2459a9; --blue-dark:#18417f; --soft:#eef3fa; --ok:#176b45; --ok-bg:#e9f7ef; --ng:#9b2c2c; --ng-bg:#fff0f0; }
-    * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; background:#f1f4f8; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.75; }
-    main { width:min(720px, calc(100% - 32px)); margin:32px auto; }
-    header, article, footer.page-nav { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 30px rgb(24 36 59 / .07); }
-    header { padding:18px 48px 14px; margin-bottom:12px; }
-    article { padding:clamp(24px, 5vw, 48px); margin-bottom:12px; }
-    footer.page-nav { padding:14px 48px; }
-    h1 { margin:0 0 8px; font-size:clamp(1.15rem, 3.5vw, 1.4rem); line-height:1.3; text-wrap:balance; }
-    h2 { margin:0 0 20px; font-size:clamp(1.35rem, 4vw, 1.7rem); line-height:1.45; text-wrap:balance; }
-    p { margin:0 0 1em; }
-    .eyebrow { margin:0 0 4px; color:var(--blue); font-weight:700; font-size:.88rem; }
-    .current-path { margin:0 0 2px; font-weight:800; }
-    .save-status { margin:0 0 10px; color:var(--muted); font-size:.88rem; }
+    :root {
+      --ink:#141413; --parchment:#faf9f6; --paper:#fffefa; --line:#d7d1c5; --muted:#6c675e;
+      --clay:#b5532e; --ok:#166534; --ng:#b91c1c; --ok-bg:#eaf3ea; --ng-bg:#fbebe9;
+      --sans:"Segoe UI","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+      --serif:Georgia,"Yu Mincho",serif;
+      --mono:"Cascadia Mono",Consolas,monospace;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--parchment); color:var(--ink); font-family:var(--sans); line-height:1.75; }
+    button { font:inherit; cursor:pointer; }
+    button:focus-visible, summary:focus-visible { outline:2px solid var(--clay); outline-offset:2px; }
+    .eyebrow { margin:0 0 4px; font:700 11px/1.3 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+
+    /* ---- ヘッダー ---- */
+    .topbar { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:14px; padding:22px 32px 18px; border-bottom:2px solid var(--ink); }
+    .brand h1 { margin:0; padding:6px 12px; display:inline-block; background:var(--ink); color:var(--parchment); font:500 20px/1.4 var(--serif); }
+    .crumb { margin:10px 0 0; font:600 13px var(--mono); color:var(--muted); }
+    .save-status { margin:4px 0 0; font-size:12px; color:var(--muted); }
     .save-status-ng { color:var(--ng); font-weight:700; }
-    .course-selector { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 10px; }
-    .course-selector-label { color:var(--muted); font-size:.88rem; font-weight:700; }
-    .course-tab { min-height:44px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--blue); font-size:.88rem; }
-    .course-tab.current { border-color:var(--blue); background:var(--blue); color:#fff; cursor:default; }
-    .progress-details > summary { display:none; color:var(--blue); font-weight:700; cursor:pointer; }
-    .steps, .steps ol { margin:0; padding:0; list-style:none; }
-    .steps ol { margin:6px 0 6px 12px; padding-left:16px; border-left:2px solid var(--line); }
-    .branch { margin-top:6px; }
-    .branch > summary { display:flex; align-items:center; gap:8px; min-height:44px; padding:6px 8px; border-radius:8px; list-style:none; cursor:pointer; }
-    .branch > summary::-webkit-details-marker { display:none; }
-    .branch > summary::before { content:"▸"; color:var(--blue); font-weight:700; }
-    .branch[open] > summary::before { content:"▾"; }
-    .branch > summary:hover { background:var(--soft); }
-    .branch-label { color:var(--ink); font-weight:800; }
-    .branch-status { color:var(--muted); font-size:.88rem; font-weight:700; }
-    .branch[open] > summary .branch-status { color:var(--blue-dark); }
-    .step { display:block; width:100%; min-height:44px; margin:5px 0; padding:10px; border:none; border-radius:8px; background:#edf0f4; color:var(--muted); font-family:inherit; font-size:.88rem; font-weight:700; text-align:left; cursor:pointer; }
-    .step:hover:not(.current) { background:#e2e7ee; }
-    .step.current { background:var(--blue); color:#fff; cursor:default; }
-    .step.done { background:#dce9fa; color:var(--blue-dark); }
-    .dashboard-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin:0 0 20px; }
-    .kpi-card { padding:16px 18px; border:1px solid var(--line); border-radius:12px; background:var(--soft); }
-    .kpi-card .kpi-value { margin:0 0 4px; font-size:1.5rem; font-weight:800; color:var(--blue-dark); line-height:1.25; }
+
+    /* ---- シェル：サイドバー＋ワークスペース ---- */
+    .shell { display:grid; grid-template-columns:268px minmax(0,1fr); gap:28px; max-width:1240px; margin:0 auto; padding:24px 32px 64px; align-items:start; }
+    .sidebar { position:sticky; top:16px; display:flex; flex-direction:column; gap:16px; }
+    .panel { border:1px solid var(--ink); background:var(--paper); padding:16px; }
+
+    .review-panel[hidden] { display:none; }
+    .review-panel { background:#fdf6f2; border-color:var(--clay); display:flex; flex-direction:column; gap:0; }
+    .review-due-row[hidden] { display:none; }
+    .review-due-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .review-due-row strong { font:600 14px/1.4 var(--sans); color:var(--ink); }
+    .review-due-row button { min-height:36px; padding:7px 12px; border:1px solid var(--clay); background:var(--clay); color:var(--parchment); font-size:12px; font-weight:700; }
+    .review-due-row button:hover { background:#9a4526; }
+    .review-breakdown { margin-top:10px; }
+    .review-breakdown > summary { min-height:32px; display:flex; align-items:center; color:var(--clay); font:700 11px var(--mono); cursor:pointer; list-style:none; }
+    .review-breakdown > summary::-webkit-details-marker { display:none; }
+    .review-breakdown > summary::before { content:"▸ "; }
+    .review-breakdown[open] > summary::before { content:"▾ "; }
+    .review-breakdown-help { margin:6px 0 8px; color:var(--muted); font-size:11.5px; line-height:1.6; }
+    .review-breakdown-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; }
+    .review-breakdown-cell { padding:4px 2px; border-left:1px solid var(--line); text-align:center; }
+    .review-breakdown-cell:nth-child(3n+1) { border-left:0; }
+    .review-breakdown-cell strong { display:block; font-size:1rem; line-height:1.3; color:var(--ink); }
+    .review-breakdown-cell span { display:block; margin-top:2px; font-size:.7rem; color:var(--muted); white-space:nowrap; }
+
+    .course-panel { padding:12px 16px; }
+    .course-selector { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+    .course-selector-label { width:100%; margin:0 0 2px; color:var(--muted); font:700 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+    .course-tab { flex:1; min-height:38px; padding:7px 10px; border:1px solid var(--ink); border-radius:0; background:var(--paper); color:var(--ink); font-size:12.5px; font-weight:700; }
+    .course-tab.current { background:var(--ink); color:var(--parchment); cursor:default; }
+
+    /* ---- 構成リスト ---- */
+    .steps { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .overview-item, .final-item { width:100%; display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:46px; padding:10px 12px; border:1px solid var(--ink); background:var(--paper); color:var(--ink); text-align:left; }
+    .overview-item.done, .final-item.done { background:var(--ok-bg); border-color:var(--ok); }
+    .overview-item.current, .final-item.current { background:var(--ink); color:var(--parchment); }
+    .overview-item strong, .final-item strong { font-size:13px; }
+    .overview-item em, .final-item em { font:11px var(--mono); font-style:normal; color:var(--muted); }
+    .final-item.locked em { color:var(--ng); }
+    .overview-item.current em, .final-item.current em { color:#d7d1c5; }
+
+    .lesson-group { border:1px solid var(--ink); background:var(--paper); }
+    .lesson-group + .lesson-group { margin-top:0; }
+    .lesson-group > summary { list-style:none; display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:46px; padding:8px 12px; cursor:pointer; }
+    .lesson-group > summary::-webkit-details-marker { display:none; }
+    .lesson-group > summary::after { content:"+"; font:700 15px var(--mono); color:var(--muted); }
+    .lesson-group[open] > summary::after { content:"\2212"; }
+    .lesson-group.current { border-color:var(--clay); }
+    .lesson-group.current > summary { background:#fdf6f2; }
+    .lt { display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .lt strong { font-size:12.5px; line-height:1.35; }
+    .lt small { font:10.5px var(--mono); color:var(--muted); }
+    .lesson-group.mastered .lt small { color:var(--ok); }
+    .lesson-items { border-top:1px solid var(--line); }
+    .lesson-item { width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; min-height:42px; padding:8px 12px 8px 18px; border:0; border-top:1px solid var(--line); background:transparent; color:var(--ink); text-align:left; font-size:12.5px; }
+    .lesson-item:first-child { border-top:0; }
+    .lesson-item:hover { background:#f0ede6; }
+    .lesson-item.current { background:var(--ink); color:var(--parchment); font-weight:700; }
+    .lesson-item .badge { font:10.5px var(--mono); color:var(--muted); }
+    .lesson-item.current .badge { color:#d7d1c5; }
+
+    .progress-details > summary { display:none; }
+    .progress-details[open] > summary { display:none; }
+
+    /* ---- ワークスペース（本文） ---- */
+    .workspace { min-width:0; }
+    article#content { max-width:680px; border:1px solid var(--ink); background:var(--paper); padding:clamp(24px, 4vw, 40px); }
+    h1 { margin:0; }
+    h2 { margin:0 0 20px; font:500 clamp(22px, 3vw, 28px)/1.4 var(--serif); text-wrap:balance; }
+    p { margin:0 0 1em; }
+    .question-count { color:var(--muted); font:700 13px var(--mono); }
+    .dashboard-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin:0 0 22px; }
+    .kpi-card { padding:16px 18px; border:1px solid var(--line); background:var(--parchment); }
+    .kpi-card .kpi-value { margin:0 0 4px; font-size:1.5rem; font-weight:800; color:var(--ink); line-height:1.25; }
     .kpi-card .kpi-value .kpi-unit { font-size:.85rem; font-weight:700; color:var(--muted); }
     .kpi-card .kpi-label { margin:0; font-size:.85rem; font-weight:700; color:var(--muted); }
-    .kpi-card.kpi-primary { background:var(--blue); border-color:var(--blue); }
-    .kpi-card.kpi-primary .kpi-value, .kpi-card.kpi-primary .kpi-value .kpi-unit { color:#fff; }
-    .kpi-card.kpi-primary .kpi-label { color:#dbe6fb; }
+    .kpi-card.kpi-primary { background:var(--ink); border-color:var(--ink); }
+    .kpi-card.kpi-primary .kpi-value, .kpi-card.kpi-primary .kpi-value .kpi-unit { color:var(--parchment); }
+    .kpi-card.kpi-primary .kpi-label { color:#d7d1c5; }
     .kpi-card.kpi-ok { background:var(--ok-bg); border-color:var(--ok); }
     .kpi-card.kpi-ok .kpi-value { color:var(--ok); }
-    .formula, blockquote { margin:20px 0; padding:16px 18px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 10px 10px 0; }
-    .formula { font-family:ui-monospace,"Cascadia Mono",monospace; font-weight:700; overflow-wrap:anywhere; }
+    .formula, blockquote { margin:20px 0; padding:16px 18px; border-left:4px solid var(--clay); background:var(--parchment); }
+    .formula { font-family:var(--mono); font-weight:700; overflow-wrap:anywhere; }
+    blockquote { margin-left:0; margin-right:0; }
     blockquote p:last-child { margin-bottom:0; }
     .note { color:var(--muted); font-size:.95rem; }
-    details.section { margin:20px 0; border:1px solid var(--line); border-radius:10px; padding:0 18px; }
+    details.section { margin:20px 0; border:1px solid var(--line); padding:0 18px; }
     details.section[open] { padding-bottom:18px; }
-    details.section > summary { display:flex; align-items:center; gap:8px; min-height:44px; margin:0 -18px; padding:10px 18px; border-radius:10px; font-size:1.1rem; font-weight:800; cursor:pointer; list-style:none; }
+    details.section > summary { display:flex; align-items:center; gap:8px; min-height:44px; margin:0 -18px; padding:10px 18px; font-size:1.05rem; font-weight:800; cursor:pointer; list-style:none; }
     details.section > summary::-webkit-details-marker { display:none; }
-    details.section > summary::before { content:"▸"; color:var(--blue); }
+    details.section > summary::before { content:"▸"; color:var(--clay); }
     details.section[open] > summary::before { content:"▾"; }
-    details.section > summary:hover { background:var(--soft); }
+    details.section > summary:hover { background:var(--parchment); }
     details.section > summary + * { margin-top:0; }
     .actions { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:30px; }
     .actions > .primary { margin-left:auto; }
     .actions-decision { display:flex; flex-wrap:wrap; gap:12px; margin-left:auto; justify-content:flex-end; }
-    button { min-height:48px; padding:10px 20px; border:2px solid transparent; border-radius:10px; font:inherit; font-weight:700; cursor:pointer; }
-    button:focus-visible, summary:focus-visible { outline:3px solid #e0a400; outline-offset:3px; }
-    .primary { background:var(--blue); color:#fff; }
-    .primary:hover { background:var(--blue-dark); }
-    .secondary { background:#fff; color:var(--blue); border-color:var(--blue); }
+    button.primary, button.secondary { min-height:48px; padding:10px 20px; border:1px solid var(--ink); font-weight:700; }
+    button.primary { background:var(--ink); color:var(--parchment); }
+    button.primary:hover { background:#2d2b28; }
+    button.secondary { background:var(--paper); color:var(--ink); }
+    button.secondary:hover { background:var(--ink); color:var(--parchment); }
     .choices { display:grid; gap:10px; margin:22px 0; }
-    .choice { width:100%; text-align:left; background:#fff; color:var(--ink); border-color:var(--line); }
-    .choice:hover:not(:disabled) { border-color:var(--blue); background:var(--soft); }
+    .choice { width:100%; min-height:48px; text-align:left; background:var(--paper); color:var(--ink); border:1px solid var(--line); padding:10px 16px; }
+    .choice:hover:not(:disabled) { border-color:var(--ink); background:var(--parchment); }
     .choice:disabled { cursor:default; opacity:1; }
-    .choice.correct { border-color:var(--ok); background:var(--ok-bg); color:var(--ok); }
-    .choice.wrong { border-color:var(--ng); background:var(--ng-bg); color:var(--ng); }
-    .feedback { padding:16px 18px; border-radius:10px; }
-    .feedback.ok { background:var(--ok-bg); color:#104c33; }
-    .feedback.ng { background:var(--ng-bg); color:#732020; }
+    .choice.correct { border-color:var(--ok); background:var(--ok-bg); color:#0f3d24; }
+    .choice.wrong { border-color:var(--ng); background:var(--ng-bg); color:#6b1410; }
+    .feedback { padding:16px 18px; border-left:4px solid var(--ng); }
+    .feedback.ok { background:var(--ok-bg); border-left-color:var(--ok); color:#0f3d24; }
+    .feedback.ng { background:var(--ng-bg); color:#6b1410; }
     .feedback strong { display:block; margin-bottom:4px; }
-    .question-count { color:var(--muted); font-weight:700; }
-    .score { font-size:2.25rem; font-weight:800; color:var(--blue); }
-    .review-summary { margin:20px 0; padding:16px 18px; background:var(--soft); border-radius:10px; }
+    .score { font:800 2rem/1.2 var(--serif); color:var(--ink); }
+    .review-summary { margin:20px 0; padding:16px 18px; background:var(--parchment); border:1px solid var(--line); }
     .review-summary h3 { margin:0 0 10px; font-size:1rem; }
     .review-list { margin:0; padding-left:22px; }
     .review-list li + li { margin-top:10px; }
     .review-list span { display:block; }
-    .course-summary .total-score { margin:0 0 10px; font-size:1.5rem; font-weight:800; color:var(--blue); }
-    .review-banner { display:flex; flex-direction:column; gap:6px; margin:0 0 10px; padding:8px 14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
-    .review-banner[hidden] { display:none; }
-    .review-due-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; }
-    .review-due-row[hidden] { display:none; }
-    .review-due-row span { font-size:.92rem; font-weight:700; color:var(--blue-dark); }
-    .review-breakdown > summary { min-height:44px; padding:6px 0; color:var(--blue); font-weight:700; font-size:.88rem; cursor:pointer; list-style:none; }
-    .review-breakdown > summary::-webkit-details-marker { display:none; }
-    .review-breakdown > summary::before { content:"▸ "; }
-    .review-breakdown[open] > summary::before { content:"▾ "; }
-    .review-breakdown-help { margin:4px 0 8px; color:var(--muted); font-size:.85rem; line-height:1.5; }
-    .review-breakdown-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(70px, 1fr)); gap:6px; }
-    .review-breakdown-cell { padding:4px 6px; border-left:1px solid var(--line); text-align:center; }
-    .review-breakdown-cell:first-child { border-left:0; }
-    .review-breakdown-cell strong { display:block; font-size:1.1rem; line-height:1.3; color:var(--ink); }
-    .review-breakdown-cell span { display:block; margin-top:2px; font-size:.78rem; color:var(--muted); white-space:nowrap; }
-    @media (max-width:520px) {
-      main { margin:16px auto; }
-      header { padding:14px 20px 10px; margin-bottom:10px; }
-      article { padding:24px 20px; margin-bottom:10px; }
-      footer.page-nav { padding:12px 20px; }
-      .progress-details > summary { display:list-item; min-height:44px; padding:8px 0; }
+    .course-summary .total-score { margin:0 0 10px; font-size:1.5rem; font-weight:800; color:var(--ink); }
+
+    @media (max-width:1000px) {
+      .shell { grid-template-columns:1fr; }
+      .sidebar { position:static; }
+    }
+    @media (max-width:640px) {
+      .topbar { flex-direction:column; align-items:flex-start; padding:16px 20px 14px; }
+      .shell { padding:16px 20px 48px; gap:14px; }
+      article#content { max-width:none; padding:22px 20px; }
+      .progress-details > summary { display:list-item; min-height:44px; padding:10px 0; color:var(--clay); font:700 13px var(--sans); cursor:pointer; }
       .actions { flex-direction:column-reverse; }
       .actions button { width:100%; }
       .actions-decision { flex-direction:column-reverse; width:100%; margin-left:0; }
@@ -116,20 +160,23 @@
   </style>
 </head>
 <body>
-  <main>
-    <header>
-      <p class="eyebrow">英文法ミニレッスン</p>
-      <h1 id="course-title">仮定法</h1>
-      <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
-      <p id="current-path" class="current-path"></p>
+  <header class="topbar">
+    <div class="brand">
+      <p class="eyebrow">English / Grammar</p>
+      <h1>英文法ミニレッスン</h1>
+    </div>
+    <div>
+      <p id="current-path" class="crumb"></p>
       <p id="save-status" class="save-status">端末に自動保存済み</p>
-    </header>
-    <article id="content" tabindex="-1"></article>
-    <footer class="page-nav">
-      <div id="review-banner" class="review-banner" hidden>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar">
+      <div id="review-banner" class="panel review-panel" hidden>
         <div id="review-due-row" class="review-due-row">
-          <span data-review-count></span>
-          <button type="button" class="secondary" data-action="start-review">復習を始める</button>
+          <strong data-review-count></strong>
+          <button type="button" data-action="start-review">始める</button>
         </div>
         <details class="review-breakdown">
           <summary>状態・復習間隔別内訳を見る</summary>
@@ -137,12 +184,22 @@
           <div id="review-breakdown-grid" class="review-breakdown-grid"></div>
         </details>
       </div>
-      <details class="progress-details">
+
+      <div class="panel course-panel">
+        <div id="course-selector" class="course-selector" role="group" aria-label="文法カテゴリ"></div>
+      </div>
+
+      <details class="progress-details" open>
         <summary>学習の構成を見る</summary>
         <ol id="steps" class="steps" aria-label="学習の構成と進捗"></ol>
       </details>
-    </footer>
+    </aside>
+
+    <section class="workspace">
+      <article id="content" tabindex="-1"></article>
+    </section>
   </main>
+
   <script src="content.js"></script>
   <script src="vendor/harness/cloud.js"></script>
   <script src="app.js"></script>
