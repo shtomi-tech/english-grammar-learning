@@ -277,8 +277,8 @@ function finalStatusFor(course) {
     const remaining = course.lessons.length - course.lessons.filter(lessonMastered).length;
     return { label: "未解放", detail: `あと${remaining}単元でマスター`, tone: "" };
   }
-  const record = state.finalChecks[course.id];
-  if (record?.cleared) return { label: "CLEAR", detail: `過去最高 ${record.bestScore}/${record.bestTotal}問`, tone: "ok" };
+  const record = state.finalChecks?.[course.id];
+  if (courseCleared(course)) return { label: "CLEAR", detail: `過去最高 ${record.bestScore}/${record.bestTotal}問`, tone: "ok" };
   return { label: "挑戦可能", detail: "修了テストに挑戦できます", tone: "" };
 }
 
@@ -297,6 +297,11 @@ function finalRecordFor(course) {
   // 単元・問題が増減すると過去のCLEAR判定は引き継がない。
   if (record.cleared && record.bestTotal !== total) record.cleared = false;
   return record;
+}
+
+function courseCleared(course) {
+  const record = state.finalChecks?.[course.id];
+  return record?.cleared === true && record.bestTotal === allCourseQuestions(course).length;
 }
 
 function startFinalCheck(course) {
@@ -574,6 +579,103 @@ function overviewActionFor(course) {
   return { targetStage, label: `復習する：${target.lesson.title}`, hint: `${target.lesson.title}の練習問題をもう一度解きます。` };
 }
 
+function courseStarted(course) {
+  const hasLessonProgress = course.lessons.some(lesson =>
+    state.visitedLessons?.includes(lesson.id) || lessonAnsweredCount(lesson) > 0
+  );
+  const hasSavedPosition = state.coursePositions?.[course.id]?.stage > 0;
+  const hasFinalAttempt = state.finalChecks?.[course.id]?.bestTotal > 0;
+  const hasFinalRun = state.finalRun?.courseId === course.id && state.finalRun.order?.length > 0;
+  return hasLessonProgress || hasSavedPosition || hasFinalAttempt || hasFinalRun;
+}
+
+function recommendedOtherCourse(currentCourse) {
+  const candidates = courses.filter(course => course.id !== currentCourse.id && !courseCleared(course));
+  const started = candidates.find(courseStarted);
+  if (started) return started;
+
+  const currentIndex = courses.findIndex(course => course.id === currentCourse.id);
+  for (let offset = 1; offset <= courses.length; offset += 1) {
+    const course = courses[(currentIndex + offset) % courses.length];
+    if (course.id !== currentCourse.id && !courseCleared(course)) return course;
+  }
+  return null;
+}
+
+function homePrimaryActionFor(course) {
+  const action = overviewActionFor(course);
+  if (!courseMastered(course)) {
+    return {
+      mode: "learning",
+      eyebrow: "まずはここから",
+      title: "",
+      lead: action.hint,
+      primary: { label: action.label, dataAttribute: "stage", value: action.targetStage, className: "cta" },
+      secondary: null
+    };
+  }
+
+  const record = state.finalChecks?.[course.id];
+  const attempted = record?.bestTotal > 0;
+  if (!courseCleared(course)) {
+    return {
+      mode: "final-retry",
+      eyebrow: "修了テスト",
+      title: attempted ? "修了テストにもう一度挑戦しましょう" : "修了テストを受けましょう",
+      lead: attempted
+        ? `前回の得点：${record.lastScore ?? 0} / ${record.bestTotal}`
+        : "全単元マスター済みです。修了テストに挑戦できます。",
+      primary: {
+        label: attempted ? "修了テストにもう一度挑戦する" : "修了テストへ",
+        dataAttribute: "action",
+        value: "goto-final",
+        className: "cta"
+      },
+      secondary: null
+    };
+  }
+
+  const nextCourse = recommendedOtherCourse(course);
+  if (nextCourse) {
+    const started = courseStarted(nextCourse);
+    return {
+      mode: "next-course",
+      eyebrow: `${course.title} 修了`,
+      title: `次は「${nextCourse.title}」を学びましょう`,
+      lead: nextCourse.recommendationLead,
+      primary: {
+        label: started ? `続きから：${nextCourse.title}` : `${nextCourse.title}の学習を始める`,
+        dataAttribute: "course",
+        value: nextCourse.id,
+        className: "cta"
+      },
+      secondary: {
+        label: "修了テストにもう一度挑戦する",
+        dataAttribute: "action",
+        value: "goto-final",
+        className: "ghost secondaryCta"
+      }
+    };
+  }
+
+  const due = dueReviewCount();
+  return {
+    mode: "all-cleared",
+    eyebrow: "全カテゴリ修了",
+    title: "すべての文法カテゴリを修了しました",
+    lead: due > 0
+      ? "全カテゴリの修了を確認しました。今日の復習を始めましょう。"
+      : "今すぐ復習する問題はありません。次回の復習まで、学んだ内容を思い出しておきましょう。",
+    primary: due > 0 ? { label: "今日の復習を始める", dataAttribute: "action", value: "start-review", className: "cta reviewCta" } : null,
+    secondary: {
+      label: "修了テストにもう一度挑戦する",
+      dataAttribute: "action",
+      value: "goto-final",
+      className: "ghost secondaryCta"
+    }
+  };
+}
+
 function statHtml(value, total, label, secondary = false) {
   return `<div class="stat${secondary ? " stat--secondary" : ""}"><strong>${value}<small> / ${total}</small></strong><span>${label}</span></div>`;
 }
@@ -676,6 +778,35 @@ function handleQuizKeydown(event) {
 }
 document.addEventListener("keydown", handleQuizKeydown);
 
+function homeActionButtonHtml(action) {
+  if (!action) return "";
+  return `<button type="button" class="${action.className}" data-${action.dataAttribute}="${action.value}">${action.label}</button>`;
+}
+
+function homeHeroHtml(course, stats, model) {
+  const recommendation = model.mode === "learning"
+    ? `${homeActionButtonHtml(model.primary)}<p class="hint">${model.lead}</p>`
+    : `<h3 class="homeHeroTitle">${model.title}</h3>
+       <p class="lead${model.mode === "all-cleared" && !model.primary ? " completionMessage" : ""}">${model.lead}</p>
+       <div class="actions homeHeroActions">${homeActionButtonHtml(model.primary)}${homeActionButtonHtml(model.secondary)}</div>`;
+  return `
+    <section class="card homeHero">
+      <p class="label">今回の学習</p>
+      <h2 tabindex="-1">${course.title}</h2>
+      <p class="lead">全${stats.total}単元を「概論 → 各論 → 練習問題」の順に進めます。</p>
+      <div class="recommend recommend--${model.mode}">
+        <p class="label">${model.eyebrow}</p>
+        ${recommendation}
+      </div>
+      <div class="stats">
+        ${statHtml(stats.completed, stats.total, "完了単元")}
+        ${statHtml(stats.weakCount, stats.total, "要復習単元")}
+        ${statHtml(stats.mastered, stats.total, "マスター済み", true)}
+        ${statHtml(stats.finalBest, stats.finalBestTotal, "修了BEST", true)}
+      </div>
+    </section>`;
+}
+
 function renderOverview(content) {
   const course = currentCourse();
   const { total, completed, mastered } = courseProgressStats(course);
@@ -684,27 +815,12 @@ function renderOverview(content) {
   const finalRecord = state.finalChecks?.[course.id];
   const finalBest = finalRecord?.bestScore || 0;
   const finalBestTotal = finalRecord?.bestTotal || allCourseQuestions(course).length;
-  const action = overviewActionFor(course);
+  const homeAction = homePrimaryActionFor(course);
   const showUnlock = justUnlockedCourseId === course.id;
   if (showUnlock) justUnlockedCourseId = null; // 一度描画したら消費する（リロード・再訪では再演しない）
 
   content.innerHTML = `
-    <section class="card">
-      <p class="label">今回の学習</p>
-      <h2 tabindex="-1">${course.title}</h2>
-      <p class="lead">全${total}単元を「概論 → 各論 → 練習問題」の順に進めます。</p>
-      <div class="recommend">
-        <p class="label">まずはここから</p>
-        <button type="button" class="cta" data-stage="${action.targetStage}">${action.label}</button>
-        <p class="hint">${action.hint}</p>
-      </div>
-      <div class="stats">
-        ${statHtml(completed, total, "完了単元")}
-        ${statHtml(weakCount, total, "要復習単元")}
-        ${statHtml(mastered, total, "マスター済み", true)}
-        ${statHtml(finalBest, finalBestTotal, "修了BEST", true)}
-      </div>
-    </section>
+    ${homeHeroHtml(course, { total, completed, mastered, weakCount, finalBest, finalBestTotal }, homeAction)}
     ${reviewMissionCard(course)}
     <details class="card" open>
       <summary><h3>${course.overview.title}</h3></summary>
@@ -944,7 +1060,7 @@ function renderFinalResult(content, course, run) {
       </ol>
     </section>` : ""}
     <div class="actions">
-      <button type="button" class="ghost" data-action="overview">概論へ戻る</button>
+      <button type="button" class="ghost" data-action="overview">ホームへ戻る</button>
       <button type="button" class="cta" data-action="start-final">もう一度挑戦する</button>
     </div>`;
 }

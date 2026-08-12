@@ -33,6 +33,12 @@ const subjunctiveVersions = {
   "it-is-time-subjunctive-past": 1
 };
 
+const participlesVersions = {
+  "participles-as-adjectives-present": 1,
+  "participles-as-adjectives-past": 1,
+  "emotion-verb-participles": 1
+};
+
 // 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
 const almostMasteredAnswers = {
   "past-subjunctive": [3, 1, 2],
@@ -44,6 +50,35 @@ const almostMasteredAnswers = {
   "if-it-were-not-for": [1, 2, 1],
   "as-if-subjunctive": [1, 2, 3]
 };
+
+const masteredSubjunctiveAnswers = {
+  ...almostMasteredAnswers,
+  "it-is-time-subjunctive-past": [1, 2, 1]
+};
+
+const masteredParticiplesAnswers = {
+  "participles-as-adjectives-present": [1, 1, 2],
+  "participles-as-adjectives-past": [1, 2, 2],
+  "emotion-verb-participles": [1, 2, 0]
+};
+
+function finalRecord(score, total, cleared) {
+  return { bestScore: score, lastScore: score, cleared, bestTotal: total };
+}
+
+function reviewForAnswers(answers, dueQuestionId = null) {
+  return Object.fromEntries(Object.keys(answers).flatMap(lessonId => [1, 2, 3].map(number => {
+    const questionId = `${lessonId}-q${number}`;
+    return [questionId, {
+      wrongCount: 0,
+      leitnerStage: 0,
+      nextReviewAt: questionId === dueQuestionId ? "2000-01-01" : "2999-12-31",
+      lastAnsweredAt: "2026-08-01"
+    }];
+  })));
+}
+
+const masteredAnswers = { ...masteredSubjunctiveAnswers, ...masteredParticiplesAnswers };
 
 test.describe("正誤フィードバックのモーション", () => {
   test("正解の選択肢にsettle、不正解の選択肢にshakeのアニメーションが設定される", async ({ page }) => {
@@ -240,6 +275,150 @@ test.describe("修了テスト解放のunlock", () => {
     const finalRow = page.locator(".unitRow").last();
     await expect(finalRow).not.toHaveClass(/is-unlocking/);
     await expect(finalRow).toContainText("挑戦可能");
+  });
+});
+
+test.describe("修了後のホーム推薦", () => {
+  test("仮定法CLEAR後は未CLEARの分詞を主導線にする", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredSubjunctiveAnswers,
+      versions: subjunctiveVersions,
+      visitedLessons: Object.keys(masteredSubjunctiveAnswers),
+      finalChecks: { subjunctive: finalRecord(27, 27, true) }
+    });
+
+    await expect(page.getByText("仮定法 修了", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "次は「分詞」を学びましょう" })).toBeVisible();
+    await expect(page.locator(".recommend")).toContainText("動詞の形を使って");
+    await expect(page.getByRole("button", { name: "分詞の学習を始める" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "修了テストへ", exact: true })).toHaveCount(0);
+  });
+
+  test("推薦先に途中進捗があれば保存位置を復元する", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: { ...masteredSubjunctiveAnswers, "participles-as-adjectives-present": [1] },
+      versions: { ...subjunctiveVersions, ...participlesVersions },
+      visitedLessons: [...Object.keys(masteredSubjunctiveAnswers), "participles-as-adjectives-present"],
+      finalChecks: { subjunctive: finalRecord(27, 27, true) },
+      coursePositions: {
+        subjunctive: { stage: 0, question: 0 },
+        participles: { stage: 2, question: 1 }
+      }
+    });
+
+    const action = page.getByRole("button", { name: "続きから：分詞" });
+    await expect(action).toBeVisible();
+    await action.click();
+
+    await expect(page.locator("#current-path")).toContainText("分詞 ＞ 分詞の形容詞的用法（現在分詞） ＞ 練習問題");
+    await expect(page.getByText("問題 2 / 3")).toBeVisible();
+    const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
+    expect(saved.courseId).toBe("participles");
+    expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });
+  });
+
+  test("修了テスト不合格時は別カテゴリではなく再挑戦を主導線にする", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredSubjunctiveAnswers,
+      versions: subjunctiveVersions,
+      visitedLessons: Object.keys(masteredSubjunctiveAnswers),
+      finalChecks: { subjunctive: finalRecord(18, 27, false) }
+    });
+
+    await expect(page.locator(".recommend")).toContainText("前回の得点：18 / 27");
+    await expect(page.getByRole("button", { name: "修了テストにもう一度挑戦する" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /次は「/ })).toHaveCount(0);
+  });
+
+  test("問題数が変わった古いCLEARは次カテゴリ推薦に使わない", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredSubjunctiveAnswers,
+      versions: subjunctiveVersions,
+      visitedLessons: Object.keys(masteredSubjunctiveAnswers),
+      finalChecks: { subjunctive: finalRecord(26, 26, true) }
+    });
+
+    await expect(page.getByRole("button", { name: "修了テストにもう一度挑戦する" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /次は「/ })).toHaveCount(0);
+  });
+
+  test("全カテゴリCLEARかつ期限到来問題があれば上部から復習を始められる", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredAnswers,
+      versions: { ...subjunctiveVersions, ...participlesVersions },
+      visitedLessons: Object.keys(masteredAnswers),
+      finalChecks: {
+        subjunctive: finalRecord(27, 27, true),
+        participles: finalRecord(9, 9, true)
+      },
+      review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
+    });
+
+    await expect(page.getByRole("heading", { name: "すべての文法カテゴリを修了しました" })).toBeVisible();
+    await page.getByRole("button", { name: "今日の復習を始める" }).click();
+    await expect(page.locator("#current-path")).toHaveText("今日の復習");
+    await expect(page.getByRole("heading", { name: "今日の復習" })).toBeVisible();
+  });
+
+  test("全カテゴリCLEARかつ期限到来問題がなければ無効な復習CTAを置かない", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredAnswers,
+      versions: { ...subjunctiveVersions, ...participlesVersions },
+      visitedLessons: Object.keys(masteredAnswers),
+      finalChecks: {
+        subjunctive: finalRecord(27, 27, true),
+        participles: finalRecord(9, 9, true)
+      },
+      review: reviewForAnswers(masteredAnswers)
+    });
+
+    await expect(page.getByRole("heading", { name: "すべての文法カテゴリを修了しました" })).toBeVisible();
+    await expect(page.locator('.recommend [data-action="start-review"]')).toHaveCount(0);
+    await expect(page.locator(".recommend")).toContainText("今すぐ復習する問題はありません");
+  });
+
+  test("320px幅でも完了後のCTAが操作可能で横にはみ出さない", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: masteredAnswers,
+      versions: { ...subjunctiveVersions, ...participlesVersions },
+      visitedLessons: Object.keys(masteredAnswers),
+      finalChecks: {
+        subjunctive: finalRecord(27, 27, true),
+        participles: finalRecord(9, 9, true)
+      },
+      review: reviewForAnswers(masteredAnswers)
+    });
+
+    const button = page.getByRole("button", { name: "修了テストにもう一度挑戦する" });
+    const box = await button.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(48);
+    const size = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth
+    }));
+    expect(size.scrollWidth).toBeLessThanOrEqual(size.clientWidth);
   });
 });
 

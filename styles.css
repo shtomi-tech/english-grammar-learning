@@ -128,6 +128,12 @@ details.section > .sectionBody.is-entering { opacity: 0; transform: translateY(6
 .wrap .card > summary h3 { display: inline; margin: 0; }
 .wrap .card[open] > summary { margin-bottom: 16px; }
 .wrap .recommend { margin: 24px 0; padding: 20px; border-left: 4px solid var(--clay); border-radius: var(--radius-control); background: var(--parchment); }
+.wrap .recommend--next-course, .wrap .recommend--all-cleared { border-left-color: var(--ok); }
+.wrap .recommend--next-course > .label::before, .wrap .recommend--all-cleared > .label::before { content: "✓ "; color: var(--ok); }
+.wrap .recommend--final-retry { border-left-color: var(--clay); }
+.wrap .homeHeroTitle { margin: 0 0 10px; font-size: clamp(22px, 3vw, 30px); }
+.wrap .homeHeroActions { justify-content: flex-start; margin: 20px 0 0; }
+.wrap .completionMessage { color: var(--muted); }
 .wrap .cta, .wrap .ghost { min-height: 48px; border-radius: var(--radius-control); cursor: pointer; transition: background-color var(--transition-hover), border-color var(--transition-hover), color var(--transition-hover), transform var(--transition-release); }
 .wrap .cta:active:not(:disabled), .wrap .ghost:active:not(:disabled) { transition: background-color var(--transition-hover), border-color var(--transition-hover), color var(--transition-hover), transform var(--transition-press); }
 .wrap .cta { padding: 12px 20px; border: 0; background: var(--ink); color: var(--parchment); font-weight: 700; }

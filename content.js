@@ -377,12 +377,14 @@ const curriculum = {
     {
       id: "subjunctive",
       title: "仮定法",
+      recommendationLead: "現実と異なる想像・願望・後悔を、動詞の形で表す文法です。",
       overview: subjunctiveCourse.overview,
       lessons: subjunctiveCourse.lessons
     },
     {
       id: "participles",
       title: "分詞",
+      recommendationLead: "動詞の形を使って、名詞や人・物の状態を説明する文法です。",
       overview: {
         title: "分詞とは",
         html: `
@@ -542,6 +544,8 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
   const allQuestions = lessons.flatMap(lesson => lesson.questions);
   check(allQuestions.every(question => typeof question.id === "string" && question.id.length > 0), "全問にIDがあること");
   check(new Set(allQuestions.map(question => question.id)).size === allQuestions.length, "問題IDが重複しないこと");
+  check(courses.every(course => typeof course.recommendationLead === "string" && course.recommendationLead.trim().length > 0), "全カテゴリに推薦紹介文があること");
+  check(courses.every(course => !/[<>]/.test(course.recommendationLead)), "推薦紹介文にHTMLを含めないこと");
   if (failures.length > 0) {
     failures.forEach(message => console.error(`CONTENT_CHECK_NG: ${message}`));
     process.exitCode = 1;
