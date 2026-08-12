@@ -1,0 +1,14 @@
+{
+  "name": "english-grammar-learning",
+  "private": true,
+  "scripts": {
+    "check:syntax": "node --check app.js",
+    "check:content": "node content.js --check",
+    "test:e2e": "playwright test",
+    "test:artifact": "playwright test --config=playwright.artifact.config.mjs",
+    "test": "npm run check:syntax && npm run check:content && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}

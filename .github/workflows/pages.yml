@@ -4,22 +4,18 @@ on:
   push:
     branches:
       - main
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,10 +26,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check app and content
+      - name: Install test dependencies
         run: |
-          node --check app.js
-          node content.js --check
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Check app and browser flows
+        run: npm test
 
       - name: Generate runtime config
         run: node scripts/write-config.mjs
@@ -42,15 +41,67 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
       - name: Prepare static files
         run: |
           rm -rf _site
           mkdir -p _site/vendor/harness
-          cp index.html app.js content.js config.json .nojekyll _site/
+          cp index.html app.js content.js styles.css config.json .nojekyll _site/
           cp vendor/harness/cloud.js _site/vendor/harness/
+
+      - name: Verify static artifact
+        run: |
+          test -f _site/index.html
+          test -f _site/app.js
+          test -f _site/content.js
+          test -f _site/styles.css
+          test -f _site/config.json
+          test -f _site/vendor/harness/cloud.js
+
+          refs=$(grep -oE '(href|src)="[^"]+"' _site/index.html | sed -E 's/^(href|src)="//; s/"$//')
+          missing=0
+          for ref in $refs; do
+            case "$ref" in
+              http://*|https://*|\#*) continue ;;
+            esac
+            path="${ref%%\?*}"
+            if [ ! -f "_site/$path" ]; then
+              echo "Missing referenced file: $path" >&2
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ]
+
+      - name: Artifact smoke test
+        run: npm run test:artifact
+
+      - name: Upload build artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          retention-days: 1
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

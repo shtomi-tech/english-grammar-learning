@@ -5,7 +5,7 @@ const legacyStorageKey = "englishGrammarLearning.v2";
 const veryLegacyStorageKey = "englishGrammarLearning.subjunctivePast.v1";
 const defaultState = {
   courseId: defaultCourseId, stage: 0, question: 0, answers: {}, versions: {}, visitedLessons: [],
-  review: {}, reviewSession: null, finalChecks: {}, finalRun: null
+  review: {}, reviewSession: null, finalChecks: {}, finalRun: null, coursePositions: {}
 };
 
 const LEITNER_LADDER = [1, 3, 7, 14]; // 正解のたびに進む復習間隔（日）
@@ -68,11 +68,46 @@ function clampStage(stage, courseId) {
   return Math.min(Math.max(Number.isInteger(stage) ? stage : 0, 0), stagesFor(courseFor(courseId)).length - 1);
 }
 
+function isRecord(value) {
+  return value && typeof value === "object" && !Array.isArray(value);
+}
+
+function normalizePosition(courseId, source = {}) {
+  const course = courseFor(courseId);
+  const stage = clampStage(source.stage, course.id);
+  const stageItem = stagesFor(course)[stage];
+  const maxQuestion = stageItem.type === "practice" ? stageItem.lesson.questions.length : 0;
+  const rawQuestion = Number.isInteger(source.question) ? source.question : 0;
+  return { stage, question: Math.min(Math.max(rawQuestion, 0), maxQuestion) };
+}
+
+function normalizeCoursePositions(source, activeCourseId, activeStage, activeQuestion) {
+  const raw = isRecord(source) ? source : {};
+  const normalized = {};
+  courses.forEach(course => {
+    if (isRecord(raw[course.id])) normalized[course.id] = normalizePosition(course.id, raw[course.id]);
+  });
+  const activeId = validCourseId(activeCourseId);
+  normalized[activeId] ||= normalizePosition(activeId, { stage: activeStage, question: activeQuestion });
+  return normalized;
+}
+
+function normalizeState(source, fallbackCourseId = defaultCourseId) {
+  const raw = isRecord(source) ? source : {};
+  const courseId = validCourseId(raw.courseId || fallbackCourseId);
+  const next = { ...defaultState, ...raw, courseId };
+  const position = normalizePosition(courseId, { stage: next.stage, question: next.question });
+  next.stage = position.stage;
+  next.question = position.question;
+  next.coursePositions = normalizeCoursePositions(next.coursePositions, courseId, position.stage, position.question);
+  next.coursePositions[courseId] = position;
+  return next;
+}
+
 let state = loadState();
 let stages = stagesFor(courseFor(state.courseId));
 backfillVisitedLessons();
 sanitizePersistedSessions();
-const progressMedia = matchMedia("(max-width: 640px)");
 
 // content.js の編集で問題IDが削除・変更されていた場合、保存済みの復習・修了テストの
 // 途中状態が存在しない問題を参照してクラッシュしないよう、対象がなければ破棄する。
@@ -85,39 +120,40 @@ function sanitizePersistedSessions() {
   }
 }
 
-function syncProgressDetails(event = progressMedia) {
-  document.querySelector(".progress-details").toggleAttribute("open", !event.matches);
-}
-
-syncProgressDetails();
-progressMedia.addEventListener("change", syncProgressDetails);
-
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    if (saved && Number.isInteger(saved.stage) && saved.answers && !Array.isArray(saved.answers)) {
-      const courseId = validCourseId(saved.courseId);
-      return { ...defaultState, ...saved, courseId, stage: clampStage(saved.stage, courseId) };
+    if (isRecord(saved) && isRecord(saved.answers)) {
+      return normalizeState(saved);
     }
     const legacy = JSON.parse(localStorage.getItem(legacyStorageKey));
-    if (legacy && Number.isInteger(legacy.stage) && legacy.answers && !Array.isArray(legacy.answers)) {
-      return { ...defaultState, ...legacy, courseId: defaultCourseId, stage: clampStage(legacy.stage, defaultCourseId) };
+    if (isRecord(legacy) && isRecord(legacy.answers)) {
+      return normalizeState({ ...legacy, courseId: defaultCourseId }, defaultCourseId);
     }
     const veryLegacy = JSON.parse(localStorage.getItem(veryLegacyStorageKey));
     if (veryLegacy && Number.isInteger(veryLegacy.step)) {
-      return {
+      return normalizeState({
         ...defaultState,
-        stage: Math.min(veryLegacy.step, 2),
+        stage: veryLegacy.step,
         question: Number.isInteger(veryLegacy.question) ? veryLegacy.question : 0,
         answers: { "past-subjunctive": Array.isArray(veryLegacy.answers) ? veryLegacy.answers : [] },
         versions: {}
-      };
+      });
     }
   } catch {}
-  return { ...defaultState };
+  return normalizeState(defaultState);
+}
+
+function rememberCurrentCoursePosition() {
+  if (!isRecord(state.coursePositions)) state.coursePositions = {};
+  state.coursePositions[state.courseId] = normalizePosition(state.courseId, {
+    stage: state.stage,
+    question: state.question
+  });
 }
 
 function saveState() {
+  rememberCurrentCoursePosition();
   localStorage.setItem(storageKey, JSON.stringify(state));
   if (cloud && cloud.isEnabled()) cloud.queueSave();
 }
@@ -134,9 +170,7 @@ function updateSaveStatus(message, tone) {
 // version 付きの単元で state.versions が未初期化のまま残り、次回起動時に
 // 「内容が更新された」と誤判定してその単元の回答を消してしまう。
 function applyNormalizedState(source) {
-  const courseId = validCourseId(source.courseId);
-  state = { ...defaultState, ...source, courseId };
-  state.stage = clampStage(state.stage, courseId);
+  state = normalizeState(source);
   stages = stagesFor(currentCourse());
   backfillVisitedLessons();
   sanitizePersistedSessions();
@@ -161,10 +195,12 @@ function currentCourse() {
 }
 
 function switchCourse(courseId) {
+  rememberCurrentCoursePosition();
   state.courseId = validCourseId(courseId);
   stages = stagesFor(currentCourse());
-  state.stage = 0;
-  state.question = 0;
+  const position = normalizePosition(state.courseId, state.coursePositions[state.courseId]);
+  state.stage = position.stage;
+  state.question = position.question;
   backfillVisitedLessons();
   saveState();
   render(true);
@@ -333,6 +369,34 @@ function dueReviewCount() {
   return reviewCandidates().filter(item => isQuestionDue(item.question)).length;
 }
 
+// ホームの間隔復習カード。復習対象（通常学習を全問回答済みの単元の問題）が0件のときは
+// カード自体を表示しない（今日の復習セッション中もrenderOverviewは呼ばれないため自動的に非表示）。
+function reviewMissionCard(course) {
+  const candidates = reviewCandidates();
+  if (!candidates.length) return "";
+  const due = dueReviewCount();
+  const counts = reviewIntervalBreakdown(candidates);
+  const action = overviewActionFor(course);
+  const target = stagesFor(course)[action.targetStage];
+  const midProgress = target.type === "practice" && lessonAnsweredCount(target.lesson) > 0 && !lessonCompleted(target.lesson);
+  const ctaLabel = due > 0 ? `今回の${Math.min(due, REVIEW_SESSION_SIZE)}問を復習する` : "今すぐ復習する問題はありません";
+  return `
+    <section class="card reviewMission">
+      <p class="label">間隔復習</p>
+      <h2>今日の復習</h2>
+      <p class="lead">通常学習を全問回答済みの単元から、1回最大${REVIEW_SESSION_SIZE}問を出題します。正解すると1・3・7・14日後の間隔へ進みます。</p>
+      <div class="reviewMetrics">
+        ${statHtml(candidates.length, Object.keys(questionIndex).length, "対象問題")}
+        ${statHtml(due, candidates.length, "今すぐ復習")}
+      </div>
+      <div class="intervalGrid" aria-label="復習間隔別内訳">
+        ${REVIEW_INTERVALS.map(({ label }) => `<div class="intervalCell"><strong>${counts[label]}</strong><span>${label}</span></div>`).join("")}
+      </div>
+      ${midProgress ? `<p class="hint">通常学習の続きがあるため、先に再開するのがおすすめです。</p>` : ""}
+      <button type="button" class="${midProgress ? "ghost secondaryCta" : "cta reviewCta"}" data-action="start-review" ${due === 0 ? "disabled" : ""}>${ctaLabel}</button>
+    </section>`;
+}
+
 // 誤答回数が多い問題を前に出す（shuffle後に安定ソートするため抽選は崩れない）。
 function weightedReviewOrder(items) {
   const shuffled = shuffle(items);
@@ -353,27 +417,6 @@ function startReviewSession() {
   render(true);
 }
 
-function updateReviewBanner() {
-  const banner = document.querySelector("#review-banner");
-  if (!banner) return;
-  if (state.reviewSession) { banner.hidden = true; return; }
-  const candidates = reviewCandidates();
-  banner.hidden = candidates.length === 0;
-  if (candidates.length === 0) return;
-
-  const due = dueReviewCount();
-  banner.querySelector("#review-due-row").hidden = due === 0;
-  if (due > 0) banner.querySelector("[data-review-count]").textContent = `今日の復習：${due}問`;
-
-  const total = Object.keys(questionIndex).length;
-  banner.querySelector("#review-breakdown-help").textContent =
-    `通常学習済みの問題（対象 ${candidates.length} / ${total}問）の現在の状態です。「今日の復習」は未実施・要再確認・期限到来を合計した件数です。`;
-  const counts = reviewIntervalBreakdown(candidates);
-  banner.querySelector("#review-breakdown-grid").innerHTML = REVIEW_INTERVALS.map(({ label }) =>
-    `<div class="review-breakdown-cell"><strong>${counts[label]}</strong><span>${label}</span></div>`
-  ).join("");
-}
-
 function lessonAnswers(lesson) {
   return state.answers[lesson.id] || [];
 }
@@ -391,13 +434,19 @@ function lessonCompleted(lesson) {
   return lessonAnsweredCount(lesson) === lesson.questions.length;
 }
 
-// サイドバーの単元グループ見出しに出す1行要約。
-function lessonGroupSummary(lesson) {
+// 単元一覧の行に出す状態文言。5区分（未着手／各論確認済み／練習途中／要復習／全問正解）。
+function lessonStatusLabel(lesson) {
   const total = lesson.questions.length;
   const answered = lessonAnsweredCount(lesson);
-  if (answered === total) return lessonScore(lesson) === total ? `全問正解（${total}/${total}）` : `練習問題 ${lessonScore(lesson)}/${total}`;
-  if (answered > 0) return `練習問題 ${answered}/${total} 途中`;
-  return state.visitedLessons.includes(lesson.id) ? "各論：済" : "未着手";
+  if (answered === total) return lessonScore(lesson) === total ? "全問正解" : `要復習 ${lessonScore(lesson)}/${total}`;
+  if (answered > 0) return `練習途中 ${answered}/${total}`;
+  return state.visitedLessons.includes(lesson.id) ? "各論確認済み" : "未着手";
+}
+
+// 単元一覧の行がクリックされたときの移動先。各論未確認なら各論へ、確認済みなら練習問題（結果画面も含む）へ。
+function unitTargetStage(lesson, lessonIndex) {
+  const lessonStage = lessonIndex * 2 + 1;
+  return state.visitedLessons.includes(lesson.id) ? lessonStage + 1 : lessonStage;
 }
 
 function resumeQuestionIndex(lesson) {
@@ -439,69 +488,204 @@ function currentPath(stage) {
 function render(resetScroll = false) {
   const stage = stages[state.stage];
   const course = currentCourse();
-  const showingResult = stage.type === "practice" && state.question >= stage.lesson.questions.length;
-  // サイドバーの行(概論/各論/練習問題/修了テスト)は共通で「済み表示」「現在地」の2状態を持つ。
-  const rowAttrs = (className, index, done, extra = "") => `class="${className} ${done ? "done" : ""} ${extra} ${index === state.stage ? "current" : ""}" data-stage="${index}" ${index === state.stage ? 'aria-current="step"' : ""}`;
+  const isHome = !state.reviewSession && stage.type === "overview";
+
+  document.querySelector(".wrap").classList.toggle("sessionActive", !isHome);
+  document.querySelector("#homePanel").classList.toggle("hide", !isHome);
+  document.querySelector("#sessionPanel").classList.toggle("hide", isHome);
+
   document.querySelector("#course-selector").innerHTML = `
-    <span class="course-selector-label">文法カテゴリ</span>
-    ${courses.map(courseItem => `<button type="button" class="course-tab ${courseItem.id === course.id ? "current" : ""}" data-course="${courseItem.id}" ${courseItem.id === course.id ? 'aria-current="page" disabled' : ""}>${courseItem.title}</button>`).join("")}`;
+    <label class="categoryPicker">
+      <span>文法カテゴリ</span>
+      <select class="categorySelect">
+        ${courses.map(courseItem => `<option value="${courseItem.id}" ${courseItem.id === course.id ? "selected" : ""}>${courseItem.title}</option>`).join("")}
+      </select>
+    </label>`;
   document.querySelector("#current-path").textContent = currentPath(stage);
 
-  const finalStatus = finalStatusFor(course);
-  document.querySelector("#steps").innerHTML = `
-    <li><button type="button" ${rowAttrs("overview-item", 0, state.stage > 0)}><strong>概論</strong><em>${state.stage > 0 ? "済" : ""}</em></button></li>
-    ${course.lessons.map((lesson, lessonIndex) => {
-      const lessonStage = lessonIndex * 2 + 1;
-      const practiceStage = lessonStage + 1;
-      const isCurrentGroup = (stage.type === "lesson" || stage.type === "practice") && stage.lessonIndex === lessonIndex;
-      const answeredCount = lessonAnsweredCount(lesson);
-      const practiceLabel = showingResult && state.stage === practiceStage ? resultLabel() : "練習問題";
-      return `<li>
-        <details class="lesson-group ${isCurrentGroup ? "current" : ""} ${lessonMastered(lesson) ? "mastered" : ""}" ${isCurrentGroup ? "open" : ""}>
-          <summary><span class="lt"><strong>${lesson.title}</strong><small>${lessonGroupSummary(lesson)}</small></span></summary>
-          <div class="lesson-items">
-            <button type="button" ${rowAttrs("lesson-item", lessonStage, state.visitedLessons.includes(lesson.id))}>各論 <span class="badge">${state.visitedLessons.includes(lesson.id) ? "済" : "未"}</span></button>
-            <button type="button" ${rowAttrs("lesson-item", practiceStage, lessonCompleted(lesson))}>${practiceLabel} <span class="badge">${answeredCount}/${lesson.questions.length}</span></button>
-          </div>
-        </details>
-      </li>`;
-    }).join("")}
-    <li><button type="button" ${rowAttrs("final-item", stages.length - 1, finalStatus.tone === "ok", !courseMastered(course) ? "locked" : "")}><strong>修了テスト</strong><em>${finalStatus.label}</em></button></li>`;
-
-  const content = document.querySelector("#content");
-  if (state.reviewSession) renderReviewSession(content);
-  else if (stage.type === "overview") renderOverview(content);
-  else if (stage.type === "lesson") renderLesson(content, stage.lesson);
-  else if (stage.type === "practice") renderPractice(content, stage.lesson);
-  else renderFinal(content, course);
-  content.focus({ preventScroll: true });
+  let container;
+  if (isHome) {
+    container = document.querySelector("#home-content");
+    renderOverview(container);
+    document.querySelector("#homePanel").removeAttribute("aria-busy");
+  } else {
+    container = document.querySelector("#session-content");
+    if (state.reviewSession) renderReviewSession(container);
+    else if (stage.type === "lesson") renderLesson(container, stage.lesson);
+    else if (stage.type === "practice") renderPractice(container, stage.lesson);
+    else renderFinal(container, course);
+  }
+  // 回答直後はfeedbackへ、次の問題表示時は問題文へ、各論表示時は単元見出しへ、
+  // それ以外（結果画面・概論など）はそのカードのh2へフォーカスを移す。
+  const focusTarget = container.querySelector(".feedback") || container.querySelector(".questionText") ||
+    container.querySelector(".flashCard h3") || container.querySelector("h2") || container;
+  focusTarget.focus({ preventScroll: true });
   if (resetScroll) scrollTo(0, 0);
-  updateReviewBanner();
 }
+
+function recommendedStageFor(course) {
+  for (let index = 0; index < course.lessons.length; index += 1) {
+    const lesson = course.lessons[index];
+    if (!state.visitedLessons.includes(lesson.id)) return index * 2 + 1;
+    if (!lessonCompleted(lesson)) return index * 2 + 2;
+  }
+  const weakIndex = course.lessons.findIndex(lesson => !lessonMastered(lesson));
+  return weakIndex >= 0 ? weakIndex * 2 + 2 : stagesFor(course).length - 1;
+}
+
+function overviewActionFor(course) {
+  const targetStage = recommendedStageFor(course);
+  const target = stagesFor(course)[targetStage];
+  if (target.type === "final") {
+    return { targetStage, label: "修了テストへ", hint: "全単元マスター済みです。修了テストに挑戦できます。" };
+  }
+  if (target.type === "lesson") {
+    return { targetStage, label: `${target.lesson.title}へ`, hint: `${target.lesson.title}の解説を確認します。` };
+  }
+  if (!lessonCompleted(target.lesson)) {
+    return { targetStage, label: `続きから：${target.lesson.title} 練習問題`, hint: `${target.lesson.title}の練習問題を続きから解きます。` };
+  }
+  return { targetStage, label: `復習する：${target.lesson.title}`, hint: `${target.lesson.title}の練習問題をもう一度解きます。` };
+}
+
+function statHtml(value, total, label, secondary = false) {
+  return `<div class="stat${secondary ? " stat--secondary" : ""}"><strong>${value}<small> / ${total}</small></strong><span>${label}</span></div>`;
+}
+
+/* ---- セッション画面（各論・練習・修了テスト・今日の復習）の共通部品 ---- */
+function savedStateText() {
+  return cloud && cloud.isEnabled() ? "現在地はクラウドとこの端末に保存済み" : "現在地はこの端末に保存済み";
+}
+
+function sessionHeadHtml(label, title, { showBack = true } = {}) {
+  return `<div class="sessionHead">
+    <div>
+      <p class="label">${label}</p>
+      <h2 tabindex="-1">${title}</h2>
+      <p class="hint savedState">${savedStateText()}</p>
+    </div>
+    ${showBack ? `<button type="button" class="ghost" data-action="go-home">一覧へ戻る</button>` : ""}
+  </div>`;
+}
+
+const SESSION_STEPS = [
+  { key: "overview", label: "概論" },
+  { key: "lesson", label: "各論" },
+  { key: "practice", label: "練習" },
+  { key: "final", label: "修了" }
+];
+const REVIEW_STEPS = [{ key: "review", label: "今日の復習" }];
+
+function stepBarHtml(steps, activeKey) {
+  const activeIndex = steps.findIndex(step => step.key === activeKey);
+  return `<div class="stepBar" aria-label="学習ステップ">
+    ${steps.map((step, index) => {
+      const cls = step.key === activeKey ? "active" : (activeIndex >= 0 && index < activeIndex) ? "cleared" : "";
+      return `<span class="step ${cls}" ${step.key === activeKey ? 'aria-current="step"' : ""}>${step.label}</span>`;
+    }).join("")}
+  </div>`;
+}
+
+// 練習問題・今日の復習・修了テストの問題画面で共有する4択カード。採点・保存はここでは行わない。
+// 回答後の「次へ」はカード内の.quizNextActionに置き、デスクトップでは画面下部に固定表示される。
+function quizCardHtml({ label, question, selectedIndex, dataAttr, nextLabel, nextAction }) {
+  const answered = Number.isInteger(selectedIndex);
+  const correct = selectedIndex === question.answer;
+  return `
+    <section class="quiz ${answered ? "quiz--answered" : ""}">
+      <p class="label">${label}</p>
+      <p class="questionText" tabindex="-1">${question.text}</p>
+      <div class="choices" role="group" aria-label="選択肢">
+        ${question.choices.map((choice, index) => `
+          <button type="button" class="choice ${answered && index === question.answer ? "correct" : ""} ${answered && index === selectedIndex && !correct ? "wrong" : ""}" data-${dataAttr}="${index}" ${answered ? "disabled" : ""}>
+            <span class="choiceNo">${index + 1}</span><span>${choice}</span>
+          </button>`).join("")}
+      </div>
+      ${!answered ? `<p class="hint kbdHint">キーボード: 1〜4で回答</p>` : `
+      <div class="feedback ${correct ? "ok" : "ng"}" role="status" tabindex="-1">
+        <h3>${correct ? "○ 正解" : `× 不正解　正解は ${question.answer + 1}. ${question.choices[question.answer]}`}</h3>
+        ${question.explanation}
+      </div>
+      <p class="hint kbdHint">Enterで次の問題へ</p>
+      <div class="quizNextAction"><button type="button" class="cta next" data-action="${nextAction}">${nextLabel}</button></div>`}
+    </section>`;
+}
+
+function handleQuizKeydown(event) {
+  if (event.repeat || event.isComposing || event.keyCode === 229) return;
+  if (event.ctrlKey || event.altKey || event.metaKey || event.shiftKey) return;
+  if (event.target instanceof Element && event.target.closest("input, textarea, select, button, a, [contenteditable]")) return;
+  const quiz = document.querySelector("#sessionPanel .quiz");
+  if (!quiz) return;
+
+  if (!quiz.classList.contains("quiz--answered")) {
+    const index = { "1": 0, "2": 1, "3": 2, "4": 3 }[event.key];
+    if (index == null) return;
+    const choice = quiz.querySelectorAll(".choice:not(:disabled)")[index];
+    if (!choice) return;
+    event.preventDefault();
+    choice.click();
+  } else if (event.key === "Enter") {
+    const next = quiz.querySelector(".quizNextAction .next");
+    if (!next) return;
+    event.preventDefault();
+    next.click();
+  }
+}
+document.addEventListener("keydown", handleQuizKeydown);
 
 function renderOverview(content) {
   const course = currentCourse();
   const { total, completed, mastered } = courseProgressStats(course);
+  const weakCount = course.lessons.filter(lesson => lessonCompleted(lesson) && !lessonMastered(lesson)).length;
   const finalStatus = finalStatusFor(course);
+  const finalRecord = state.finalChecks?.[course.id];
+  const finalBest = finalRecord?.bestScore || 0;
+  const finalBestTotal = finalRecord?.bestTotal || allCourseQuestions(course).length;
+  const action = overviewActionFor(course);
+
   content.innerHTML = `
-    <p class="eyebrow">${course.title}の学習状況</p>
-    <div class="dashboard-kpis">
-      <div class="kpi-card kpi-primary">
-        <p class="kpi-value">${completed} <span class="kpi-unit">/ ${total}単元</span></p>
-        <p class="kpi-label">学習が完了した単元</p>
+    <section class="card">
+      <p class="label">今回の学習</p>
+      <h2 tabindex="-1">${course.title}</h2>
+      <p class="lead">全${total}単元を「概論 → 各論 → 練習問題」の順に進めます。</p>
+      <div class="recommend">
+        <p class="label">まずはここから</p>
+        <button type="button" class="cta" data-stage="${action.targetStage}">${action.label}</button>
+        <p class="hint">${action.hint}</p>
       </div>
-      <div class="kpi-card">
-        <p class="kpi-value">${mastered} <span class="kpi-unit">/ ${total}単元</span></p>
-        <p class="kpi-label">全問正解でマスター済み</p>
+      <div class="stats">
+        ${statHtml(completed, total, "完了単元")}
+        ${statHtml(weakCount, total, "要復習単元")}
+        ${statHtml(mastered, total, "マスター済み", true)}
+        ${statHtml(finalBest, finalBestTotal, "修了BEST", true)}
       </div>
-      <div class="kpi-card ${finalStatus.tone === "ok" ? "kpi-ok" : ""}">
-        <p class="kpi-value">${finalStatus.label}</p>
-        <p class="kpi-label">修了テスト・${finalStatus.detail}</p>
+    </section>
+    ${reviewMissionCard(course)}
+    <details class="card" open>
+      <summary><h3>${course.overview.title}</h3></summary>
+      ${course.overview.html}
+    </details>
+    <section class="card">
+      <p class="label">単元一覧</p>
+      <h2>全${total}単元</h2>
+      <div class="unitList">
+        ${course.lessons.map((lesson, lessonIndex) => {
+          const status = lessonStatusLabel(lesson);
+          const stateClass = lessonCompleted(lesson) ? (lessonMastered(lesson) ? "done" : "review") : "";
+          return `<button type="button" class="unitRow ${stateClass}" data-stage="${unitTargetStage(lesson, lessonIndex)}">
+            <span class="unitNo">${lessonIndex + 1}</span>
+            <span class="unitName">${lesson.title}</span>
+            <span class="unitStatus">${status}</span>
+          </button>`;
+        }).join("")}
+        <button type="button" class="unitRow ${finalStatus.tone === "ok" ? "done" : ""}" data-stage="${stagesFor(course).length - 1}">
+          <span class="unitNo">${course.lessons.length + 1}</span>
+          <span class="unitName">修了テスト</span>
+          <span class="unitStatus">${finalStatus.label}</span>
+        </button>
       </div>
-    </div>
-    <h2>${course.overview.title}</h2>
-    ${course.overview.html}
-    <div class="actions"><button class="primary" data-action="next">${course.lessons[0].title}へ</button></div>`;
+    </section>`;
 }
 
 function renderLesson(content, lesson) {
@@ -513,9 +697,13 @@ function renderLesson(content, lesson) {
   const course = currentCourse();
   const backLabel = stage.lessonIndex === 0 ? "概論へ戻る" : `${course.lessons[stage.lessonIndex - 1].title}の結果へ戻る`;
   content.innerHTML = `
-    <h2>${lesson.title}</h2>
-    ${lesson.html}
-    <div class="actions"><button class="secondary" data-action="back">${backLabel}</button><button class="primary" data-action="next">3問に挑戦</button></div>`;
+    ${sessionHeadHtml(course.title, "各論")}
+    ${stepBarHtml(SESSION_STEPS, "lesson")}
+    <article class="flashCard">
+      <h3 tabindex="-1">${lesson.title}</h3>
+      ${lesson.html}
+    </article>
+    <div class="actions"><button type="button" class="ghost" data-action="back">${backLabel}</button><button type="button" class="cta" data-action="next">3問に挑戦</button></div>`;
 }
 
 function renderPractice(content, lesson) {
@@ -523,16 +711,14 @@ function renderPractice(content, lesson) {
   const question = lesson.questions[state.question];
   const answers = currentAnswers(lesson);
   const selected = answers[state.question];
-  const answered = Number.isInteger(selected);
-  const correct = selected === question.answer;
   content.innerHTML = `
-    <p class="question-count">${lesson.title}　問題 ${state.question + 1} / ${lesson.questions.length}</p>
-    <h2>${question.text}</h2>
-    <div class="choices" role="group" aria-label="選択肢">
-      ${question.choices.map((choice, index) => `<button class="choice ${answered && index === question.answer ? "correct" : ""} ${answered && index === selected && !correct ? "wrong" : ""}" data-choice="${index}" ${answered ? "disabled" : ""}>${index + 1}. ${choice}</button>`).join("")}
-    </div>
-    ${answered ? `<div class="feedback ${correct ? "ok" : "ng"}" role="status"><strong>${correct ? "✓ 正解" : `✕ 不正解　正解は ${question.answer + 1}. ${question.choices[question.answer]}`}</strong>${question.explanation}</div>` : `<p class="note" aria-live="polite">最も適切な選択肢を一つ選んでください。</p>`}
-    <div class="actions"><button class="secondary" data-action="back">各論へ戻る</button>${answered ? `<button class="primary" data-action="next-question">${state.question + 1 === lesson.questions.length ? "結果を見る" : "次の問題"}</button>` : ""}</div>`;
+    ${sessionHeadHtml(lesson.title, "練習問題")}
+    ${stepBarHtml(SESSION_STEPS, "practice")}
+    ${quizCardHtml({
+      label: `問題 ${state.question + 1} / ${lesson.questions.length}`, question, selectedIndex: selected, dataAttr: "choice",
+      nextLabel: state.question + 1 === lesson.questions.length ? "結果を見る" : "次の問題", nextAction: "next-question"
+    })}
+    <div class="actions"><button type="button" class="ghost" data-action="back">各論へ戻る</button></div>`;
 }
 
 function renderResult(content, lesson) {
@@ -554,14 +740,17 @@ function renderResult(content, lesson) {
     forwardLabel = "概論へ戻る";
   }
   const decisionButtons = wrongIndexes.length
-    ? `<button class="secondary" data-action="${forwardAction}">${forwardLabel}</button><button class="primary" data-action="retry-wrong">間違えた${wrongIndexes.length}問を解き直す</button>`
-    : `<button class="primary" data-action="${forwardAction}">${forwardLabel}</button>`;
+    ? `<button type="button" class="cta" data-action="retry-wrong">間違えた${wrongIndexes.length}問を解き直す</button><button type="button" class="ghost" data-action="${forwardAction}">${forwardLabel}</button>`
+    : `<button type="button" class="cta" data-action="${forwardAction}">${forwardLabel}</button>`;
   content.innerHTML = `
-    <p class="eyebrow">${isLastLesson ? "全単元完了" : "単元完了"}</p>
-    <h2>${lesson.title}の結果</h2>
-    <p class="score">${score} / ${lesson.questions.length} 問正解</p>
-    <p>${score === lesson.questions.length ? `${lesson.title}の基本を確認できました。` : "間違えた問題の解説を意識して、もう一度取り組んでみましょう。"}</p>
-    ${wrongIndexes.length ? `<section class="review-summary" aria-labelledby="review-title">
+    ${sessionHeadHtml(lesson.title, isLastLesson ? "全単元完了" : "単元結果", { showBack: false })}
+    ${stepBarHtml(SESSION_STEPS, "practice")}
+    <section class="doneBanner ${score === lesson.questions.length ? "doneBanner--success" : ""}">
+      <p class="label">学習結果</p>
+      <div class="score">${score} / ${lesson.questions.length}</div>
+      <p>${score === lesson.questions.length ? `${lesson.title}の基本を確認できました。` : "間違えた問題の解説を意識して、もう一度取り組んでみましょう。"}</p>
+    </section>
+    ${wrongIndexes.length ? `<section class="card review-summary" aria-labelledby="review-title">
       <h3 id="review-title">要復習：${wrongIndexes.map(index => `問題${index + 1}`).join("・")}</h3>
       <ol class="review-list">
         ${wrongIndexes.map(index => {
@@ -572,9 +761,9 @@ function renderResult(content, lesson) {
     </section>` : ""}
     ${isLastLesson ? renderCourseSummary(course) : ""}
     <div class="actions">
-      <button class="secondary" data-action="detail">各論を読み直す</button>
-      <button class="secondary" data-action="retry">3問をもう一度解く</button>
-      <div class="actions-decision">${decisionButtons}</div>
+      <button type="button" class="ghost" data-action="detail">各論を読み直す</button>
+      <button type="button" class="ghost" data-action="retry">3問をもう一度解く</button>
+      <div class="actionsDecision">${decisionButtons}</div>
     </div>`;
 }
 
@@ -594,7 +783,7 @@ function renderCourseSummary(course) {
   } else if (completedUnits.length > 0) {
     statusMessage = "<p>回答済みの単元はすべて正解でした。</p>";
   }
-  return `<section class="review-summary course-summary" aria-labelledby="course-summary-title">
+  return `<section class="card course-summary" aria-labelledby="course-summary-title">
     <h3 id="course-summary-title">全${total}単元のまとめ</h3>
     <p class="total-score">${totalScore} / ${totalQuestions} 問正解</p>
     ${statusMessage}
@@ -611,16 +800,15 @@ function renderFinal(content, course) {
   if (!courseMastered(course)) {
     const unmastered = course.lessons.filter(lesson => !lessonMastered(lesson));
     content.innerHTML = `
-      <p class="eyebrow">修了テスト</p>
-      <h2>${course.title}の修了テスト</h2>
-      <p class="note">修了テストは、すべての単元の練習問題に全問正解すると挑戦できます。</p>
-      <section class="review-summary" aria-labelledby="final-lock-title">
+      ${sessionHeadHtml(course.title, "修了テスト")}
+      ${stepBarHtml(SESSION_STEPS, "final")}
+      <section class="card" aria-labelledby="final-lock-title">
+        <p class="hint">修了テストは、すべての単元の練習問題に全問正解すると挑戦できます。</p>
         <h3 id="final-lock-title">あと${unmastered.length}単元</h3>
         <ol class="review-list">
           ${unmastered.map(lesson => `<li><span>${lesson.title}（${lessonScore(lesson)}/${lesson.questions.length}）</span></li>`).join("")}
         </ol>
-      </section>
-      <div class="actions"><button class="secondary" data-action="overview">概論へ戻る</button></div>`;
+      </section>`;
     return;
   }
 
@@ -628,28 +816,26 @@ function renderFinal(content, course) {
   const total = allCourseQuestions(course).length;
   const passScore = finalPassScore(total);
   content.innerHTML = `
-    <p class="eyebrow">修了テスト</p>
-    <h2>${course.title}の修了テスト</h2>
-    <p>全${total}問からランダムに出題します。${passScore}/${total}問以上（正答率80%以上）でCLEARです。</p>
-    ${record.cleared ? `<p class="note">CLEAR済みです（過去最高 ${record.bestScore}/${record.bestTotal}）。もう一度挑戦できます。</p>`
-      : record.lastScore ? `<p class="note">前回の結果：${record.lastScore}/${record.bestTotal}</p>` : ""}
-    <div class="actions"><button class="secondary" data-action="overview">概論へ戻る</button><button class="primary" data-action="start-final">修了テストを始める</button></div>`;
+    ${sessionHeadHtml(course.title, "修了テスト")}
+    ${stepBarHtml(SESSION_STEPS, "final")}
+    <section class="card">
+      <p class="lead">全${total}問からランダムに出題します。${passScore}/${total}問以上（正答率80%以上）でCLEARです。</p>
+      ${record.cleared ? `<p class="hint">CLEAR済みです（過去最高 ${record.bestScore}/${record.bestTotal}）。もう一度挑戦できます。</p>`
+        : record.lastScore ? `<p class="hint">前回の結果：${record.lastScore}/${record.bestTotal}</p>` : ""}
+    </section>
+    <div class="actions"><button type="button" class="cta" data-action="start-final">修了テストを始める</button></div>`;
 }
 
 function renderFinalQuestion(content, run) {
   const { course, lesson, question } = questionIndex[run.order[run.index]];
   const selected = run.answers[run.index];
-  const answered = Number.isInteger(selected);
-  const correct = selected === question.answer;
   content.innerHTML = `
-    <p class="question-count">${course.title}　修了テスト　問題 ${run.index + 1} / ${run.order.length}</p>
-    <p class="note">出典：${lesson.title}</p>
-    <h2>${question.text}</h2>
-    <div class="choices" role="group" aria-label="選択肢">
-      ${question.choices.map((choice, index) => `<button class="choice ${answered && index === question.answer ? "correct" : ""} ${answered && index === selected && !correct ? "wrong" : ""}" data-final-choice="${index}" ${answered ? "disabled" : ""}>${index + 1}. ${choice}</button>`).join("")}
-    </div>
-    ${answered ? `<div class="feedback ${correct ? "ok" : "ng"}" role="status"><strong>${correct ? "✓ 正解" : `✕ 不正解　正解は ${question.answer + 1}. ${question.choices[question.answer]}`}</strong>${question.explanation}</div>` : `<p class="note" aria-live="polite">最も適切な選択肢を一つ選んでください。</p>`}
-    <div class="actions">${answered ? `<button class="primary" data-action="final-next">${run.index + 1 === run.order.length ? "結果を見る" : "次の問題"}</button>` : ""}</div>`;
+    ${sessionHeadHtml(`${course.title}　出典：${lesson.title}`, "修了テスト")}
+    ${stepBarHtml(SESSION_STEPS, "final")}
+    ${quizCardHtml({
+      label: `問題 ${run.index + 1} / ${run.order.length}`, question, selectedIndex: selected, dataAttr: "final-choice",
+      nextLabel: run.index + 1 === run.order.length ? "結果を見る" : "次の問題", nextAction: "final-next"
+    })}`;
 }
 
 // 記録の更新はテスト完了の瞬間（final-nextでindexが末尾に達したとき）だけ行う。
@@ -675,12 +861,15 @@ function renderFinalResult(content, course, run) {
   const wrongEntries = run.order.filter((qId, i) => run.answers[i] !== questionIndex[qId].question.answer);
 
   content.innerHTML = `
-    <p class="eyebrow">${passed ? "修了テスト CLEAR" : "修了テスト結果"}</p>
-    <h2>${course.title}の修了テスト</h2>
-    <p class="score">${score} / ${total} 問正解</p>
-    <p>${passed ? `${passScore}/${total}問以上（正答率80%以上）でCLEARです。おめでとうございます。` : `${passScore}/${total}問以上（正答率80%以上）でCLEARです。もう一度挑戦してみましょう。`}</p>
-    ${record.bestScore > score ? `<p class="note">過去最高は${record.bestScore}/${record.bestTotal}です。</p>` : ""}
-    ${wrongEntries.length ? `<section class="review-summary" aria-labelledby="final-review-title">
+    ${sessionHeadHtml(course.title, passed ? "修了テスト CLEAR" : "修了テスト結果", { showBack: false })}
+    ${stepBarHtml(SESSION_STEPS, "final")}
+    <section class="doneBanner ${passed ? "doneBanner--success" : ""}">
+      <p class="label">学習結果</p>
+      <div class="score">${score} / ${total}</div>
+      <p>${passed ? `${passScore}/${total}問以上（正答率80%以上）でCLEARです。おめでとうございます。` : `${passScore}/${total}問以上（正答率80%以上）でCLEARです。もう一度挑戦してみましょう。`}</p>
+      ${record.bestScore > score ? `<p class="hint">過去最高は${record.bestScore}/${record.bestTotal}です。</p>` : ""}
+    </section>
+    ${wrongEntries.length ? `<section class="card review-summary" aria-labelledby="final-review-title">
       <h3 id="final-review-title">間違えた問題</h3>
       <ol class="review-list">
         ${wrongEntries.map(qId => {
@@ -690,8 +879,8 @@ function renderFinalResult(content, course, run) {
       </ol>
     </section>` : ""}
     <div class="actions">
-      <button class="secondary" data-action="overview">概論へ戻る</button>
-      <button class="primary" data-action="start-final">もう一度挑戦する</button>
+      <button type="button" class="ghost" data-action="overview">概論へ戻る</button>
+      <button type="button" class="cta" data-action="start-final">もう一度挑戦する</button>
     </div>`;
 }
 
@@ -701,34 +890,33 @@ function renderReviewSession(content) {
   if (session.index >= session.order.length) return renderReviewResult(content, session);
   const { course, lesson, question } = questionIndex[session.order[session.index]];
   const selected = session.answers[session.index];
-  const answered = Number.isInteger(selected);
-  const correct = selected === question.answer;
   content.innerHTML = `
-    <p class="question-count">今日の復習　問題 ${session.index + 1} / ${session.order.length}</p>
-    <p class="note">出典：${course.title} ＞ ${lesson.title}</p>
-    <h2>${question.text}</h2>
-    <div class="choices" role="group" aria-label="選択肢">
-      ${question.choices.map((choice, index) => `<button class="choice ${answered && index === question.answer ? "correct" : ""} ${answered && index === selected && !correct ? "wrong" : ""}" data-review-choice="${index}" ${answered ? "disabled" : ""}>${index + 1}. ${choice}</button>`).join("")}
-    </div>
-    ${answered ? `<div class="feedback ${correct ? "ok" : "ng"}" role="status"><strong>${correct ? "✓ 正解" : `✕ 不正解　正解は ${question.answer + 1}. ${question.choices[question.answer]}`}</strong>${question.explanation}</div>` : `<p class="note" aria-live="polite">最も適切な選択肢を一つ選んでください。</p>`}
+    ${sessionHeadHtml(`出典：${course.title} ＞ ${lesson.title}`, "今日の復習", { showBack: false })}
+    ${stepBarHtml(REVIEW_STEPS, "review")}
+    ${quizCardHtml({
+      label: `問題 ${session.index + 1} / ${session.order.length}`, question, selectedIndex: selected, dataAttr: "review-choice",
+      nextLabel: session.index + 1 === session.order.length ? "結果を見る" : "次の問題", nextAction: "review-next"
+    })}
     <div class="actions">
-      <button class="secondary" data-action="review-exit">復習を終了する</button>
-      ${answered ? `<button class="primary" data-action="review-next">${session.index + 1 === session.order.length ? "結果を見る" : "次の問題"}</button>` : ""}
+      <button type="button" class="ghost" data-action="review-exit">復習を終了する</button>
     </div>`;
 }
 
 function renderReviewResult(content, session) {
   const remaining = dueReviewCount();
   content.innerHTML = `
-    <p class="eyebrow">今日の復習</p>
-    <h2>復習が完了しました</h2>
-    <p class="score">${session.correctCount} / ${session.order.length} 問正解</p>
-    <p>正解した問題は次の復習日まで表示されません。間違えた問題はまた近いうちに出題されます。</p>
+    ${sessionHeadHtml("今日の復習", "復習完了", { showBack: false })}
+    ${stepBarHtml(REVIEW_STEPS, "review")}
+    <section class="doneBanner ${remaining === 0 ? "doneBanner--success" : ""}">
+      <p class="label">学習結果</p>
+      <div class="score">${session.correctCount} / ${session.order.length}</div>
+      <p>正解した問題は次の復習日まで表示されません。間違えた問題はまた近いうちに出題されます。</p>
+    </section>
     ${remaining > 0
-      ? `<p class="note">今日の復習：残り${remaining}問</p>
-         <div class="actions"><button class="secondary" data-action="review-exit">学習に戻る</button><button class="primary" data-action="review-continue">続けて復習する</button></div>`
-      : `<p class="note">今日の復習はすべて終わりました。</p>
-         <div class="actions"><button class="primary" data-action="review-exit">学習に戻る</button></div>`}`;
+      ? `<p class="hint">今日の復習：残り${remaining}問</p>
+         <div class="actions"><button type="button" class="ghost" data-action="review-exit">学習に戻る</button><button type="button" class="cta reviewCta" data-action="review-continue">続けて復習する</button></div>`
+      : `<p class="hint">今日の復習はすべて終わりました。</p>
+         <div class="actions"><button type="button" class="cta" data-action="review-exit">学習に戻る</button></div>`}`;
 }
 
 function goBack(stage) {
@@ -738,6 +926,10 @@ function goBack(stage) {
   }
   setStage(state.stage - 1);
 }
+
+document.addEventListener("change", event => {
+  if (event.target.matches(".categorySelect")) switchCourse(event.target.value);
+});
 
 document.addEventListener("click", event => {
   const button = event.target.closest("button");
@@ -782,6 +974,7 @@ document.addEventListener("click", event => {
     return;
   }
   const stage = stages[state.stage];
+  if (button.dataset.action === "go-home") { setStage(0, true); return; }
   if (button.dataset.action === "next") setStage(state.stage + 1, stage.type === "lesson");
   if (button.dataset.action === "back") goBack(stage);
   if (button.dataset.action === "detail") setStage(state.stage - 1);
