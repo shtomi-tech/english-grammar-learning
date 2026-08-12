@@ -22,6 +22,9 @@ const APP_ID = "english-grammar-learning";
 const CONFIG_PATH = "config.json";
 const CLOUD_STUDENT_STAMP_KEY = storageKey + ".cloudStudent";
 let cloud = null;
+// 修了テストが「未解放→解放」に変わった直後だけ、次にホームを描画するときunlock表現を一度出す。
+// 保存データには残さず、現在のページ滞在中のみ有効なモジュール変数として扱う。
+let justUnlockedCourseId = null;
 
 let questionIndex = {};
 function buildQuestionIndex() {
@@ -158,11 +161,25 @@ function saveState() {
   if (cloud && cloud.isEnabled()) cloud.queueSave();
 }
 
+// harnessから届くtone（"syncing"/"ok"/"ng"）をlocal/syncing/saved/errorの表示へ正規化する。
+// "saved"のcheckは、直前がokでなかった（＝今回新たに保存が完了した）ときだけ再生する。
+let previousSaveTone = null;
 function updateSaveStatus(message, tone) {
   const el = document.querySelector("#save-status");
   if (!el) return;
   el.textContent = message;
   el.classList.toggle("save-status-ng", tone === "ng");
+  el.classList.toggle("save-status-syncing", tone === "syncing");
+  if (tone === "ok") {
+    if (previousSaveTone !== "ok") {
+      el.classList.remove("save-status-saved");
+      void el.offsetWidth;
+      el.classList.add("save-status-saved");
+    }
+  } else {
+    el.classList.remove("save-status-saved");
+  }
+  previousSaveTone = tone;
 }
 
 // 欠損フィールドを defaultState で埋めてから、通常のロード直後と同じ正規化
@@ -489,6 +506,7 @@ function render(resetScroll = false) {
   const stage = stages[state.stage];
   const course = currentCourse();
   const isHome = !state.reviewSession && stage.type === "overview";
+  if (isHome) previousStepKey = null;
 
   document.querySelector(".wrap").classList.toggle("sessionActive", !isHome);
   document.querySelector("#homePanel").classList.toggle("hide", !isHome);
@@ -506,8 +524,16 @@ function render(resetScroll = false) {
   let container;
   if (isHome) {
     container = document.querySelector("#home-content");
+    const homePanel = document.querySelector("#homePanel");
+    const wasLoading = homePanel.hasAttribute("aria-busy");
     renderOverview(container);
-    document.querySelector("#homePanel").removeAttribute("aria-busy");
+    homePanel.removeAttribute("aria-busy");
+    if (wasLoading) {
+      // 初回のskeleton→実コンテンツだけ短くクロスフェードする。実描画自体は待たせない。
+      container.classList.add("is-appearing");
+      void container.offsetWidth;
+      container.classList.remove("is-appearing");
+    }
   } else {
     container = document.querySelector("#session-content");
     if (state.reviewSession) renderReviewSession(container);
@@ -576,12 +602,28 @@ const SESSION_STEPS = [
 ];
 const REVIEW_STEPS = [{ key: "review", label: "今日の復習" }];
 
+// active段階の移動・cleared化の瞬間だけ対象stepにsettleモーションを付けるため、
+// 直前にstepBarHtmlを描画したときのactiveKeyをモジュールスコープで覚えておく。
+// ホーム表示のたびにnullへ戻す（render()側）ことで、初期描画・リロード・カテゴリ切替では再演しない。
+let previousStepKey = null;
+
 function stepBarHtml(steps, activeKey) {
   const activeIndex = steps.findIndex(step => step.key === activeKey);
+  const previousIndex = steps.findIndex(step => step.key === previousStepKey);
+  const justChanged = previousStepKey !== null && previousStepKey !== activeKey;
+  const justClearedIndex = justChanged && previousIndex >= 0 && previousIndex < activeIndex ? previousIndex : -1;
+  previousStepKey = activeKey;
+
   return `<div class="stepBar" aria-label="学習ステップ">
     ${steps.map((step, index) => {
-      const cls = step.key === activeKey ? "active" : (activeIndex >= 0 && index < activeIndex) ? "cleared" : "";
-      return `<span class="step ${cls}" ${step.key === activeKey ? 'aria-current="step"' : ""}>${step.label}</span>`;
+      const isActive = step.key === activeKey;
+      const isCleared = activeIndex >= 0 && index < activeIndex;
+      const isLocked = activeIndex >= 0 && index > activeIndex;
+      const isSettling = (isActive && justChanged) || index === justClearedIndex;
+      const cls = [isActive && "active", isCleared && "cleared", isLocked && "locked", isSettling && "is-settling"].filter(Boolean).join(" ");
+      const ariaCurrent = isActive ? ' aria-current="step"' : "";
+      const ariaDisabled = isLocked ? ' aria-disabled="true"' : "";
+      return `<span class="step ${cls}"${ariaCurrent}${ariaDisabled}>${step.label}</span>`;
     }).join("")}
   </div>`;
 }
@@ -592,7 +634,7 @@ function quizCardHtml({ label, question, selectedIndex, dataAttr, nextLabel, nex
   const answered = Number.isInteger(selectedIndex);
   const correct = selectedIndex === question.answer;
   return `
-    <section class="quiz ${answered ? "quiz--answered" : ""}">
+    <section class="quiz ${answered ? "quiz--answered" : "is-entering"}">
       <p class="label">${label}</p>
       <p class="questionText" tabindex="-1">${question.text}</p>
       <div class="choices" role="group" aria-label="選択肢">
@@ -643,6 +685,8 @@ function renderOverview(content) {
   const finalBest = finalRecord?.bestScore || 0;
   const finalBestTotal = finalRecord?.bestTotal || allCourseQuestions(course).length;
   const action = overviewActionFor(course);
+  const showUnlock = justUnlockedCourseId === course.id;
+  if (showUnlock) justUnlockedCourseId = null; // 一度描画したら消費する（リロード・再訪では再演しない）
 
   content.innerHTML = `
     <section class="card">
@@ -679,10 +723,10 @@ function renderOverview(content) {
             <span class="unitStatus">${status}</span>
           </button>`;
         }).join("")}
-        <button type="button" class="unitRow ${finalStatus.tone === "ok" ? "done" : ""}" data-stage="${stagesFor(course).length - 1}">
+        <button type="button" class="unitRow ${finalStatus.tone === "ok" ? "done" : ""} ${showUnlock ? "is-unlocking" : ""}" data-stage="${stagesFor(course).length - 1}">
           <span class="unitNo">${course.lessons.length + 1}</span>
           <span class="unitName">修了テスト</span>
-          <span class="unitStatus">${finalStatus.label}</span>
+          <span class="unitStatus">${showUnlock ? "修了テストが解放されました" : finalStatus.label}</span>
         </button>
       </div>
     </section>`;
@@ -704,6 +748,27 @@ function renderLesson(content, lesson) {
       ${lesson.html}
     </article>
     <div class="actions"><button type="button" class="ghost" data-action="back">${backLabel}</button><button type="button" class="cta" data-action="next">3問に挑戦</button></div>`;
+  enhanceAccordions(content);
+}
+
+// 各論本文内の details.section を、矢印transform＋本文opacity/translateYで開閉するよう補強する。
+// 教材本文（content.js）自体は変更せず、描画時にsummary以外の子要素だけをwrapperへ移す。
+function enhanceAccordions(container) {
+  container.querySelectorAll("details.section").forEach(details => {
+    let body = details.querySelector(":scope > .sectionBody");
+    if (!body) {
+      body = document.createElement("div");
+      body.className = "sectionBody";
+      Array.from(details.children).filter(child => child.tagName !== "SUMMARY").forEach(child => body.appendChild(child));
+      details.appendChild(body);
+    }
+    details.addEventListener("toggle", () => {
+      if (!details.open) return;
+      body.classList.add("is-entering");
+      void body.offsetWidth;
+      body.classList.remove("is-entering");
+    });
+  });
 }
 
 function renderPractice(content, lesson) {
@@ -1005,8 +1070,11 @@ document.addEventListener("click", event => {
   if (button.dataset.choice !== undefined) {
     const question = stage.lesson.questions[state.question];
     const idx = Number(button.dataset.choice);
+    const course = currentCourse();
+    const wasLocked = finalStatusFor(course).label === "未解放";
     currentAnswers(stage.lesson)[state.question] = idx;
     recordReviewResult(question, idx === question.answer);
+    if (wasLocked && finalStatusFor(course).label !== "未解放") justUnlockedCourseId = course.id;
     saveState();
     render();
   }

@@ -9,8 +9,8 @@ test.describe("_site 成果物スモークテスト", () => {
     expect(response.status()).toBe(200);
   });
 
-  test("/styles.css?v=0.2.0 がHTTP 200で応答する", async ({ request }) => {
-    const response = await request.get("/styles.css?v=0.2.0");
+  test("/styles.css?v=0.3.0 がHTTP 200で応答する", async ({ request }) => {
+    const response = await request.get("/styles.css?v=0.3.0");
     expect(response.status()).toBe(200);
   });
 

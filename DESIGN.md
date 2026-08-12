@@ -126,11 +126,37 @@
 
 ## Motion
 
-- hover: 180ms, `background-color`/`border-color`/`color`の`transition`
-- press（`:active`）: 120ms, `transform: scale(.98)` 相当の短い沈み込みのみ
-- feedback reveal（正誤表示、`.feedback`）: 200ms, `opacity` + 8px程度の`translateY`
+Kinetics（参考: https://kinetics.colorion.co/）のAccordion Spring・Icon Morph Swap・Step Progress・Success Check・Submit States・Card Resizeを参考に、既存のhover/press/feedback規則をCSSと少数のJS helperで拡張する。姉妹アプリ（`kobun-vocab-learning`）と共有するhover/feedbackの数値・用途は変えない。
+
+### token
+
+- hover: 180ms, `background-color`/`border-color`/`color`の`transition`（既存、姉妹アプリと共通）
+- press（`:active`）: 80ms, `transform: scale(.98)`相当の短い沈み込み
+- release（pressの戻り・hover復帰）: 180ms, `--ease-spring-soft`を使う
+- feedback reveal（正誤表示、`.feedback`）: 200ms, `opacity` + 8px程度の`translateY`（既存、姉妹アプリと共通）
+- progress（Step Progressのactive移動・cleared化の短いsettle）: 280ms
+- accordion（各論`<details class="section">`の矢印・本文の開閉）: 260ms
+- completion（修了テスト解放の一度きりの強調）: 420ms
+- `--ease-spring-soft: cubic-bezier(.34, 1.2, .64, 1)`。押し込み（press）には使わず、戻り・展開・強調（release/progress/accordion/completion）にだけ使う。
 - `prefers-reduced-motion: reduce` では上記すべての`transition`/`animation`を`0ms`にし、即時表示にする。
-- 使用プロパティは `transform`・`opacity`・色変化のみ。レイアウトを揺らす`width`/`height`/`margin`のアニメーションは行わない。
+- 使用プロパティは `transform`・`opacity`・色変化のみ。レイアウトを揺らす`width`/`height`/`margin`のアニメーションは行わない。固定`max-height`によるアコーディオンの高さアニメーションも行わない（長い節が切れるため）。
+
+### Accordion（各論の`<details class="section">`）
+
+- `<summary>`内の矢印（疑似要素またはspan）だけを`transform: rotate()`で回転させ、開閉を示す。
+- 本文は`opacity` + `translateY(4〜6px)`で表示する。高さは`<details>`のネイティブな挙動に任せ、固定`max-height`は使わない。
+- `<details>`のネイティブな意味・キーボード操作（Space/Enter開閉）を変えない。開閉途中の再クリックでも最終的な`open`属性と表示が一致する。
+
+### 修了テスト解放
+
+- 単元一覧の「修了テスト」行の一時的な強調（unlock表現）は、その操作の直前直後で状態が「未解放→解放」に変わったときだけ再生する。永続的な「演出済み」フラグは保存データに追加せず、現在操作内の前後比較だけで判定する。
+- リロード、カテゴリ再訪、すでに解放済みの場合は再演しない。
+
+### 原則
+
+- 1操作1主役：1つの操作に対して同時に動く要素は1つの主役に絞る。複数要素が同時に主張する演出は避ける。
+- 完了待ち禁止：アニメーションの完了を待たないと次の操作ができない実装をしない（`animationend`を操作の可否に使わない）。
+- 動きだけに意味を持たせない：状態の違いは文言・記号・色などモーション以外の手がかりでも伝える。モーションを状態の唯一の手がかりにしない。
 
 ## 状態マトリクス
 
@@ -143,7 +169,10 @@
 | クラウド同期 | — | — | インライン`#save-status`にエラー文言（`alert()`不使用） | — | — | — |
 | 練習問題／今日の復習／修了テスト | — | — | — | 選択肢に○＋緑罫線＋`.feedback.ok` | 選択したものに×＋赤罫線、正答も同時表示＋`.feedback.ng` | — |
 | 単元結果／修了テスト結果／復習セッション完了 | — | 要復習0件は「全問正解しました」相当の文言 | — | — | — | `.doneBanner`（正誤色は強調面のみ、反転しない） |
-| 修了テスト | — | 未解放時はロック理由と不足単元を一覧表示 | — | — | — | — |
+| 修了テスト | — | 未解放時はロック理由と不足単元を一覧表示 | — | — | — | 未解放→解放の変化時だけ一度`is-unlocking`相当を再生（`completion` 420ms）。リロード・再訪・解放済みでは再演しない |
+| 各論`<details class="section">` | — | — | — | — | — | 開閉のたびに矢印回転＋本文opacity/translateYを再生（`accordion` 260ms） |
+| ステップバー（`.step`） | — | — | — | — | — | active移動・cleared化のときだけ対象stepのみsettle（`progress` 280ms）。初期描画・リロードでは全stepを再演しない |
+| 保存状態（`#save-status`） | syncing中はloader表示 | — | 保存失敗は静的`!`（アニメーションなし） | — | — | saved化の瞬間だけcheckを一度settle。同文言の再設定はしない（`aria-live=polite`） |
 
 ## グリッド規則
 
