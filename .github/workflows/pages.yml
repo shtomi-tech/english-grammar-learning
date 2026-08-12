@@ -31,15 +31,15 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
-      - name: Check app and browser flows
-        run: npm test
-
       - name: Generate runtime config
         run: node scripts/write-config.mjs
         env:
           APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Check app and browser flows
+        run: npm test
 
       - name: Prepare static files
         run: |
