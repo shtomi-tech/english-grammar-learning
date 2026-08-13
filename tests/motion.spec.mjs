@@ -39,6 +39,10 @@ const participlesVersions = {
   "emotion-verb-participles": 1
 };
 
+const infinitivesVersions = {
+  "infinitive-nominal-use": 1
+};
+
 // 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
 const almostMasteredAnswers = {
   "past-subjunctive": [3, 1, 2],
@@ -62,6 +66,10 @@ const masteredParticiplesAnswers = {
   "emotion-verb-participles": [1, 2, 0]
 };
 
+const masteredInfinitivesAnswers = {
+  "infinitive-nominal-use": [2, 2, 0]
+};
+
 function finalRecord(score, total, cleared) {
   return { bestScore: score, lastScore: score, cleared, bestTotal: total };
 }
@@ -78,7 +86,7 @@ function reviewForAnswers(answers, dueQuestionId = null) {
   })));
 }
 
-const masteredAnswers = { ...masteredSubjunctiveAnswers, ...masteredParticiplesAnswers };
+const masteredAnswers = { ...masteredSubjunctiveAnswers, ...masteredParticiplesAnswers, ...masteredInfinitivesAnswers };
 
 test.describe("正誤フィードバックのモーション", () => {
   test("正解の選択肢にsettle、不正解の選択肢にshakeのアニメーションが設定される", async ({ page }) => {
@@ -303,7 +311,7 @@ test.describe("修了後のホーム推薦", () => {
       stage: 0,
       question: 0,
       answers: { ...masteredSubjunctiveAnswers, "participles-as-adjectives-present": [1] },
-      versions: { ...subjunctiveVersions, ...participlesVersions },
+      versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: [...Object.keys(masteredSubjunctiveAnswers), "participles-as-adjectives-present"],
       finalChecks: { subjunctive: finalRecord(27, 27, true) },
       coursePositions: {
@@ -360,11 +368,12 @@ test.describe("修了後のホーム推薦", () => {
       stage: 0,
       question: 0,
       answers: masteredAnswers,
-      versions: { ...subjunctiveVersions, ...participlesVersions },
+      versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true)
+        participles: finalRecord(9, 9, true),
+        infinitives: finalRecord(3, 3, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
     });
@@ -381,11 +390,12 @@ test.describe("修了後のホーム推薦", () => {
       stage: 0,
       question: 0,
       answers: masteredAnswers,
-      versions: { ...subjunctiveVersions, ...participlesVersions },
+      versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true)
+        participles: finalRecord(9, 9, true),
+        infinitives: finalRecord(3, 3, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -402,11 +412,12 @@ test.describe("修了後のホーム推薦", () => {
       stage: 0,
       question: 0,
       answers: masteredAnswers,
-      versions: { ...subjunctiveVersions, ...participlesVersions },
+      versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true)
+        participles: finalRecord(9, 9, true),
+        infinitives: finalRecord(3, 3, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });

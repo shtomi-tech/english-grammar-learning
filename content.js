@@ -526,6 +526,94 @@ const curriculum = {
           ]
         }
       ]
+    },
+    {
+      id: "infinitives",
+      title: "不定詞",
+      recommendationLead: "to + 動詞の原形で、名詞・形容詞・副詞の働きをする文法です。",
+      overview: {
+        title: "不定詞とは",
+        html: `
+          <p>不定詞は、基本的に <code>to + 動詞の原形</code> の形で、動詞の意味を残しながら、名詞・形容詞・副詞のように働く表現です。</p>
+          <p>「～すること」「～するために」「～するための」のように、動作や状態をさまざまな形で文に組み込めます。</p>
+          <blockquote>
+            <p>To learn English takes time.<br>英語を学ぶには時間がかかります。</p>
+            <p>I need something to drink.<br>私は何か飲むものが必要です。</p>
+            <p>She went to the library to study.<br>彼女は勉強するために図書館へ行きました。</p>
+          </blockquote>
+          <p><code>to learn English</code> は「英語を学ぶこと」、<code>to drink</code> は <code>something</code> の内容、<code>to study</code> は目的を表しています。</p>
+          <p>不定詞は、主語・目的語・補語になったり、名詞を説明したり、目的や理由を付け加えたりします。また、助動詞や一部の使役・知覚を表す動詞の後ろでは、<code>to</code> を使わない原形不定詞が使われます。</p>
+          <p class="note">まず <code>to</code> の後ろが動詞の原形かを確認し、その不定詞のまとまりが文中でどの働きをしているかを見分けます。<code>to</code> が前置詞の場合は、後ろに名詞や動名詞が続くため、形だけで判断しないことが大切です。</p>`
+      },
+      lessons: [
+        {
+          id: "infinitive-nominal-use",
+          version: 1,
+          title: "不定詞の名詞的用法",
+          html: `
+            <p>不定詞の名詞的用法は、<code>to + 動詞の原形</code> のまとまりが名詞と同じように働き、「～すること」を表す用法です。文中で主語・目的語・補語になります。</p>
+            <details class="section" open>
+            <summary>主語になる場合</summary>
+            <p>不定詞が文の主語になる場合、文頭に置いて「～することは…」と表します。</p>
+            <div class="formula">To + 動詞の原形 ... + 動詞 / 形容詞</div>
+            <blockquote><p>To get enough sleep is important.<br>十分な睡眠をとることは大切です。</p></blockquote>
+            <p><code>To get enough sleep</code> が主語で、<code>is important</code> がその内容を説明しています。</p>
+            </details>
+            <details class="section">
+            <summary>目的語になる場合</summary>
+            <p>不定詞が動詞の目的語になり、「～することを…する」「～したい」のような意味を表します。</p>
+            <blockquote><p>I want to learn English.<br>私は英語を学びたいです。</p></blockquote>
+            <p><code>to learn English</code> は <code>want</code> の目的語です。<code>want + to不定詞</code> で「～したい」という意味になります。</p>
+            <p>動詞によって、不定詞を続けるか動名詞を続けるかは異なります。すべての動詞に同じ形を続けられるわけではありません。</p>
+            </details>
+            <details class="section">
+            <summary>補語になる場合</summary>
+            <p>不定詞がbe動詞の後ろに置かれ、主語の内容を説明することがあります。</p>
+            <blockquote><p>My plan is to visit Kyoto.<br>私の計画は京都を訪れることです。</p></blockquote>
+            <p><code>to visit Kyoto</code> は <code>My plan</code> の内容を説明する補語です。</p>
+            </details>
+            <details class="section">
+            <summary>副詞的用法との違い</summary>
+            <p>文頭に不定詞があっても、必ず名詞的用法になるわけではありません。</p>
+            <blockquote><p>To save time, I took a taxi.<br>時間を節約するために、私はタクシーに乗りました。</p></blockquote>
+            <p><code>To save time</code> は主語ではなく、文全体の目的を説明しているため、副詞的用法です。</p>
+            </details>
+            <p class="note">名詞的用法かどうかを判断するときは、不定詞のまとまりが文の主語・目的語・補語になっているかを確認します。<code>to</code> の後ろが動詞の原形なら不定詞、名詞や動名詞なら前置詞です。</p>`,
+          questions: [
+            {
+              id: "infinitive-nominal-use-q1",
+              text: "次の文のうち、to不定詞が名詞的用法（主語）で使われているものを選びなさい。",
+              choices: [
+                "To save time, I took a taxi.",
+                "I need a book to read.",
+                "To learn English takes time.",
+                "She went to the library to study."
+              ],
+              answer: 2,
+              explanation: "To learn English が文の主語で、「英語を学ぶこと」という意味なので名詞的用法です。1と4は目的を表す副詞的用法、2は a book を説明する形容詞的用法です。"
+            },
+            {
+              id: "infinitive-nominal-use-q2",
+              text: "I want (　　) English.",
+              choices: ["study", "studying", "to study", "studied"],
+              answer: 2,
+              explanation: "want の目的語として to study English を置きます。to の後ろは動詞の原形なので、to study が正解です。「英語を学びたい」という意味になります。"
+            },
+            {
+              id: "infinitive-nominal-use-q3",
+              text: "次の文のうち、to不定詞が補語として使われているものを選びなさい。",
+              choices: [
+                "My plan is to visit Kyoto.",
+                "I visited Kyoto to see the temples.",
+                "I have places to visit in Kyoto.",
+                "To visit Kyoto is exciting."
+              ],
+              answer: 0,
+              explanation: "to visit Kyoto は be動詞 is の後ろで、My plan の内容を説明する補語です。2は目的、3は places の説明、4は to visit Kyoto が主語です。"
+            }
+          ]
+        }
+      ]
     }
   ]
 };
