@@ -671,7 +671,7 @@ const curriculum = {
               text: "It is difficult for children ___ the rule. に入る形は？",
               choices: ["to understand", "understanding", "understand", "understood"],
               answer: 0,
-              explanation: "It is 形容詞 for + 人 + to不定詞 の形で、for children の後ろに to understand を続けます。"
+              explanation: "「子どもにとってルールを理解するのは難しい」という意味になるため、to understand が正解です。"
             }
           ]
         },
@@ -729,7 +729,7 @@ const curriculum = {
               text: "An unexpected snowstorm made it (    ) for them to reach the summit.",
               choices: ["possible", "impossible", "easy", "important"],
               answer: 1,
-              explanation: "make it + 形容詞 + for + 人 + to do の形です。予想外の吹雪によって登頂が不可能になったため、impossible が適切です。"
+              explanation: "予想外の吹雪によって登頂が不可能になったため、impossible が適切です。"
             }
           ]
         },
@@ -1019,7 +1019,7 @@ const curriculum = {
               text: "This problem is too difficult (　　) me to solve.",
               choices: ["for", "to", "of", "with"],
               answer: 0,
-              explanation: "<code>too + 形容詞 + for + 人 + to + 動詞の原形</code> の形にします。"
+              explanation: "「私には解けない」という意味になるため、<code>for</code> が正解です。"
             }
           ]
         },
@@ -1049,11 +1049,6 @@ const curriculum = {
             <p><code>of he</code> や <code>of they</code> とはしません。</p>
             </details>
             <details class="section" open>
-            <summary><code>for</code> との違い</summary>
-            <blockquote><p>It is important for you to check the answer.<br>あなたが答えを確認することは重要です。</p><p>It was kind of you to check my answer.<br>私の答えを確認してくれて、あなたは親切でした。</p></blockquote>
-            <p><code>for + 人 + to ...</code> は不定詞の動作をする人を示します。一方、<code>of + 人 + to ...</code> は、その人の性質や行動を評価します。<code>important</code> は行動の重要性、<code>kind</code> は人の性質に注目しています。</p>
-            </details>
-            <details class="section" open>
             <summary>書き換え</summary>
             <p><code>It is + 形容詞 + of + 人 + to ...</code> は、<code>人 + be動詞 + 形容詞 + to ...</code> の形に書き換えられることがあります。</p>
             <blockquote><p>It was kind of you to help me.<br>= You were kind to help me.</p></blockquote>
@@ -1061,9 +1056,9 @@ const curriculum = {
             </details>
             <details class="section" open>
             <summary>見分け方</summary>
-            <p>形容詞が人の性質や行動を評価しているかを確認します。人を評価する形容詞なら <code>of + 人 + to ...</code>、行動の重要性・難しさ・可能性などを表す形容詞なら <code>for + 人 + to ...</code> を使います。</p>
+            <p>形容詞が人の性質や行動を評価しているかを確認します。人を評価する形容詞なら <code>of + 人 + to ...</code> を使います。</p>
             </details>
-            <p class="note"><code>of</code> は人への評価、<code>for</code> は不定詞の動作をする人を示す、と区別すると整理しやすくなります。</p>`,
+            <p class="note"><code>of + 人 + to ...</code> は、人の性質や行動への評価を表します。</p>`,
           questions: [
             {
               id: "infinitive-of-adjective-evaluation-q1",
@@ -1095,6 +1090,151 @@ const curriculum = {
               ],
               answer: 2,
               explanation: "<code>careless</code> は <code>him</code> の不注意な行動を評価しているため、<code>of him to forget</code> の形です。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-negative-form",
+          version: 1,
+          title: "不定詞の否定形",
+          html: `
+            <p>不定詞を否定するときは、<code>to</code> の前に <code>not</code> を置きます。基本の形は <code>not to + 動詞の原形</code> で、「～しないこと」「～しないために」などを表します。</p>
+            <details class="section" open>
+            <summary>基本の形</summary>
+            <div class="formula">not to + 動詞の原形</div>
+            <blockquote><p>I decided not to go.<br>私は行かないことに決めました。</p></blockquote>
+            <p>否定を表す <code>not</code> は <code>to</code> の前に置きます。<code>to</code> の後ろは、通常の不定詞と同じく動詞の原形です。</p>
+            </details>
+            <details class="section" open>
+            <summary>名詞的用法</summary>
+            <p>不定詞の否定形を「～しないこと」という名詞のように使います。</p>
+            <blockquote><p>She promised not to tell anyone.<br>彼女は誰にも話さないと約束しました。</p></blockquote>
+            <p><code>not to tell anyone</code> は、彼女が約束した内容を表しています。</p>
+            <blockquote><p>I hope not to disappoint you.<br>あなたを失望させないことを願っています。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>目的を表す場合</summary>
+            <p>「～しないために」「～しないように」という目的を表すときにも、不定詞の否定形を使います。</p>
+            <div class="formula">in order not to + 動詞の原形<br>so as not to + 動詞の原形</div>
+            <blockquote><p>He left home early in order not to miss the train.<br>彼は電車に乗り遅れないように早く家を出ました。</p></blockquote>
+            <blockquote><p>She spoke quietly so as not to wake the baby.<br>彼女は赤ちゃんを起こさないように静かに話しました。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>主節の動作との違い</summary>
+            <p><code>not</code> は、不定詞が表す動作を否定します。</p>
+            <blockquote><p>I decided not to buy it.<br>私はそれを買わないことに決めました。</p></blockquote>
+            <p>これは「買うと決めなかった」ではなく、「買わないと決めた」という意味です。主節の動詞を否定する場合とは意味が異なります。</p>
+            </details>
+            <details class="section" open>
+            <summary>受動態・完了形</summary>
+            <p>受動態や完了形の不定詞でも、<code>not</code> は <code>to</code> の前に置きます。</p>
+            <blockquote><p>He hoped not to be noticed.<br>彼は気づかれないことを望みました。</p><p>She was sorry not to have called earlier.<br>彼女はもっと早く電話しなかったことを残念に思いました。</p></blockquote>
+            <p><code>not to be + 過去分詞</code> は「～されないこと」、<code>not to have + 過去分詞</code> は「～しなかったこと」を表します。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <ol>
+              <li><code>not</code> が <code>to</code> の前にあるか確認する。</li>
+              <li><code>to</code> の後ろが動詞の原形か確認する。</li>
+              <li>「～しないこと」または「～しないために」と訳して、文中での働きを判断する。</li>
+            </ol>
+            </details>
+            <p class="note">不定詞の否定形は <code>not to + 動詞の原形</code> が基本です。まず <code>not</code> と <code>to</code> の位置を確認しましょう。</p>`,
+          questions: [
+            {
+              id: "infinitive-negative-form-q1",
+              text: "I decided (　　　) the invitation.",
+              choices: ["not accepting", "not to accept", "to not accepting", "to accept not"],
+              answer: 1,
+              explanation: "<code>not to + 動詞の原形</code> の形にします。<code>decide not to do</code> で「～しないことに決める」という意味です。"
+            },
+            {
+              id: "infinitive-negative-form-q2",
+              text: "He left home early in order (　　　) the train.",
+              choices: ["not missing", "not to miss", "to not missing", "not miss"],
+              answer: 1,
+              explanation: "「～しないために」は <code>in order not to + 動詞の原形</code> で表します。"
+            },
+            {
+              id: "infinitive-negative-form-q3",
+              text: "\`She tried not to laugh.\` の意味として正しいものを選びなさい。",
+              choices: [
+                "彼女は笑わないように努めた。",
+                "彼女は笑うことを決めなかった。",
+                "彼女は笑わなかったことを後悔した。",
+                "彼女は笑ってはいけないと約束した。"
+              ],
+              answer: 0,
+              explanation: "<code>try not to + 動詞の原形</code> は「～しないように努める」という意味です。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-perfect-form",
+          version: 1,
+          title: "完了不定詞",
+          html: `
+            <p>完了不定詞は、<code>to have + 過去分詞</code> の形で、基準となる時点より前の動作や状態を表します。「～した」「～していた」などと訳します。</p>
+            <details class="section" open>
+            <summary>基本の形</summary>
+            <div class="formula">to have + 過去分詞</div>
+            <blockquote><p>I am happy to have met you.<br>あなたに会えたことをうれしく思います。</p></blockquote>
+            <p><code>am happy</code> は現在の気持ち、<code>to have met you</code> はそれより前に会ったことを表しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>単純不定詞との違い</summary>
+            <blockquote><p>I am happy to meet you.<br>あなたに会えてうれしいです。</p><p>I am happy to have met you.<br>あなたに会えたことをうれしく思います。</p></blockquote>
+            <p>単純不定詞は主節と同時、またはそれ以後の内容を表すことが多いのに対し、完了不定詞は主節より前の出来事を表します。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>seem</code> などと使う場合</summary>
+            <blockquote><p>She seems to have forgotten the key.<br>彼女は鍵を忘れたようです。</p></blockquote>
+            <p><code>seems</code> は現在の判断で、鍵を忘れたのはそれより前の出来事です。</p>
+            <blockquote><p>He is said to have left the country.<br>彼は国外へ出たと言われています。</p></blockquote>
+            <p>「言われている」時点より前に、国外へ出たことを表します。</p>
+            </details>
+            <details class="section" open>
+            <summary>受動態</summary>
+            <div class="formula">to have been + 過去分詞</div>
+            <blockquote><p>She was proud to have been chosen.<br>彼女は選ばれたことを誇りに思いました。</p></blockquote>
+            <p><code>to have been chosen</code> は「選ばれたこと」を表す、完了不定詞の受動態です。</p>
+            </details>
+            <details class="section" open>
+            <summary>過去分詞の形に注意</summary>
+            <p><code>to</code> の後ろは動詞の原形なので、<code>had</code> ではなく <code>have</code> を使います。</p>
+            <blockquote><p><code>to have visited</code> / <code>to have seen</code> / <code>to have finished</code></p></blockquote>
+            <p><code>to have saw</code> のように、<code>have</code> の後ろに過去形を置くことはできません。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <ol>
+              <li><code>to have + 過去分詞</code> の形を探す。</li>
+              <li>完了不定詞と主節の出来事の時間を比べる。</li>
+              <li>完了不定詞のほうが先に起きていれば、「～した」「～していた」と訳す。</li>
+            </ol>
+            </details>
+            <p class="note">完了不定詞は、単なる過去形ではなく、主節の内容より前に起きたことを示します。まず <code>to have + 過去分詞</code> の形を確認しましょう。</p>`,
+          questions: [
+            {
+              id: "infinitive-perfect-form-q1",
+              text: "I am happy (　　　) you.",
+              choices: ["to meet", "meeting", "to have met", "to have meet"],
+              answer: 2,
+              explanation: "「会ったこと」を現在うれしく思っているため、<code>to have + 過去分詞</code> の <code>to have met</code> を使います。"
+            },
+            {
+              id: "infinitive-perfect-form-q2",
+              text: "She seems (　　　) the key.",
+              choices: ["to forget", "to have forgotten", "to have forget", "forgetting"],
+              answer: 1,
+              explanation: "<code>seems</code> は現在の判断で、鍵を忘れたのはそれより前の出来事なので、<code>to have forgotten</code> が正解です。"
+            },
+            {
+              id: "infinitive-perfect-form-q3",
+              text: "She was proud (　　　) for the team.",
+              choices: ["to choose", "to have chosen", "to have been chosen", "to be choosing"],
+              answer: 2,
+              explanation: "完了不定詞の受動態は <code>to have been + 過去分詞</code> です。<code>to have been chosen</code> で「選ばれたこと」を表します。"
             }
           ]
         }

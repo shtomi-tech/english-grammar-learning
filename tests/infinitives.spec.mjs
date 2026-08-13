@@ -313,6 +313,53 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
           answer: 2
         }
       ]
+    },
+    {
+      title: "不定詞の否定形",
+      marker: "not to + 動詞の原形",
+      questions: [
+        {
+          text: "I decided (　　　) the invitation.",
+          choices: ["not accepting", "not to accept", "to not accepting", "to accept not"],
+          answer: 1
+        },
+        {
+          text: "He left home early in order (　　　) the train.",
+          choices: ["not missing", "not to miss", "to not missing", "not miss"],
+          answer: 1
+        },
+        {
+          text: "`She tried not to laugh.` の意味として正しいものを選びなさい。",
+          choices: [
+            "彼女は笑わないように努めた。",
+            "彼女は笑うことを決めなかった。",
+            "彼女は笑わなかったことを後悔した。",
+            "彼女は笑ってはいけないと約束した。"
+          ],
+          answer: 0
+        }
+      ]
+    },
+    {
+      title: "完了不定詞",
+      marker: "to have + 過去分詞",
+      questions: [
+        {
+          text: "I am happy (　　　) you.",
+          choices: ["to meet", "meeting", "to have met", "to have meet"],
+          answer: 2
+        },
+        {
+          text: "She seems (　　　) the key.",
+          choices: ["to forget", "to have forgotten", "to have forget", "forgetting"],
+          answer: 1
+        },
+        {
+          text: "She was proud (　　　) for the team.",
+          choices: ["to choose", "to have chosen", "to have been chosen", "to be choosing"],
+          answer: 2
+        }
+      ]
     }
   ];
 
@@ -321,7 +368,7 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
     await page.getByLabel("文法カテゴリ").selectOption("infinitives");
     await page.getByRole("button", { name: new RegExp(lesson.title) }).click();
     await expect(page.getByRole("heading", { name: lesson.title })).toBeVisible();
-    await expect(page.getByText(lesson.marker, { exact: true })).toBeVisible();
+    await expect(page.getByText(lesson.marker, { exact: true }).first()).toBeVisible();
 
     await page.getByRole("button", { name: "3問に挑戦" }).click();
     for (const [index, expected] of lesson.questions.entries()) {
