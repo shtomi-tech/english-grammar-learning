@@ -141,3 +141,168 @@ test("形式目的語構文の解説と3問を確認できる", async ({ page })
 
   await expect(page.locator(".score")).toHaveText("3 / 3");
 });
+
+test("不定詞の形容詞的用法の解説と3問を確認できる", async ({ page }) => {
+  await freshHome(page);
+  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await page.getByRole("button", { name: /不定詞の形容詞的用法/ }).click();
+
+  await expect(page.getByRole("heading", { name: "不定詞の形容詞的用法" })).toBeVisible();
+  await expect(page.getByText("名詞 + to + 動詞の原形", { exact: true })).toBeVisible();
+  await expect(page.locator("#session-content").getByText("to drink", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "3問に挑戦" }).click();
+  const expectedQuestions = [
+    {
+      text: "I need something (　　) before the trip.",
+      choices: ["eat", "to eat", "eating", "eaten"],
+      answer: 1
+    },
+    {
+      text: "I need someone (　　) me with this work.",
+      choices: ["to help", "helping", "helped", "to be helped"],
+      answer: 0
+    },
+    {
+      text: "不定詞の形容詞的用法が使われている文を選びなさい。",
+      choices: [
+        "To get enough sleep is important.",
+        "She went to bed early to get enough sleep.",
+        "I have a lot of homework to do.",
+        "He wants to get enough sleep."
+      ],
+      answer: 2
+    }
+  ];
+
+  for (const [index, expected] of expectedQuestions.entries()) {
+    await expect(page.locator(".questionText")).toHaveText(expected.text);
+    await expect.poll(() => page.locator(".choice").evaluateAll(buttons =>
+      buttons.map(button => button.querySelectorAll("span")[1].textContent)
+    )).toEqual(expected.choices);
+    await page.locator(".choice").nth(expected.answer).click();
+    await page.locator('[data-action="next-question"]').click();
+    if (index < expectedQuestions.length - 1) await expect(page.locator(".quiz")).toBeVisible();
+  }
+
+  await expect(page.locator(".score")).toHaveText("3 / 3");
+});
+
+test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3問に取り組める", async ({ page }) => {
+  const lessons = [
+    {
+      title: "不定詞の副詞的用法（目的）",
+      marker: "主語 + 動詞 ... + to + 動詞の原形",
+      questions: [
+        {
+          text: "She went to the library (　　) English.",
+          choices: ["study", "to study", "studying", "studied"],
+          answer: 1
+        },
+        {
+          text: "She spoke quietly so as (　　) the baby.",
+          choices: ["not to wake", "not wake", "to not waking", "not waking"],
+          answer: 0
+        },
+        {
+          text: "目的を表す副詞的用法が使われている文を選びなさい。",
+          choices: [
+            "I have homework to do.",
+            "To read books is useful.",
+            "He went outside to get some fresh air.",
+            "I need a pen to write with."
+          ],
+          answer: 2
+        }
+      ]
+    },
+    {
+      title: "不定詞の副詞的用法（原因・理由）",
+      marker: "主語 + be動詞 + 感情を表す形容詞 + to + 動詞の原形",
+      questions: [
+        {
+          text: "I am glad (　　) you again.",
+          choices: ["see", "to see", "seeing", "saw"],
+          answer: 1
+        },
+        {
+          text: "She was surprised (　　) the result.",
+          choices: ["hear", "to hear", "hearing", "heard"],
+          answer: 1
+        },
+        {
+          text: "He was sorry to keep us waiting. の to keep us waiting の働きは？",
+          choices: ["目的", "sorry の理由", "名詞を修飾する説明", "結果"],
+          answer: 1
+        }
+      ]
+    },
+    {
+      title: "不定詞の副詞的用法（結果）",
+      marker: "grow up to be ...",
+      questions: [
+        {
+          text: "He grew up (　　) a scientist.",
+          choices: ["be", "to be", "being", "been"],
+          answer: 1
+        },
+        {
+          text: "She hurried to the station, only (　　) that the train had left.",
+          choices: ["find", "to find", "finding", "found"],
+          answer: 1
+        },
+        {
+          text: "結果を表す副詞的用法が使われている文を選びなさい。",
+          choices: [
+            "He went to the store to buy milk.",
+            "I need a bag to carry books.",
+            "She opened the door to find nobody there.",
+            "To travel abroad is exciting."
+          ],
+          answer: 2
+        }
+      ]
+    },
+    {
+      title: "不定詞の副詞的用法（程度・結果）",
+      marker: "too + 形容詞 + to + 動詞の原形",
+      questions: [
+        {
+          text: "This bag is too heavy (　　) carry.",
+          choices: ["to", "for", "that", "as"],
+          answer: 0
+        },
+        {
+          text: "The room is large enough (　　) hold fifty people.",
+          choices: ["to", "for", "that", "than"],
+          answer: 0
+        },
+        {
+          text: "This problem is too difficult (　　) me to solve.",
+          choices: ["for", "to", "of", "with"],
+          answer: 0
+        }
+      ]
+    }
+  ];
+
+  for (const lesson of lessons) {
+    await freshHome(page);
+    await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+    await page.getByRole("button", { name: new RegExp(lesson.title) }).click();
+    await expect(page.getByRole("heading", { name: lesson.title })).toBeVisible();
+    await expect(page.getByText(lesson.marker, { exact: true })).toBeVisible();
+
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    for (const [index, expected] of lesson.questions.entries()) {
+      await expect(page.locator(".questionText")).toHaveText(expected.text);
+      await expect.poll(() => page.locator(".choice").evaluateAll(buttons =>
+        buttons.map(button => button.querySelectorAll("span")[1].textContent)
+      )).toEqual(expected.choices);
+      await page.locator(".choice").nth(expected.answer).click();
+      await page.locator('[data-action="next-question"]').click();
+      if (index < lesson.questions.length - 1) await expect(page.locator(".quiz")).toBeVisible();
+    }
+    await expect(page.locator(".score")).toHaveText("3 / 3");
+  }
+});

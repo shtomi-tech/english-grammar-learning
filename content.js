@@ -744,6 +744,313 @@ const curriculum = {
               explanation: "make it + 形容詞 + for + 人 + to do の形です。予想外の吹雪によって登頂が不可能になったため、impossible が適切です。"
             }
           ]
+        },
+        {
+          id: "infinitive-adjective-use",
+          version: 1,
+          title: "不定詞の形容詞的用法",
+          html: `
+            <p>不定詞の形容詞的用法は、<code>to + 動詞の原形</code> が名詞を説明する用法です。「～するための」「～すべき」「～する」という意味になります。</p>
+            <details class="section" open>
+            <summary>名詞を説明する基本の形</summary>
+            <div class="formula">名詞 + to + 動詞の原形</div>
+            <blockquote><p>I need something to drink.<br>私は何か飲むものが必要です。</p></blockquote>
+            <p><code>to drink</code> が <code>something</code> を説明し、「飲むもの」という意味になります。</p>
+            </details>
+            <details class="section" open>
+            <summary>名詞が不定詞の動作を受ける場合</summary>
+            <blockquote><p>She has a lot of homework to do.<br>彼女にはするべき宿題がたくさんあります。</p><p>I need a book to read.<br>私は読む本が必要です。</p><p>He found a chair to sit on.<br>彼は座る椅子を見つけました。</p></blockquote>
+            <p><code>homework</code> や <code>book</code> は「する」「読む」対象なので、<code>to do</code> や <code>to read</code> の目的語にあたります。<code>a chair to sit on</code> のように、動詞と結びつく前置詞が文末に残ることもあります。</p>
+            </details>
+            <details class="section" open>
+            <summary>名詞が不定詞の動作をする場合</summary>
+            <blockquote><p>I need someone to help me.<br>私を助けてくれる人が必要です。</p></blockquote>
+            <p><code>someone</code> が「助ける」人なので、<code>to help</code> の意味上の主語になっています。このように、名詞が不定詞の動作を受けるのか、動作をするのかを確認すると、意味を取りやすくなります。</p>
+            </details>
+            <details class="section" open>
+            <summary>よく使われる表現</summary>
+            <p><code>something</code>、<code>anything</code>、<code>nothing</code>、<code>a place</code>、<code>a chance</code>、<code>a way</code> などの後ろに、不定詞を置くことがあります。</p>
+            <blockquote><p>Do you have anything to eat?<br>何か食べるものを持っていますか。</p><p>We need a place to stay.<br>私たちには泊まる場所が必要です。</p><p>This is a good way to learn English.<br>これは英語を学ぶよい方法です。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>他の用法との見分け方</summary>
+            <p>不定詞が名詞を説明していれば、形容詞的用法です。</p>
+            <ol>
+              <li><code>To study English is important.</code> は、不定詞が主語なので名詞的用法です。</li>
+              <li><code>She went to the library to study English.</code> は、目的を表すので副詞的用法です。</li>
+              <li><code>I need a book to study.</code> は、<code>to study</code> が <code>a book</code> を説明するので形容詞的用法です。</li>
+            </ol>
+            <p>不定詞の前にある名詞を確認し、「どのような名詞か」を説明していれば、形容詞的用法と判断できます。</p>
+            </details>
+            <p class="note">不定詞の形容詞的用法は、基本的に「名詞 + to不定詞」の形です。不定詞が前の名詞を説明しているかどうかを確認しましょう。</p>`,
+          questions: [
+            {
+              id: "infinitive-adjective-use-q1",
+              text: "I need something (　　) before the trip.",
+              choices: ["eat", "to eat", "eating", "eaten"],
+              answer: 1,
+              explanation: "<code>to eat</code> が <code>something</code> を説明し、「食べるもの」という意味になるため、to eat が正解です。"
+            },
+            {
+              id: "infinitive-adjective-use-q2",
+              text: "I need someone (　　) me with this work.",
+              choices: ["to help", "helping", "helped", "to be helped"],
+              answer: 0,
+              explanation: "<code>someone</code> が「手伝う」人なので、<code>to help me</code> が <code>someone</code> を説明します。"
+            },
+            {
+              id: "infinitive-adjective-use-q3",
+              text: "不定詞の形容詞的用法が使われている文を選びなさい。",
+              choices: [
+                "To get enough sleep is important.",
+                "She went to bed early to get enough sleep.",
+                "I have a lot of homework to do.",
+                "He wants to get enough sleep."
+              ],
+              answer: 2,
+              explanation: "<code>to do</code> が <code>homework</code> を説明し、「するべき宿題」という意味になっています。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-adverbial-purpose",
+          version: 1,
+          title: "不定詞の副詞的用法（目的）",
+          html: `
+            <p>不定詞の副詞的用法（目的）は、<code>to + 動詞の原形</code> が動詞や文全体を説明し、「何のためにその動作をするのか」という目的を表す用法です。「～するために」と訳します。</p>
+            <details class="section" open>
+            <summary>目的を表す基本の形</summary>
+            <div class="formula">主語 + 動詞 ... + to + 動詞の原形</div>
+            <blockquote><p>She went to the library to study English.<br>彼女は英語を勉強するために図書館へ行きました。</p></blockquote>
+            <p><code>to study English</code> は、図書館へ行った目的を表しています。主節の動作が「行った」、不定詞が「何のために行ったか」を説明しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>主節と不定詞の動作主</summary>
+            <p>この用法では、主節の主語と不定詞の動作主が同じになることが多いです。</p>
+            <blockquote><p>I got up early to catch the first train.<br>私は始発電車に乗るために早起きしました。</p></blockquote>
+            <p><code>I</code> が「早起きする人」であり、「始発電車に乗る人」でもあります。</p>
+            </details>
+            <details class="section" open>
+            <summary>目的を強調する表現</summary>
+            <p>目的をはっきり示すために、<code>in order to</code> や <code>so as to</code> を使うこともあります。</p>
+            <blockquote><p>He left early in order to catch the train.<br>彼は電車に間に合うために早く出発しました。</p><p>She spoke quietly so as not to wake the baby.<br>彼女は赤ちゃんを起こさないように静かに話しました。</p></blockquote>
+            <p>否定の目的は、<code>in order not to</code> や <code>so as not to</code> で表します。</p>
+            </details>
+            <details class="section" open>
+            <summary>形容詞的用法との違い</summary>
+            <blockquote><p>I need a book to read.<br>私は読む本が必要です。</p><p>I went to the library to read books.<br>私は本を読むために図書館へ行きました。</p></blockquote>
+            <p>前の文の <code>to read</code> は <code>a book</code> を説明するため形容詞的用法です。後の文の <code>to read books</code> は図書館へ行った目的を説明するため、副詞的用法です。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <p>不定詞を「何のために」と訳して、主節の動作の目的として自然なら、目的を表す副詞的用法です。不定詞が動詞や文全体を説明しているかを確認しましょう。</p>
+            </details>
+            <p class="note">目的を表す副詞的用法では、「不定詞の前に名詞があるか」ではなく、「何のための動作か」を確認します。</p>`,
+          questions: [
+            {
+              id: "infinitive-adverbial-purpose-q1",
+              text: "She went to the library (　　) English.",
+              choices: ["study", "to study", "studying", "studied"],
+              answer: 1,
+              explanation: "図書館へ行った目的を表すので、<code>to study</code> が正解です。"
+            },
+            {
+              id: "infinitive-adverbial-purpose-q2",
+              text: "She spoke quietly so as (　　) the baby.",
+              choices: ["not to wake", "not wake", "to not waking", "not waking"],
+              answer: 0,
+              explanation: "否定の目的は <code>so as not to + 動詞の原形</code> で表します。"
+            },
+            {
+              id: "infinitive-adverbial-purpose-q3",
+              text: "目的を表す副詞的用法が使われている文を選びなさい。",
+              choices: [
+                "I have homework to do.",
+                "To read books is useful.",
+                "He went outside to get some fresh air.",
+                "I need a pen to write with."
+              ],
+              answer: 2,
+              explanation: "<code>to get some fresh air</code> は、外へ行った目的を表しています。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-adverbial-reason",
+          version: 1,
+          title: "不定詞の副詞的用法（原因・理由）",
+          html: `
+            <p>不定詞の副詞的用法（原因・理由）は、<code>to + 動詞の原形</code> が、感情や判断が生じた原因・理由を表す用法です。「～して」「～なので」「～したことを」と訳します。</p>
+            <details class="section" open>
+            <summary>感情を表す形容詞の後ろ</summary>
+            <div class="formula">主語 + be動詞 + 感情を表す形容詞 + to + 動詞の原形</div>
+            <blockquote><p>I am glad to see you.<br>あなたに会えてうれしいです。</p></blockquote>
+            <p><code>to see you</code> は、「うれしい」という感情が生じた理由を表しています。「あなたに会うためにうれしい」という目的ではありません。</p>
+            </details>
+            <details class="section" open>
+            <summary>よく使われる形容詞</summary>
+            <p><code>glad</code>・<code>happy</code> は「うれしい」、<code>sorry</code> は「残念に思う・申し訳なく思う」、<code>surprised</code> は「驚いている」、<code>pleased</code> は「喜んでいる」、<code>disappointed</code> は「失望している」という意味です。</p>
+            <blockquote><p>She was surprised to hear the result.<br>彼女はその結果を聞いて驚きました。</p><p>He was sorry to keep us waiting.<br>彼は私たちを待たせて申し訳なく思いました。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>目的を表す用法との違い</summary>
+            <blockquote><p>I went to the station to meet her.<br>私は彼女に会うために駅へ行きました。</p><p>I was glad to meet her.<br>私は彼女に会えてうれしかったです。</p></blockquote>
+            <p>前の <code>to meet her</code> は駅へ行った目的です。後の <code>to meet her</code> は、うれしかった理由です。同じ不定詞でも、何を説明しているかによって用法が変わります。</p>
+            </details>
+            <details class="section" open>
+            <summary>判断の理由を表す場合</summary>
+            <p>感情だけでなく、驚き・残念さ・喜びなどの判断の理由も表します。</p>
+            <blockquote><p>She was lucky to find her wallet.<br>彼女は財布を見つけて運がよかったです。</p></blockquote>
+            <p><code>to find her wallet</code> は、運がよかった理由を説明しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <p>形容詞の後ろに不定詞があり、その不定詞が感情や判断の理由を表している場合は、原因・理由を表す副詞的用法です。</p>
+            </details>
+            <p class="note">「なぜうれしいのか」「なぜ驚いたのか」のように、感情や判断の理由を不定詞が説明しているかを確認しましょう。</p>`,
+          questions: [
+            {
+              id: "infinitive-adverbial-reason-q1",
+              text: "I am glad (　　) you again.",
+              choices: ["see", "to see", "seeing", "saw"],
+              answer: 1,
+              explanation: "<code>glad</code> の原因・理由を表すため、<code>to see</code> が正解です。"
+            },
+            {
+              id: "infinitive-adverbial-reason-q2",
+              text: "She was surprised (　　) the result.",
+              choices: ["hear", "to hear", "hearing", "heard"],
+              answer: 1,
+              explanation: "驚いた理由を表すので、<code>to hear</code> を使います。"
+            },
+            {
+              id: "infinitive-adverbial-reason-q3",
+              text: "He was sorry to keep us waiting. の to keep us waiting の働きは？",
+              choices: ["目的", "sorry の理由", "名詞を修飾する説明", "結果"],
+              answer: 1,
+              explanation: "<code>to keep us waiting</code> は、申し訳なく思った理由を表しています。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-adverbial-result",
+          version: 1,
+          title: "不定詞の副詞的用法（結果）",
+          html: `
+            <p>不定詞の副詞的用法（結果）は、<code>to + 動詞の原形</code> が、ある動作のあとに起こった結果を表す用法です。「～して、その結果…」と訳します。</p>
+            <details class="section" open>
+            <summary>結果を表す基本の考え方</summary>
+            <blockquote><p>He grew up to be a scientist.<br>彼は成長して科学者になりました。</p></blockquote>
+            <p><code>to be a scientist</code> は「成長した目的」ではありません。成長したあとにどうなったかという結果を表しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>よく使われる表現</summary>
+            <p><code>grow up to be ...</code> は「成長して～になる」、<code>live to ...</code> は「生きて～する」、<code>wake up to find ...</code> は「目を覚ますと～だと分かる」という意味です。</p>
+            <blockquote><p>She woke up to find the room empty.<br>彼女は目を覚ますと、部屋が空っぽだと分かりました。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary><code>only to</code> の使い方</summary>
+            <p><code>only to</code> は、期待とは異なる残念な結果を表すことが多く、「結局～することになった」と訳します。</p>
+            <blockquote><p>He hurried to the station, only to miss the train.<br>彼は急いで駅へ行きましたが、結局電車に乗り遅れました。</p></blockquote>
+            <p>急いだ目的は電車に乗ることでしたが、実際の結果は「乗り遅れたこと」です。</p>
+            </details>
+            <details class="section" open>
+            <summary>目的を表す用法との違い</summary>
+            <blockquote><p>He went to London to study English.<br>彼は英語を勉強するためにロンドンへ行きました。</p><p>He grew up to become a famous writer.<br>彼は成長して有名な作家になりました。</p></blockquote>
+            <p>前の文はロンドンへ行った目的、後の文は成長した結果です。不定詞を「～するために」と訳すか、「～して、その結果」と訳すかを確認します。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <p>不定詞の前にある動作と、不定詞が表す出来事の時間的な順序に注目します。前の動作のあとに起こった出来事なら、結果を表す副詞的用法です。</p>
+            </details>
+            <p class="note">結果を表す副詞的用法では、不定詞が「何のために」ではなく、「そのあとどうなったか」を表している点に注意します。</p>`,
+          questions: [
+            {
+              id: "infinitive-adverbial-result-q1",
+              text: "He grew up (　　) a scientist.",
+              choices: ["be", "to be", "being", "been"],
+              answer: 1,
+              explanation: "<code>grow up to be ...</code> は「成長して～になる」という結果を表します。"
+            },
+            {
+              id: "infinitive-adverbial-result-q2",
+              text: "She hurried to the station, only (　　) that the train had left.",
+              choices: ["find", "to find", "finding", "found"],
+              answer: 1,
+              explanation: "<code>only to + 動詞の原形</code> で、予想外の結果を表します。"
+            },
+            {
+              id: "infinitive-adverbial-result-q3",
+              text: "結果を表す副詞的用法が使われている文を選びなさい。",
+              choices: [
+                "He went to the store to buy milk.",
+                "I need a bag to carry books.",
+                "She opened the door to find nobody there.",
+                "To travel abroad is exciting."
+              ],
+              answer: 2,
+              explanation: "<code>to find nobody there</code> は、ドアを開けたあとに分かった結果を表しています。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-adverbial-degree",
+          version: 1,
+          title: "不定詞の副詞的用法（程度・結果）",
+          html: `
+            <p>不定詞の副詞的用法（程度・結果）は、<code>too ... to ～</code> や <code>... enough to ～</code> を使い、ある状態の程度と、その結果として可能か不可能かを表す用法です。</p>
+            <details class="section" open>
+            <summary><code>too ... to ～</code></summary>
+            <div class="formula">too + 形容詞 + to + 動詞の原形</div>
+            <blockquote><p>This box is too heavy to carry.<br>この箱は重すぎて運べません。</p></blockquote>
+            <p><code>too ... to</code> は「あまりに…なので～できない」「～するには…すぎる」という意味です。「運ぶために重すぎる」ではなく、「重すぎる。その結果、運べない」と捉えます。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>... enough to ～</code></summary>
+            <div class="formula">形容詞 + enough + to + 動詞の原形</div>
+            <blockquote><p>He is old enough to drive.<br>彼は運転できる年齢です。</p></blockquote>
+            <p><code>old enough</code> は「十分に年齢が高い」、<code>to drive</code> はその結果としてできることを表します。名詞を使う場合は、<code>enough + 名詞 + to ...</code> の形になります。</p>
+            <blockquote><p>She has enough time to finish the work.<br>彼女にはその仕事を終える十分な時間があります。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>不定詞の動作主を示す場合</summary>
+            <p>不定詞の動作をする人を示すときは、<code>for + 人 + to + 動詞の原形</code> を使います。</p>
+            <blockquote><p>This problem is too difficult for me to solve.<br>この問題は私には難しすぎて解けません。</p></blockquote>
+            <p><code>for me</code> は、<code>to solve</code> の動作をする人を表しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>目的を表す用法との違い</summary>
+            <blockquote><p>I went to the library to study.<br>私は勉強するために図書館へ行きました。</p><p>The book is too difficult to understand.<br>その本は難しすぎて理解できません。</p></blockquote>
+            <p>前の文は図書館へ行った目的です。後の文は本が難しい程度と、その結果として理解できないことを表しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <p><code>too ... to</code> や <code>... enough to</code> では、不定詞が目的ではなく、形容詞が表す程度から生じる結果を説明しています。</p>
+            </details>
+            <p class="note"><code>too ... to</code> は「～するには…すぎる」、<code>... enough to</code> は「～するのに十分…」と、程度と結果をまとめて捉えます。</p>`,
+          questions: [
+            {
+              id: "infinitive-adverbial-degree-q1",
+              text: "This bag is too heavy (　　) carry.",
+              choices: ["to", "for", "that", "as"],
+              answer: 0,
+              explanation: "<code>too + 形容詞 + to + 動詞の原形</code> の形なので、<code>to</code> が正解です。"
+            },
+            {
+              id: "infinitive-adverbial-degree-q2",
+              text: "The room is large enough (　　) hold fifty people.",
+              choices: ["to", "for", "that", "than"],
+              answer: 0,
+              explanation: "<code>形容詞 + enough + to + 動詞の原形</code> の形を使います。"
+            },
+            {
+              id: "infinitive-adverbial-degree-q3",
+              text: "This problem is too difficult (　　) me to solve.",
+              choices: ["for", "to", "of", "with"],
+              answer: 0,
+              explanation: "不定詞の動作主を示す <code>for me</code> が必要です。"
+            }
+          ]
         }
       ]
     }

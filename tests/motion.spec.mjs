@@ -42,7 +42,12 @@ const participlesVersions = {
 const infinitivesVersions = {
   "infinitive-nominal-use": 2,
   "dummy-subject-it": 1,
-  "dummy-object-it": 1
+  "dummy-object-it": 1,
+  "infinitive-adjective-use": 1,
+  "infinitive-adverbial-purpose": 1,
+  "infinitive-adverbial-reason": 1,
+  "infinitive-adverbial-result": 1,
+  "infinitive-adverbial-degree": 1
 };
 
 // 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
@@ -71,7 +76,12 @@ const masteredParticiplesAnswers = {
 const masteredInfinitivesAnswers = {
   "infinitive-nominal-use": [0, 0, 3],
   "dummy-subject-it": [0, 0, 0],
-  "dummy-object-it": [1, 0, 1]
+  "dummy-object-it": [1, 0, 1],
+  "infinitive-adjective-use": [1, 0, 2],
+  "infinitive-adverbial-purpose": [1, 0, 2],
+  "infinitive-adverbial-reason": [1, 1, 1],
+  "infinitive-adverbial-result": [1, 1, 2],
+  "infinitive-adverbial-degree": [0, 0, 0]
 };
 
 function finalRecord(score, total, cleared) {
@@ -376,7 +386,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(9, 9, true)
+        infinitives: finalRecord(24, 24, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
     });
@@ -398,7 +408,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(9, 9, true)
+        infinitives: finalRecord(24, 24, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -420,7 +430,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(9, 9, true)
+        infinitives: finalRecord(24, 24, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
