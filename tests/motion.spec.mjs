@@ -19,7 +19,7 @@ async function seedProgress(page, progress) {
 
 async function openInversionLesson(page) {
   await freshHome(page);
-  // 仮定法の倒置（3節、最初のみopen）。未着手のためユニット一覧から直接遷移する。
+  // 仮定法の倒置（3節、初期表示はすべてopen）。未着手のためユニット一覧から直接遷移する。
   await page.locator(".unitList .unitRow").nth(5).click();
 }
 
@@ -40,7 +40,9 @@ const participlesVersions = {
 };
 
 const infinitivesVersions = {
-  "infinitive-nominal-use": 1
+  "infinitive-nominal-use": 2,
+  "dummy-subject-it": 1,
+  "dummy-object-it": 1
 };
 
 // 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
@@ -67,7 +69,9 @@ const masteredParticiplesAnswers = {
 };
 
 const masteredInfinitivesAnswers = {
-  "infinitive-nominal-use": [2, 2, 0]
+  "infinitive-nominal-use": [0, 0, 3],
+  "dummy-subject-it": [0, 0, 0],
+  "dummy-object-it": [1, 0, 1]
 };
 
 function finalRecord(score, total, cleared) {
@@ -131,20 +135,19 @@ test.describe("正誤フィードバックのモーション", () => {
 });
 
 test.describe("各論のAccordion", () => {
-  test("最初の節はopenで矢印が回転し、以降の節はclosedで矢印は初期状態", async ({ page }) => {
+  test("各論の節は初期表示ですべてopenになり、矢印も回転する", async ({ page }) => {
     await openInversionLesson(page);
     const sections = page.locator("details.section");
     await expect(sections).toHaveCount(3);
-    expect(await sections.nth(0).evaluate(el => el.open)).toBe(true);
-    expect(await sections.nth(1).evaluate(el => el.open)).toBe(false);
-    expect(await sections.nth(2).evaluate(el => el.open)).toBe(false);
 
-    const transforms = await sections.evaluateAll(els =>
-      els.map(el => getComputedStyle(el.querySelector("summary"), "::before").transform)
-    );
-    expect(transforms[0]).not.toBe("none");
-    expect(transforms[1]).toBe("none");
-    expect(transforms[2]).toBe("none");
+    const statesAndTransforms = await sections.evaluateAll(els => els.map(el => ({
+      open: el.open,
+      transform: getComputedStyle(el.querySelector("summary"), "::before").transform
+    })));
+    expect(statesAndTransforms.map(section => section.open)).toEqual([true, true, true]);
+    for (const section of statesAndTransforms) {
+      expect(section.transform).not.toBe("none");
+    }
   });
 
   test("summaryクリックで開閉し、矢印の回転がopen属性と一致する", async ({ page }) => {
@@ -153,13 +156,13 @@ test.describe("各論のAccordion", () => {
     const summaryTransform = () => second.locator("summary").evaluate(el => getComputedStyle(el, "::before").transform);
 
     await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(true);
+    expect(await second.evaluate(el => el.open)).toBe(false);
     // 回転はtransition中のため、最終状態に落ち着くまでポーリングする。
-    await expect.poll(summaryTransform).not.toBe("none");
+    await expect.poll(summaryTransform).toBe("none");
 
     await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(false);
-    await expect.poll(summaryTransform).toBe("none");
+    expect(await second.evaluate(el => el.open)).toBe(true);
+    await expect.poll(summaryTransform).not.toBe("none");
   });
 
   test("Spaceキーで開閉できる", async ({ page }) => {
@@ -167,9 +170,9 @@ test.describe("各論のAccordion", () => {
     const third = page.locator("details.section").nth(2);
     await third.locator("summary").focus();
     await page.keyboard.press("Space");
-    expect(await third.evaluate(el => el.open)).toBe(true);
-    await page.keyboard.press("Space");
     expect(await third.evaluate(el => el.open)).toBe(false);
+    await page.keyboard.press("Space");
+    expect(await third.evaluate(el => el.open)).toBe(true);
   });
 
   test("節を持たない各論ではdetails.sectionが存在せず本文がそのまま表示される", async ({ page }) => {
@@ -373,7 +376,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(3, 3, true)
+        infinitives: finalRecord(9, 9, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
     });
@@ -395,7 +398,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(3, 3, true)
+        infinitives: finalRecord(9, 9, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -417,7 +420,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(3, 3, true)
+        infinitives: finalRecord(9, 9, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -494,7 +497,7 @@ test.describe("reduced motion", () => {
     await openInversionLesson(page);
     const second = page.locator("details.section").nth(1);
     await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(true);
+    expect(await second.evaluate(el => el.open)).toBe(false);
     const transitionDuration = await second.locator("summary").evaluate(
       el => getComputedStyle(el, "::before").transitionDuration
     );

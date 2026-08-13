@@ -867,7 +867,7 @@ function renderLesson(content, lesson) {
   enhanceAccordions(content);
 }
 
-// 各論本文内の details.section を、矢印transform＋本文opacity/translateYで開閉するよう補強する。
+// 各論本文内の details.section を初期表示ですべて開き、矢印transform＋本文opacity/translateYで開閉するよう補強する。
 // 教材本文（content.js）自体は変更せず、描画時にsummary以外の子要素だけをwrapperへ移す。
 function enhanceAccordions(container) {
   container.querySelectorAll("details.section").forEach(details => {
@@ -878,6 +878,7 @@ function enhanceAccordions(container) {
       Array.from(details.children).filter(child => child.tagName !== "SUMMARY").forEach(child => body.appendChild(child));
       details.appendChild(body);
     }
+    details.open = true;
     details.addEventListener("toggle", () => {
       if (!details.open) return;
       body.classList.add("is-entering");
