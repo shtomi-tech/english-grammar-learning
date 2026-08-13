@@ -542,11 +542,11 @@ const curriculum = {
             <p>She went to the library to study.<br>彼女は勉強するために図書館へ行きました。</p>
           </blockquote>
           <p><code>to learn English</code> は「英語を学ぶこと」、<code>to drink</code> は <code>something</code> の内容、<code>to study</code> は目的を表しています。</p>
-          <p>不定詞は、主語・目的語・補語になったり、名詞を説明したり、目的や理由を付け加えたりします。また、助動詞や一部の使役・知覚を表す動詞の後ろでは、<code>to</code> を使わない原形不定詞が使われます。</p>
+          <p>不定詞は、主語・目的語・補語になったり、名詞を説明したり、目的や理由を付け加えたりします。まず基本の <code>to + 動詞の原形</code> の働きを学び、その後で、使役動詞や知覚動詞の後ろに <code>to</code> を付けずに置く「原形不定詞」を学びます。</p>
           <p class="note">まず <code>to</code> の後ろが動詞の原形かを確認し、その不定詞のまとまりが文中でどの働きをしているかを見分けます。<code>to</code> が前置詞の場合は、後ろに名詞や動名詞が続くため、形だけで判断しないことが大切です。</p>`
       },
       lessons: [
-        {
+{
           id: "infinitive-nominal-use",
           version: 2,
           title: "不定詞の名詞的用法",
@@ -618,124 +618,9 @@ const curriculum = {
             }
           ]
         },
-        {
-          id: "dummy-subject-it",
-          version: 1,
-          title: "形式主語構文",
-          html: `
-            <p>英語では、主語が長くなると、文の形を整えるために <code>it</code> を主語の位置に置き、内容を表す不定詞句やthat節を文の後ろに置くことがあります。これを形式主語構文といいます。</p>
-            <details class="section" open>
-            <summary>不定詞を使う形</summary>
-            <div class="formula">It is + 形容詞 + to + 動詞の原形</div>
-            <blockquote><p>It is important to check the answer.<br>答えを確認することは大切です。</p></blockquote>
-            <p><code>it</code> は具体的なものを指していません。内容上の主語は <code>to check the answer</code> です。<code>To check the answer is important.</code> としても意味は通りますが、長い主語を後ろに置く形式主語構文のほうが自然です。</p>
-            </details>
-            <details class="section" open>
-            <summary>that節を使う形</summary>
-            <div class="formula">It is + 形容詞 + that + 主語 + 動詞</div>
-            <blockquote><p>It is surprising that Ken solved the problem.<br>ケンがその問題を解いたことは驚きです。</p></blockquote>
-            <p>この文では、<code>that Ken solved the problem</code> が内容上の主語です。</p>
-            </details>
-            <details class="section" open>
-            <summary>形式主語の見分け方</summary>
-            <ol>
-              <li><code>it</code> が具体的なものを指しているか確認する。</li>
-              <li>後ろに <code>to + 動詞の原形</code> や <code>that + 主語 + 動詞</code> があるか確認する。</li>
-              <li>後ろの句や節を主語の位置に戻して、意味が通るか確認する。</li>
-            </ol>
-            <p>天候・時刻を表す <code>it</code> や、具体的なものを指す代名詞の <code>it</code> とは区別します。</p>
-            </details>
-            <p class="note">形式主語の <code>it</code> を「それ」と訳す必要はありません。後ろの不定詞句やthat節が表す内容を、日本語では「～すること」「～ということ」と訳します。</p>`,
-          questions: [
-            {
-              id: "dummy-subject-it-q1",
-              text: "It is important to check the answer. の It の働きは？",
-              choices: [
-                "内容上の主語を後ろへ送る形式主語",
-                "天候だけを表す形式上の主語",
-                "動詞checkが直接取る目的語",
-                "前置詞toが取る目的語"
-              ],
-              answer: 0,
-              explanation: "It が形式上の主語となり、内容を担う to check the answer を後ろに置いています。完成文は「答えを確認することは重要だ」という意味です。"
-            },
-            {
-              id: "dummy-subject-it-q2",
-              text: "It is important ___ to study. に入る形は？",
-              choices: ["for him", "him", "he", "to him"],
-              answer: 0,
-              explanation: "for him to study の形で、「彼が勉強すること」が重要だという意味になります。"
-            },
-            {
-              id: "dummy-subject-it-q3",
-              text: "It is difficult for children ___ the rule. に入る形は？",
-              choices: ["to understand", "understanding", "understand", "understood"],
-              answer: 0,
-              explanation: "「子どもにとってルールを理解するのは難しい」という意味になるため、to understand が正解です。"
-            }
-          ]
-        },
-        {
-          id: "dummy-object-it",
-          version: 1,
-          title: "形式目的語構文",
-          html: `
-            <p>目的語になる不定詞句やthat節が長い場合、英語では目的語の位置に <code>it</code> を置き、内容を表す不定詞句やthat節を後ろに置くことがあります。これを形式目的語構文といいます。</p>
-            <details class="section" open>
-            <summary>不定詞を使う基本の形</summary>
-            <div class="formula">主語 + 動詞 + it + 形容詞 + to + 動詞の原形</div>
-            <blockquote><p>I found it difficult to answer the question.<br>私は、その質問に答えることが難しいと分かりました。</p></blockquote>
-            <p>この文では、<code>it</code> が形式目的語、<code>to answer the question</code> が内容上の目的語です。<code>difficult</code> は、目的語の内容がどのようなものかを説明する目的格補語です。</p>
-            </details>
-            <details class="section" open>
-            <summary>よく使われる形</summary>
-            <p><code>find</code>、<code>think</code>、<code>feel</code>、<code>consider</code>、<code>make</code> などの動詞で、<code>動詞 + it + 形容詞</code> の形が使われます。</p>
-            <blockquote><p>A lot of people may feel it easy to answer this question.<br>この問題に答えることは簡単だと、多くの人が感じているかもしれません。</p><p>Lisa thinks it important not to give up halfway.<br>リサは、途中であきらめないことが重要だと考えています。</p></blockquote>
-            <p>不定詞を否定するときは、<code>not to + 動詞の原形</code> とします。</p>
-            </details>
-            <details class="section" open>
-            <summary>that節を使う形</summary>
-            <div class="formula">主語 + 動詞 + it + 形容詞 + that + 主語 + 動詞</div>
-            <blockquote><p>We made it clear that the plan must change.<br>私たちは、その計画を変更しなければならないことを明確にしました。</p></blockquote>
-            <p>この文では、<code>it</code> が形式目的語、<code>that the plan must change</code> が内容上の目的語です。</p>
-            </details>
-            <details class="section" open>
-            <summary>形式目的語の見分け方</summary>
-            <ol>
-              <li><code>it</code> が具体的なものを指しているか確認する。</li>
-              <li><code>it</code> の後ろに形容詞などの補語があるか確認する。</li>
-              <li>さらに後ろの不定詞句やthat節が、判断されている内容になっているか確認する。</li>
-            </ol>
-            <p><code>I found it on the desk.</code> の <code>it</code> は、具体的なものを指す代名詞です。後ろに内容上の目的語となる不定詞句やthat節がないため、形式目的語ではありません。</p>
-            </details>
-            <p class="note">形式目的語の <code>it</code> は「それ」と訳す具体的な代名詞ではありません。後ろの不定詞句やthat節が表す内容を、「～すること」「～ということ」と捉えます。</p>`,
-          questions: [
-            {
-              id: "dummy-object-it-q1",
-              text: "A lot of people may feel it easy (    ) this question.",
-              choices: ["answer", "to answer", "answering", "for answering"],
-              answer: 1,
-              explanation: "feel it easy to do の形で、it が形式目的語、to answer this question が内容上の目的語です。"
-            },
-            {
-              id: "dummy-object-it-q2",
-              text: "Lisa thinks it important (    ) up halfway.",
-              choices: ["not to give", "not give", "not giving", "not to giving"],
-              answer: 0,
-              explanation: "think it important not to do の形です。不定詞を否定するため、not to + 動詞の原形 の not to give を使います。"
-            },
-            {
-              id: "dummy-object-it-q3",
-              text: "An unexpected snowstorm made it (    ) for them to reach the summit.",
-              choices: ["possible", "impossible", "easy", "important"],
-              answer: 1,
-              explanation: "予想外の吹雪によって登頂が不可能になったため、impossible が適切です。"
-            }
-          ]
-        },
-        {
+{
           id: "infinitive-adjective-use",
-          version: 1,
+          version: 2,
           title: "不定詞の形容詞的用法",
           html: `
             <p>不定詞の形容詞的用法は、<code>to + 動詞の原形</code> が名詞を説明する用法です。「～するための」「～すべき」「～する」という意味になります。</p>
@@ -761,7 +646,7 @@ const curriculum = {
             <ol>
               <li><code>To study English is important.</code> は、不定詞が主語なので名詞的用法です。</li>
               <li><code>She went to the library to study English.</code> は、目的を表すので副詞的用法です。</li>
-              <li><code>I need a book to study.</code> は、<code>to study</code> が <code>a book</code> を説明するので形容詞的用法です。</li>
+              <li><code>I need a book to read.</code> は、<code>to read</code> が <code>a book</code> を説明するので形容詞的用法です。<code>book</code> は読む対象です。</li>
             </ol>
             <p>不定詞の前にある名詞を確認し、「どのような名詞か」を説明していれば、形容詞的用法と判断できます。</p>
             </details>
@@ -795,7 +680,7 @@ const curriculum = {
             }
           ]
         },
-        {
+{
           id: "infinitive-adverbial-purpose",
           version: 1,
           title: "不定詞の副詞的用法（目的）",
@@ -852,7 +737,7 @@ const curriculum = {
             }
           ]
         },
-        {
+{
           id: "infinitive-adverbial-reason",
           version: 1,
           title: "不定詞の副詞的用法（原因・理由）",
@@ -909,9 +794,9 @@ const curriculum = {
             }
           ]
         },
-        {
+{
           id: "infinitive-adverbial-result",
-          version: 1,
+          version: 2,
           title: "不定詞の副詞的用法（結果）",
           html: `
             <p>不定詞の副詞的用法（結果）は、<code>to + 動詞の原形</code> が、ある動作のあとに起こった結果を表す用法です。「～して、その結果…」と訳します。</p>
@@ -933,12 +818,17 @@ const curriculum = {
             </details>
             <details class="section" open>
             <summary>目的を表す用法との違い</summary>
-            <blockquote><p>He went to London to study English.<br>彼は英語を勉強するためにロンドンへ行きました。</p><p>He grew up to become a famous writer.<br>彼は成長して有名な作家になりました。</p></blockquote>
-            <p>前の文はロンドンへ行った目的、後の文は成長した結果です。不定詞を「～するために」と訳すか、「～して、その結果」と訳すかを確認します。</p>
+            <blockquote><p>He went to the library to study.<br>彼は勉強するために図書館へ行きました。</p><p>He grew up to become a famous writer.<br>彼は成長して有名な作家になりました。</p></blockquote>
+            <p>勉強は図書館へ行った後に行われますが、図書館へ行った目的です。一方、作家になったことは成長した後に実際に起きた結果です。</p>
             </details>
             <details class="section" open>
             <summary>見分け方</summary>
-            <p>不定詞の前にある動作と、不定詞が表す出来事の時間的な順序に注目します。前の動作のあとに起こった出来事なら、結果を表す副詞的用法です。</p>
+            <ol>
+              <li>不定詞が主節の動作の意図・目的を表し、「何のために」と言えるなら目的用法です。</li>
+              <li>不定詞が主節の後に実際に起きたこと・分かったことを述べ、「その後、実際にどうなったか」と言えるなら結果用法です。</li>
+              <li><code>grow up to ...</code>、<code>wake up to find ...</code>、<code>only to ...</code> は、結果用法の手掛かりになります。</li>
+              <li>時間的に後で起きることだけでは、結果用法と決めません。</li>
+            </ol>
             </details>
             <p class="note">結果を表す副詞的用法では、不定詞が「何のために」ではなく、「そのあとどうなったか」を表している点に注意します。</p>`,
           questions: [
@@ -947,14 +837,14 @@ const curriculum = {
               text: "He grew up (　　) a scientist.",
               choices: ["be", "to be", "being", "been"],
               answer: 1,
-              explanation: "<code>grow up to be ...</code> は「成長して～になる」という結果を表します。"
+              explanation: "<code>grow up to be ...</code> は、成長した後に実際に科学者になった結果を表します。成長する目的ではありません。"
             },
             {
               id: "infinitive-adverbial-result-q2",
               text: "She hurried to the station, only (　　) that the train had left.",
               choices: ["find", "to find", "finding", "found"],
               answer: 1,
-              explanation: "<code>only to + 動詞の原形</code> で、予想外の結果を表します。"
+              explanation: "<code>only to + 動詞の原形</code> で、急いだ目的ではなく、その後に実際に起きた予想外の結果を表します。"
             },
             {
               id: "infinitive-adverbial-result-q3",
@@ -966,11 +856,11 @@ const curriculum = {
                 "To travel abroad is exciting."
               ],
               answer: 2,
-              explanation: "<code>to find nobody there</code> は、ドアを開けたあとに分かった結果を表しています。"
+              explanation: "<code>to find nobody there</code> は、ドアを開けた目的ではなく、開けた後に実際に分かった結果を表しています。"
             }
           ]
         },
-        {
+{
           id: "infinitive-adverbial-degree",
           version: 1,
           title: "不定詞の副詞的用法（程度・結果）",
@@ -1023,7 +913,64 @@ const curriculum = {
             }
           ]
         },
-        {
+{
+          id: "infinitive-logical-subject-for",
+          version: 1,
+          title: "不定詞の意味上の主語",
+          html: `
+            <p>不定詞が表す動作を「誰がするのか」を示す語を、意味上の主語と呼びます。文の主語とは別に、不定詞の動作主を示したいときに <code>for + 人</code> を使います。</p>
+            <details class="section" open>
+            <summary>基本の形</summary>
+            <div class="formula">for + 人 + to + 動詞の原形</div>
+            <blockquote><p>It is important for him to study.<br>彼が勉強することは大切です。</p></blockquote>
+            <p>「勉強する」のは <code>him</code> です。<code>for</code> は前置詞なので、後ろの代名詞は主格の <code>he</code> ではなく目的格の <code>him</code> を使います。</p>
+            <div class="formula">for me / for you / for him / for her / for us / for them</div>
+            </details>
+            <details class="section" open>
+            <summary>形容詞と意味上の主語</summary>
+            <blockquote><p>It is difficult for children to understand the rule.<br>子どもたちにとって、その規則を理解するのは難しいです。</p></blockquote>
+            <p><code>children</code> が <code>understand</code> の意味上の主語です。「子どもたちにとって、その規則を理解するのは難しい」と捉えます。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>too</code>・<code>enough</code> との接続</summary>
+            <blockquote><p>This problem is too difficult for me to solve.<br>この問題は難しすぎて、私には解けません。</p></blockquote>
+            <p><code>solve</code> するのは <code>me</code> です。既習の <code>too ... to</code> に <code>for me</code> が加わり、誰にとって難しいかを示しています。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>of + 人</code> との予告</summary>
+            <p>一般に不定詞の動作主を示す場合は <code>for + 人</code> を使います。<code>kind</code> や <code>careless</code> のように、人の性質・行動を評価する形容詞では、次の単元で学ぶ <code>of + 人</code> を使います。詳しい比較は次の単元で扱います。</p>
+            </details>
+            <p class="note"><code>for + 人</code> を見つけたら、その人が不定詞の動作をする主語にあたるかを確認します。</p>` ,
+          questions: [
+            {
+              id: "infinitive-logical-subject-for-q1",
+              text: "It is important (　　) to study.",
+              choices: ["for him", "him", "he", "to him"],
+              answer: 0,
+              explanation: "勉強するのは him なので、<code>for + 人 + to + 動詞の原形</code> の <code>for him</code> を使います。for は前置詞なので目的格の him になります。"
+            },
+            {
+              id: "infinitive-logical-subject-for-q2",
+              text: "It is difficult for children (　　) the rule.",
+              choices: ["to understand", "understanding", "understand", "understood"],
+              answer: 0,
+              explanation: "children が understand の意味上の主語です。<code>for children + to + 動詞の原形</code> なので、<code>to understand</code> を使います。"
+            },
+            {
+              id: "infinitive-logical-subject-for-q3",
+              text: "正しい英文を選びなさい。",
+              choices: [
+                "It is important for he to study.",
+                "It is important him to study.",
+                "It is important for him to study.",
+                "It is important of him to study."
+              ],
+              answer: 2,
+              explanation: "不定詞の動作主を示す <code>for + 人</code> と、前置詞 for の後ろの目的格 <code>him</code> が必要なので、<code>It is important for him to study.</code> が正解です。"
+            }
+          ]
+        },
+{
           id: "infinitive-of-adjective-evaluation",
           version: 1,
           title: "人の性質を表す形容詞と不定詞",
@@ -1047,6 +994,16 @@ const curriculum = {
             <div class="formula">of me / of you / of him / of her / of us / of them</div>
             <blockquote><p>It was nice of him to help us.<br>彼が私たちを助けてくれて親切でした。</p></blockquote>
             <p><code>of he</code> や <code>of they</code> とはしません。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>for + 人</code> との違い</summary>
+            <p><code>It is important for students to study.</code> では、<code>important</code> は students の性質を評価していません。不定詞の動作主を示すので <code>for</code> を使います。</p>
+            <p><code>It was careless of him to forget the key.</code> では、<code>careless</code> が him の行動・性質を評価しているので <code>of</code> を使います。</p>
+            <ol>
+              <li>形容詞が「その人は親切だ・不注意だ」など、人を直接評価しているか確認します。</li>
+              <li>評価していれば <code>of + 人</code> を使います。</li>
+              <li>難易度・重要性・可能性と動作主を示すだけなら <code>for + 人</code> を使います。</li>
+            </ol>
             </details>
             <details class="section" open>
             <summary>書き換え</summary>
@@ -1093,9 +1050,192 @@ const curriculum = {
             }
           ]
         },
-        {
-          id: "infinitive-negative-form",
+{
+          id: "dummy-subject-it",
+          version: 2,
+          title: "形式主語構文",
+          html: `
+            <p>英語では、主語が長くなると、文の形を整えるために <code>it</code> を主語の位置に置き、内容を表す不定詞句やthat節を文の後ろに置くことがあります。これを形式主語構文といいます。</p>
+            <details class="section" open>
+            <summary>不定詞を使う形</summary>
+            <div class="formula">It is + 形容詞 + to + 動詞の原形</div>
+            <blockquote><p>It is important to check the answer.<br>答えを確認することは大切です。</p></blockquote>
+            <p><code>it</code> は具体的なものを指していません。内容上の主語は <code>to check the answer</code> です。<code>To check the answer is important.</code> としても意味は通りますが、長い主語を後ろに置く形式主語構文のほうが自然です。</p>
+            </details>
+            <details class="section" data-initially-closed>
+            <summary>that節を使う形（発展）</summary>
+            <div class="formula">It is + 形容詞 + that + 主語 + 動詞</div>
+            <blockquote><p>It is surprising that Ken solved the problem.<br>ケンがその問題を解いたことは驚きです。</p></blockquote>
+            <p>この文では、<code>that Ken solved the problem</code> が内容上の主語です。</p>
+            </details>
+            <details class="section" open>
+            <summary>形式主語の見分け方</summary>
+            <ol>
+              <li><code>it</code> が具体的なものを指しているか確認する。</li>
+              <li>後ろに <code>to + 動詞の原形</code> や <code>that + 主語 + 動詞</code> があるか確認する。</li>
+              <li>後ろの句や節を主語の位置に戻して、意味が通るか確認する。</li>
+            </ol>
+            <p>天候・時刻を表す <code>it</code> や、具体的なものを指す代名詞の <code>it</code> とは区別します。</p>
+            </details>
+            <p class="note">形式主語の <code>it</code> を「それ」と訳す必要はありません。後ろの不定詞句やthat節が表す内容を、日本語では「～すること」「～ということ」と訳します。</p>`,
+          questions: [
+            {
+              id: "dummy-subject-it-q1",
+              text: "It is important to check the answer. の It の働きは？",
+              choices: [
+                "内容上の主語を後ろへ送る形式主語",
+                "天候だけを表す形式上の主語",
+                "動詞checkが直接取る目的語",
+                "前置詞toが取る目的語"
+              ],
+              answer: 0,
+              explanation: "It が形式上の主語となり、内容を担う to check the answer を後ろに置いています。完成文は「答えを確認することは重要だ」という意味です。"
+            },
+            {
+              id: "dummy-subject-it-q2",
+              text: "It is difficult (　　) the answer.",
+              choices: ["to find", "finding", "find", "found"],
+              answer: 0,
+              explanation: "形式主語 it の内容を表す不定詞なので、to + 動詞の原形の to find を使います。"
+            },
+            {
+              id: "dummy-subject-it-q3",
+              text: "形式主語構文が使われている文を選びなさい。",
+              choices: [
+                "It is raining now.",
+                "I found it on the desk.",
+                "It is useful to read every day.",
+                "It is my new bag."
+              ],
+              answer: 2,
+              explanation: "It is useful to read every day. では it が具体的なものを指さず、to read every day が内容上の主語です。"
+            }
+          ]
+        },
+{
+          id: "dummy-object-it",
+          version: 2,
+          title: "形式目的語構文",
+          html: `
+            <p>目的語になる不定詞句やthat節が長い場合、英語では目的語の位置に <code>it</code> を置き、内容を表す不定詞句やthat節を後ろに置くことがあります。これを形式目的語構文といいます。</p>
+            <details class="section" open>
+            <summary>不定詞を使う基本の形</summary>
+            <div class="formula">主語 + 動詞 + it + 形容詞 + to + 動詞の原形</div>
+            <blockquote><p>I found it difficult to answer the question.<br>私には、その質問に答えるのが難しいと分かりました。</p></blockquote>
+            <p>この文では、<code>it</code> が形式目的語、<code>to answer the question</code> が内容上の目的語です。<code>difficult</code> は、it の内容を「難しい」と説明する語（目的格補語）です。</p>
+            </details>
+            <details class="section" open>
+            <summary>よく使われる形</summary>
+            <p><code>find</code>、<code>think</code>、<code>feel</code>、<code>consider</code>、<code>make</code> などの動詞で、<code>動詞 + it + 形容詞</code> の形が使われます。</p>
+            <blockquote><p>A lot of people may feel it easy to answer this question.<br>この問題に答えることは簡単だと、多くの人が感じているかもしれません。</p><p>Lisa thinks it important not to give up halfway.<br>リサは、途中であきらめないことが重要だと考えています。</p></blockquote>
+            <p>不定詞を否定するときは、<code>not to + 動詞の原形</code> とします。この形は後の「不定詞の否定形」で詳しく学びます。</p>
+            </details>
+            <details class="section" data-initially-closed>
+            <summary>that節を使う形（発展）</summary>
+            <div class="formula">主語 + 動詞 + it + 形容詞 + that + 主語 + 動詞</div>
+            <blockquote><p>We made it clear that the plan must change.<br>私たちは、その計画を変更しなければならないことを明確にしました。</p></blockquote>
+            <p>この文では、<code>it</code> が形式目的語、<code>that the plan must change</code> が内容上の目的語です。</p>
+            </details>
+            <details class="section" open>
+            <summary>形式目的語の見分け方</summary>
+            <ol>
+              <li><code>it</code> が具体的なものを指しているか確認する。</li>
+              <li><code>it</code> の後ろに形容詞などの補語があるか確認する。</li>
+              <li>さらに後ろの不定詞句やthat節が、判断されている内容になっているか確認する。</li>
+            </ol>
+            <p><code>I found it on the desk.</code> の <code>it</code> は、具体的なものを指す代名詞です。後ろに内容上の目的語となる不定詞句やthat節がないため、形式目的語ではありません。</p>
+            </details>
+            <p class="note">形式目的語の <code>it</code> は「それ」と訳す具体的な代名詞ではありません。後ろの不定詞句やthat節が表す内容を、「～すること」「～ということ」と捉えます。</p>`,
+          questions: [
+            {
+              id: "dummy-object-it-q1",
+              text: "A lot of people may feel it easy (    ) this question.",
+              choices: ["answer", "to answer", "answering", "for answering"],
+              answer: 1,
+              explanation: "feel it easy to do の形で、it が形式目的語、to answer this question が内容上の目的語です。"
+            },
+            {
+              id: "dummy-object-it-q2",
+              text: "Lisa thinks it important (    ) up halfway.",
+              choices: ["not to give", "not give", "not giving", "not to giving"],
+              answer: 0,
+              explanation: "think it important not to do の形です。不定詞を否定するため、not to + 動詞の原形 の not to give を使います。"
+            },
+            {
+              id: "dummy-object-it-q3",
+              text: "An unexpected snowstorm made it (    ) for them to reach the summit.",
+              choices: ["possible", "impossible", "easy", "important"],
+              answer: 1,
+              explanation: "予想外の吹雪によって登頂が不可能になったため、impossible が適切です。"
+            }
+          ]
+        },
+{
+          id: "bare-infinitive",
           version: 1,
+          title: "原形不定詞",
+          html: `
+            <p>原形不定詞は、<code>to</code> を付けずに動詞の原形を使う形です。主に一部の使役動詞・知覚動詞の後ろで使います。通常の <code>to + 動詞の原形</code> から、自由に <code>to</code> を削除する規則ではありません。</p>
+            <details class="section" open>
+            <summary><code>make</code> と <code>let</code></summary>
+            <div class="formula">動詞 + 人 + 動詞の原形</div>
+            <p><code>make + 人 + 動詞の原形</code> は、強制・働きかけを表し、「人に～させる」と訳します。</p>
+            <blockquote><p>The teacher made us clean the room.<br>先生は私たちに部屋を掃除させました。</p></blockquote>
+            <p><code>let + 人 + 動詞の原形</code> は、許可を表し、「人が～するのを許す」と訳します。</p>
+            <blockquote><p>My parents let me go out.<br>両親は私を外出させてくれました。</p></blockquote>
+            <p>能動態では <code>to clean</code> や <code>to go</code> にはしません。</p>
+            </details>
+            <details class="section" open>
+            <summary>知覚動詞</summary>
+            <p><code>see / hear + 人 + 動詞の原形</code> では、人やものがする動作を一まとまりとして知覚したことを表します。</p>
+            <blockquote><p>I saw him cross the street.<br>私は彼が通りを渡るのを見ました。</p><p>We heard her sing.<br>私たちは彼女が歌うのを聞きました。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary><code>make</code> の受動態</summary>
+            <p>能動態の <code>make + 人 + 動詞の原形</code> を受動態にすると、<code>人 + be made + to + 動詞の原形</code> となり、<code>to</code> が戻ります。</p>
+            <blockquote><p>The teacher made us clean the room.<br>先生は私たちに部屋を掃除させました。</p><p>We were made to clean the room by the teacher.<br>私たちは先生に部屋を掃除させられました。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary>助動詞との関係</summary>
+            <p><code>can play</code>、<code>must study</code> のように、助動詞の後ろにも <code>to</code> を付けず動詞の原形を置きます。ただし、この単元の中心は使役動詞・知覚動詞です。助動詞の意味・用法まではここでは扱いません。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <ol>
+              <li>直前に <code>make</code>、<code>let</code>、<code>see</code>、<code>hear</code> などがあるか確認します。</li>
+              <li>その動詞と原形の間に、動作をする人・ものがあるか確認します。</li>
+              <li>能動態では原形の前に <code>to</code> を置きません。</li>
+              <li><code>be made</code> の受動態では <code>to + 動詞の原形</code> にします。</li>
+            </ol>
+            </details>
+            <p class="note">原形不定詞は、決まった動詞の後ろで使う特別な形です。まず直前の動詞と、原形の前後の語を確認しましょう。</p>` ,
+          questions: [
+            {
+              id: "bare-infinitive-q1",
+              text: "The teacher made us (　　) the room.",
+              choices: ["clean", "to clean", "cleaning", "cleaned"],
+              answer: 0,
+              explanation: "<code>make + 人 + 動詞の原形</code> の形なので、<code>to</code> のない <code>clean</code> を使います。"
+            },
+            {
+              id: "bare-infinitive-q2",
+              text: "I saw him (　　) the street.",
+              choices: ["cross", "to cross", "crossed", "to crossed"],
+              answer: 0,
+              explanation: "<code>see + 人 + 動詞の原形</code> の形で、him が渡る動作を見たことを表すため、<code>cross</code> を使います。"
+            },
+            {
+              id: "bare-infinitive-q3",
+              text: "We were made (　　) outside.",
+              choices: ["wait", "to wait", "waiting", "waited"],
+              answer: 1,
+              explanation: "<code>make + 人 + 動詞の原形</code> の受動態では <code>be made to + 動詞の原形</code> となるため、<code>to wait</code> が正解です。"
+            }
+          ]
+        },
+{
+          id: "infinitive-negative-form",
+          version: 2,
           title: "不定詞の否定形",
           html: `
             <p>不定詞を否定するときは、<code>to</code> の前に <code>not</code> を置きます。基本の形は <code>not to + 動詞の原形</code> で、「～しないこと」「～しないために」などを表します。</p>
@@ -1157,7 +1297,7 @@ const curriculum = {
             },
             {
               id: "infinitive-negative-form-q3",
-              text: "\`She tried not to laugh.\` の意味として正しいものを選びなさい。",
+              text: "She tried not to laugh. の意味として正しいものを選びなさい。",
               choices: [
                 "彼女は笑わないように努めた。",
                 "彼女は笑うことを決めなかった。",
@@ -1169,9 +1309,9 @@ const curriculum = {
             }
           ]
         },
-        {
+{
           id: "infinitive-perfect-form",
-          version: 1,
+          version: 2,
           title: "完了不定詞",
           html: `
             <p>完了不定詞は、<code>to have + 過去分詞</code> の形で、基準となる時点より前の動作や状態を表します。「～した」「～していた」などと訳します。</p>
@@ -1217,10 +1357,10 @@ const curriculum = {
           questions: [
             {
               id: "infinitive-perfect-form-q1",
-              text: "I am happy (　　　) you.",
+              text: "I met you last year, and I am happy (　　　) you.",
               choices: ["to meet", "meeting", "to have met", "to have meet"],
               answer: 2,
-              explanation: "「会ったこと」を現在うれしく思っているため、<code>to have + 過去分詞</code> の <code>to have met</code> を使います。"
+              explanation: "last year に会った出来事は、現在の am happy より前です。過去の出来事を現在うれしく思っているので、<code>to have + 過去分詞</code> の <code>to have met</code> を使います。"
             },
             {
               id: "infinitive-perfect-form-q2",

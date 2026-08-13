@@ -878,7 +878,7 @@ function enhanceAccordions(container) {
       Array.from(details.children).filter(child => child.tagName !== "SUMMARY").forEach(child => body.appendChild(child));
       details.appendChild(body);
     }
-    details.open = true;
+    details.open = !details.hasAttribute("data-initially-closed");
     details.addEventListener("toggle", () => {
       if (!details.open) return;
       body.classList.add("is-entering");

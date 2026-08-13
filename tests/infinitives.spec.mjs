@@ -12,6 +12,7 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
   await page.getByLabel("文法カテゴリ").selectOption("infinitives");
   await expect(page.getByRole("heading", { name: "不定詞", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "不定詞とは", exact: true })).toBeVisible();
+  await expect(page.locator("#homePanel")).toContainText("使役動詞や知覚動詞の後ろに");
 
   await page.getByRole("button", { name: "不定詞の名詞的用法へ" }).click();
   await expect(page.getByRole("heading", { name: "不定詞の名詞的用法" })).toBeVisible();
@@ -20,6 +21,28 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
   await page.getByRole("button", { name: "3問に挑戦" }).click();
   await expect(page.locator(".quiz")).toHaveCount(1);
   await expect(page.locator(".choice")).toHaveCount(4);
+});
+
+test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({ page }) => {
+  await freshHome(page);
+  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+
+  await expect(page.locator(".unitList .unitName")).toHaveText([
+    "不定詞の名詞的用法",
+    "不定詞の形容詞的用法",
+    "不定詞の副詞的用法（目的）",
+    "不定詞の副詞的用法（原因・理由）",
+    "不定詞の副詞的用法（結果）",
+    "不定詞の副詞的用法（程度・結果）",
+    "不定詞の意味上の主語",
+    "人の性質を表す形容詞と不定詞",
+    "形式主語構文",
+    "形式目的語構文",
+    "原形不定詞",
+    "不定詞の否定形",
+    "完了不定詞",
+    "修了テスト"
+  ]);
 });
 
 test("名詞的用法には既存アプリで使用済みの主語・目的語・補語の問題を使う", async ({ page }) => {
@@ -61,14 +84,18 @@ test("名詞的用法には既存アプリで使用済みの主語・目的語�
   await expect(page.locator(".score")).toHaveText("3 / 3");
 });
 
-test("形式主語構文の解説を読み、既存アプリで使用済みの3問に取り組める", async ({ page }) => {
+test("形式主語構文はto不定詞を中心に学び、that節を発展として開ける", async ({ page }) => {
   await freshHome(page);
   await page.getByLabel("文法カテゴリ").selectOption("infinitives");
   await page.getByRole("button", { name: /形式主語構文/ }).click();
 
   await expect(page.getByRole("heading", { name: "形式主語構文" })).toBeVisible();
   await expect(page.getByText("It is + 形容詞 + to + 動詞の原形", { exact: true })).toBeVisible();
-  await expect(page.getByText("It is + 形容詞 + that + 主語 + 動詞", { exact: true })).toBeVisible();
+  const advanced = page.locator("details.section").filter({ hasText: "that節を使う形（発展）" });
+  await expect(advanced.locator("summary")).toHaveText("that節を使う形（発展）");
+  await expect(advanced.locator(".formula")).toBeHidden();
+  await advanced.locator("summary").click();
+  await expect(advanced.locator(".formula")).toBeVisible();
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
   const expectedQuestions = [
@@ -77,12 +104,17 @@ test("形式主語構文の解説を読み、既存アプリで使用済みの3�
       choices: ["内容上の主語を後ろへ送る形式主語", "天候だけを表す形式上の主語", "動詞checkが直接取る目的語", "前置詞toが取る目的語"]
     },
     {
-      text: "It is important ___ to study. に入る形は？",
-      choices: ["for him", "him", "he", "to him"]
+      text: "It is difficult (　　) the answer.",
+      choices: ["to find", "finding", "find", "found"]
     },
     {
-      text: "It is difficult for children ___ the rule. に入る形は？",
-      choices: ["to understand", "understanding", "understand", "understood"]
+      text: "形式主語構文が使われている文を選びなさい。",
+      choices: [
+        "It is raining now.",
+        "I found it on the desk.",
+        "It is useful to read every day.",
+        "It is my new bag."
+      ]
     }
   ];
 
@@ -91,7 +123,7 @@ test("形式主語構文の解説を読み、既存アプリで使用済みの3�
     await expect.poll(() => page.locator(".choice").evaluateAll(buttons =>
       buttons.map(button => button.querySelectorAll("span")[1].textContent)
     )).toEqual(expected.choices);
-    await page.locator(".choice").first().click();
+    await page.locator(".choice").nth(index === 2 ? 2 : 0).click();
     await page.locator('[data-action="next-question"]').click();
     if (index < expectedQuestions.length - 1) await expect(page.locator(".quiz")).toBeVisible();
   }
@@ -106,8 +138,13 @@ test("形式目的語構文の解説と3問を確認できる", async ({ page })
 
   await expect(page.getByRole("heading", { name: "形式目的語構文" })).toBeVisible();
   await expect(page.getByText("主語 + 動詞 + it + 形容詞 + to + 動詞の原形", { exact: true })).toBeVisible();
-  await expect(page.getByText("主語 + 動詞 + it + 形容詞 + that + 主語 + 動詞", { exact: true })).toBeVisible();
   await expect(page.getByText("it が形式目的語", { exact: false }).first()).toBeVisible();
+  await expect(page.locator("#session-content blockquote").filter({ hasText: "私には、その質問に答えるのが難しいと分かりました。" })).toBeVisible();
+  const advanced = page.locator("details.section").filter({ hasText: "that節を使う形（発展）" });
+  await expect(advanced.locator("summary")).toHaveText("that節を使う形（発展）");
+  await expect(advanced.locator(".formula")).toBeHidden();
+  await advanced.locator("summary").click();
+  await expect(advanced.locator(".formula")).toBeVisible();
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
   const expectedQuestions = [
@@ -149,6 +186,8 @@ test("不定詞の形容詞的用法の解説と3問を確認できる", async (
   await expect(page.getByRole("heading", { name: "不定詞の形容詞的用法" })).toBeVisible();
   await expect(page.getByText("名詞 + to + 動詞の原形", { exact: true })).toBeVisible();
   await expect(page.locator("#session-content").getByText("to drink", { exact: true })).toBeVisible();
+  await expect(page.locator("#session-content")).toContainText("I need a book to read.");
+  await expect(page.locator("#session-content")).not.toContainText("I need a book to study.");
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
   const expectedQuestions = [
@@ -187,7 +226,7 @@ test("不定詞の形容詞的用法の解説と3問を確認できる", async (
   await expect(page.locator(".score")).toHaveText("3 / 3");
 });
 
-test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3問に取り組める", async ({ page }) => {
+test("不定詞の各単元を学び、それぞれの3問に取り組める", async ({ page }) => {
   const lessons = [
     {
       title: "不定詞の副詞的用法（目的）",
@@ -239,6 +278,7 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
     {
       title: "不定詞の副詞的用法（結果）",
       marker: "grow up to be ...",
+      bodyText: ["何のために", "その後、実際にどうなったか", "He went to the library to study."],
       questions: [
         {
           text: "He grew up (　　) a scientist.",
@@ -284,8 +324,35 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
       ]
     },
     {
+      title: "不定詞の意味上の主語",
+      marker: "for + 人 + to + 動詞の原形",
+      questions: [
+        {
+          text: "It is important (　　) to study.",
+          choices: ["for him", "him", "he", "to him"],
+          answer: 0
+        },
+        {
+          text: "It is difficult for children (　　) the rule.",
+          choices: ["to understand", "understanding", "understand", "understood"],
+          answer: 0
+        },
+        {
+          text: "正しい英文を選びなさい。",
+          choices: [
+            "It is important for he to study.",
+            "It is important him to study.",
+            "It is important for him to study.",
+            "It is important of him to study."
+          ],
+          answer: 2
+        }
+      ]
+    },
+    {
       title: "人の性質を表す形容詞と不定詞",
       marker: "It is + 形容詞 + of + 人 + to + 動詞の原形",
+      bodyText: ["It is important for students to study.", "It was careless of him to forget the key."],
       questions: [
         {
           text: "It was kind (　　) you to help me.",
@@ -315,6 +382,28 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
       ]
     },
     {
+      title: "原形不定詞",
+      marker: "動詞 + 人 + 動詞の原形",
+      bodyText: ["My parents let me go out.", "We were made to clean the room by the teacher.", "can play"],
+      questions: [
+        {
+          text: "The teacher made us (　　) the room.",
+          choices: ["clean", "to clean", "cleaning", "cleaned"],
+          answer: 0
+        },
+        {
+          text: "I saw him (　　) the street.",
+          choices: ["cross", "to cross", "crossed", "to crossed"],
+          answer: 0
+        },
+        {
+          text: "We were made (　　) outside.",
+          choices: ["wait", "to wait", "waiting", "waited"],
+          answer: 1
+        }
+      ]
+    },
+    {
       title: "不定詞の否定形",
       marker: "not to + 動詞の原形",
       questions: [
@@ -329,7 +418,7 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
           answer: 1
         },
         {
-          text: "`She tried not to laugh.` の意味として正しいものを選びなさい。",
+        text: "She tried not to laugh. の意味として正しいものを選びなさい。",
           choices: [
             "彼女は笑わないように努めた。",
             "彼女は笑うことを決めなかった。",
@@ -345,7 +434,7 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
       marker: "to have + 過去分詞",
       questions: [
         {
-          text: "I am happy (　　　) you.",
+          text: "I met you last year, and I am happy (　　　) you.",
           choices: ["to meet", "meeting", "to have met", "to have meet"],
           answer: 2
         },
@@ -369,6 +458,9 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
     await page.getByRole("button", { name: new RegExp(lesson.title) }).click();
     await expect(page.getByRole("heading", { name: lesson.title })).toBeVisible();
     await expect(page.getByText(lesson.marker, { exact: true }).first()).toBeVisible();
+    for (const bodyText of lesson.bodyText ?? []) {
+      await expect(page.locator("#session-content p, #session-content blockquote, #session-content li").filter({ hasText: bodyText }).first()).toBeVisible();
+    }
 
     await page.getByRole("button", { name: "3問に挑戦" }).click();
     for (const [index, expected] of lesson.questions.entries()) {
