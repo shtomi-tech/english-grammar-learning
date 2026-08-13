@@ -5,7 +5,7 @@ const legacyStorageKey = "englishGrammarLearning.v2";
 const veryLegacyStorageKey = "englishGrammarLearning.subjunctivePast.v1";
 const defaultState = {
   courseId: defaultCourseId, stage: 0, question: 0, answers: {}, versions: {}, visitedLessons: [],
-  review: {}, reviewSession: null, finalChecks: {}, finalRun: null, coursePositions: {}
+  review: {}, reviewSession: null, finalChecks: {}, finalRun: null, coursePositions: {}, courseStructureVersions: {}
 };
 
 const LEITNER_LADDER = [1, 3, 7, 14]; // 正解のたびに進む復習間隔（日）
@@ -104,10 +104,12 @@ function normalizeState(source, fallbackCourseId = defaultCourseId) {
   next.question = position.question;
   next.coursePositions = normalizeCoursePositions(next.coursePositions, courseId, position.stage, position.question);
   next.coursePositions[courseId] = position;
+  next.courseStructureVersions = isRecord(next.courseStructureVersions) ? next.courseStructureVersions : {};
   return next;
 }
 
 let state = loadState();
+syncCourseStructureVersions();
 let stages = stagesFor(courseFor(state.courseId));
 backfillVisitedLessons();
 sanitizePersistedSessions();
@@ -188,10 +190,28 @@ function updateSaveStatus(message, tone) {
 // 「内容が更新された」と誤判定してその単元の回答を消してしまう。
 function applyNormalizedState(source) {
   state = normalizeState(source);
+  syncCourseStructureVersions();
   stages = stagesFor(currentCourse());
   backfillVisitedLessons();
   sanitizePersistedSessions();
   syncContentVersions();
+}
+
+function syncCourseStructureVersions() {
+  state.courseStructureVersions ||= {};
+  let changed = false;
+  for (const course of courses) {
+    if (!Number.isInteger(course.structureVersion) || state.courseStructureVersions[course.id] === course.structureVersion) continue;
+    state.courseStructureVersions[course.id] = course.structureVersion;
+    state.coursePositions[course.id] = { stage: 0, question: 0 };
+    if (state.courseId === course.id) {
+      state.stage = 0;
+      state.question = 0;
+    }
+    if (state.finalRun?.courseId === course.id) state.finalRun = null;
+    changed = true;
+  }
+  if (changed) saveState();
 }
 
 // クラウドから届いた進捗をそのまま state に差し替えない。今週追加した review / finalChecks /

@@ -19,24 +19,31 @@ async function seedProgress(page, progress) {
 
 async function openInversionLesson(page) {
   await freshHome(page);
-  // 仮定法の倒置（3節、初期表示はすべてopen）。未着手のためユニット一覧から直接遷移する。
-  await page.locator(".unitList .unitRow").nth(5).click();
+  // 単元の位置ではなく名称で開く。順序変更の影響を受けない。
+  await page.locator(".unitList .unitRow").filter({ hasText: "仮定法の倒置" }).click();
 }
 
 const subjunctiveVersions = {
-  "past-perfect-subjunctive": 2,
-  "future-subjunctive-should": 1,
-  "future-subjunctive-were-to": 1,
-  "subjunctive-inversion": 1,
-  "if-it-were-not-for": 1,
-  "as-if-subjunctive": 1,
-  "it-is-time-subjunctive-past": 1
+  "conditionals-vs-subjunctive": 1,
+  "past-subjunctive": 2,
+  "past-perfect-subjunctive": 3,
+  "wish-subjunctive": 1,
+  "if-only-subjunctive": 1,
+  "mixed-subjunctive": 2,
+  "if-it-were-not-for": 2,
+  "as-if-subjunctive": 2,
+  "it-is-time-subjunctive-past": 2,
+  "future-subjunctive-should": 2,
+  "future-subjunctive-were-to": 2,
+  "subjunctive-inversion": 2
 };
 
 const participlesVersions = {
-  "participles-as-adjectives-present": 1,
-  "participles-as-adjectives-past": 1,
-  "emotion-verb-participles": 1
+  "participles-as-adjectives-present": 2,
+  "participles-as-adjectives-past": 2,
+  "emotion-verb-participles": 2,
+  "participle-complements": 1,
+  "perception-verb-participles": 1
 };
 
 const infinitivesVersions = {
@@ -55,27 +62,32 @@ const infinitivesVersions = {
   "infinitive-perfect-form": 2
 };
 
-// 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
+// 最終単元「仮定法の倒置」だけを未着手のまま残した、あと1単元でマスターのfixture。
 const almostMasteredAnswers = {
+  "conditionals-vs-subjunctive": [0, 1, 2],
   "past-subjunctive": [3, 1, 2],
   "past-perfect-subjunctive": [3, 2, 2],
+  "wish-subjunctive": [1, 2, 2],
+  "if-only-subjunctive": [1, 1, 2],
   "mixed-subjunctive": [2, 2, 0],
-  "future-subjunctive-should": [0, 2, 3],
-  "future-subjunctive-were-to": [0, 2, 1],
-  "subjunctive-inversion": [1, 2, 3],
   "if-it-were-not-for": [1, 2, 1],
-  "as-if-subjunctive": [1, 2, 3]
+  "as-if-subjunctive": [1, 2, 3],
+  "it-is-time-subjunctive-past": [1, 2, 1],
+  "future-subjunctive-should": [0, 2, 0],
+  "future-subjunctive-were-to": [0, 2, 1]
 };
 
 const masteredSubjunctiveAnswers = {
   ...almostMasteredAnswers,
-  "it-is-time-subjunctive-past": [1, 2, 1]
+  "subjunctive-inversion": [1, 2, 3]
 };
 
 const masteredParticiplesAnswers = {
   "participles-as-adjectives-present": [1, 1, 2],
   "participles-as-adjectives-past": [1, 2, 2],
-  "emotion-verb-participles": [1, 2, 0]
+  "emotion-verb-participles": [1, 2, 0],
+  "participle-complements": [1, 1, 1],
+  "perception-verb-participles": [0, 1, 1]
 };
 
 const masteredInfinitivesAnswers = {
@@ -197,7 +209,7 @@ test.describe("各論のAccordion", () => {
 
   test("節を持たない各論ではdetails.sectionが存在せず本文がそのまま表示される", async ({ page }) => {
     await freshHome(page);
-    await page.getByRole("button", { name: "仮定法過去へ" }).click();
+    await page.locator(".unitList .unitRow").filter({ hasText: "仮定法過去" }).first().click();
     await expect(page.locator("details.section")).toHaveCount(0);
     await expect(page.locator(".flashCard")).toContainText("仮定法過去は");
   });
@@ -281,7 +293,7 @@ test.describe("修了テスト解放のunlock", () => {
     await page.getByRole("button", { name: "次の問題" }).click();
     await page.locator(".choice").nth(2).click(); // q2 正解 index2
     await page.getByRole("button", { name: "次の問題" }).click();
-    await page.locator(".choice").nth(1).click(); // q3 正解 index1（ここでコース全体がマスターになる）
+    await page.locator(".choice").nth(3).click(); // q3 正解 index3（ここでコース全体がマスターになる）
     await page.getByRole("button", { name: "結果を見る" }).click();
 
     await page.getByRole("button", { name: "修了テストへ" }).click();
@@ -293,7 +305,7 @@ test.describe("修了テスト解放のunlock", () => {
   });
 
   test("リロード後は同じ解放状態でもunlockモーションを再演しない", async ({ page }) => {
-    const masteredAll = { ...almostMasteredAnswers, "it-is-time-subjunctive-past": [1, 2, 1] };
+    const masteredAll = { ...almostMasteredAnswers, "subjunctive-inversion": [1, 2, 3] };
     await seedProgress(page, {
       courseId: "subjunctive",
       stage: 0,
@@ -318,7 +330,7 @@ test.describe("修了後のホーム推薦", () => {
       answers: masteredSubjunctiveAnswers,
       versions: subjunctiveVersions,
       visitedLessons: Object.keys(masteredSubjunctiveAnswers),
-      finalChecks: { subjunctive: finalRecord(27, 27, true) }
+      finalChecks: { subjunctive: finalRecord(36, 36, true) }
     });
 
     await expect(page.getByText("仮定法 修了", { exact: true })).toBeVisible();
@@ -336,7 +348,7 @@ test.describe("修了後のホーム推薦", () => {
       answers: { ...masteredSubjunctiveAnswers, "participles-as-adjectives-present": [1] },
       versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: [...Object.keys(masteredSubjunctiveAnswers), "participles-as-adjectives-present"],
-      finalChecks: { subjunctive: finalRecord(27, 27, true) },
+      finalChecks: { subjunctive: finalRecord(36, 36, true) },
       coursePositions: {
         subjunctive: { stage: 0, question: 0 },
         participles: { stage: 2, question: 1 }
@@ -362,10 +374,10 @@ test.describe("修了後のホーム推薦", () => {
       answers: masteredSubjunctiveAnswers,
       versions: subjunctiveVersions,
       visitedLessons: Object.keys(masteredSubjunctiveAnswers),
-      finalChecks: { subjunctive: finalRecord(18, 27, false) }
+      finalChecks: { subjunctive: finalRecord(28, 36, false) }
     });
 
-    await expect(page.locator(".recommend")).toContainText("前回の得点：18 / 27");
+    await expect(page.locator(".recommend")).toContainText("前回の得点：28 / 36");
     await expect(page.getByRole("button", { name: "修了テストにもう一度挑戦する" })).toBeVisible();
     await expect(page.getByRole("heading", { name: /次は「/ })).toHaveCount(0);
   });
@@ -378,7 +390,7 @@ test.describe("修了後のホーム推薦", () => {
       answers: masteredSubjunctiveAnswers,
       versions: subjunctiveVersions,
       visitedLessons: Object.keys(masteredSubjunctiveAnswers),
-      finalChecks: { subjunctive: finalRecord(26, 26, true) }
+      finalChecks: { subjunctive: finalRecord(35, 35, true) }
     });
 
     await expect(page.getByRole("button", { name: "修了テストにもう一度挑戦する" })).toBeVisible();
@@ -394,8 +406,8 @@ test.describe("修了後のホーム推薦", () => {
       versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
-        subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true),
+        subjunctive: finalRecord(36, 36, true),
+        participles: finalRecord(15, 15, true),
         infinitives: finalRecord(39, 39, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
@@ -416,8 +428,8 @@ test.describe("修了後のホーム推薦", () => {
       versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
-        subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true),
+        subjunctive: finalRecord(36, 36, true),
+        participles: finalRecord(15, 15, true),
         infinitives: finalRecord(39, 39, true)
       },
       review: reviewForAnswers(masteredAnswers)
@@ -438,8 +450,8 @@ test.describe("修了後のホーム推薦", () => {
       versions: { ...subjunctiveVersions, ...participlesVersions, ...infinitivesVersions },
       visitedLessons: Object.keys(masteredAnswers),
       finalChecks: {
-        subjunctive: finalRecord(27, 27, true),
-        participles: finalRecord(9, 9, true),
+        subjunctive: finalRecord(36, 36, true),
+        participles: finalRecord(15, 15, true),
         infinitives: finalRecord(39, 39, true)
       },
       review: reviewForAnswers(masteredAnswers)
