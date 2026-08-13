@@ -631,12 +631,6 @@ const curriculum = {
             <p><code>it</code> は具体的なものを指していません。内容上の主語は <code>to check the answer</code> です。<code>To check the answer is important.</code> としても意味は通りますが、長い主語を後ろに置く形式主語構文のほうが自然です。</p>
             </details>
             <details class="section" open>
-            <summary>動作をする人を示す形</summary>
-            <div class="formula">It is + 形容詞 + for + 人 + to + 動詞の原形</div>
-            <blockquote><p>It is important for students to review the lesson.<br>生徒がその授業を復習することは大切です。</p></blockquote>
-            <p><code>for students</code> は、<code>to review</code> の動作をする人、つまり不定詞の意味上の主語を表しています。</p>
-            </details>
-            <details class="section" open>
             <summary>that節を使う形</summary>
             <div class="formula">It is + 形容詞 + that + 主語 + 動詞</div>
             <blockquote><p>It is surprising that Ken solved the problem.<br>ケンがその問題を解いたことは驚きです。</p></blockquote>
@@ -670,14 +664,14 @@ const curriculum = {
               text: "It is important ___ to study. に入る形は？",
               choices: ["for him", "him", "he", "to him"],
               answer: 0,
-              explanation: "for him to study で、him が to study の意味上の主語になり、「彼が勉強すること」が重要だという意味になります。"
+              explanation: "for him to study の形で、「彼が勉強すること」が重要だという意味になります。"
             },
             {
               id: "dummy-subject-it-q3",
               text: "It is difficult for children ___ the rule. に入る形は？",
               choices: ["to understand", "understanding", "understand", "understood"],
               answer: 0,
-              explanation: "It is 形容詞 for + 人 + to不定詞 の形です。for children は to understand の意味上の主語です。"
+              explanation: "It is 形容詞 for + 人 + to不定詞 の形で、for children の後ろに to understand を続けます。"
             }
           ]
         },
@@ -698,12 +692,6 @@ const curriculum = {
             <p><code>find</code>、<code>think</code>、<code>feel</code>、<code>consider</code>、<code>make</code> などの動詞で、<code>動詞 + it + 形容詞</code> の形が使われます。</p>
             <blockquote><p>A lot of people may feel it easy to answer this question.<br>この問題に答えることは簡単だと、多くの人が感じているかもしれません。</p><p>Lisa thinks it important not to give up halfway.<br>リサは、途中であきらめないことが重要だと考えています。</p></blockquote>
             <p>不定詞を否定するときは、<code>not to + 動詞の原形</code> とします。</p>
-            </details>
-            <details class="section" open>
-            <summary>不定詞の意味上の主語を示す形</summary>
-            <div class="formula">主語 + 動詞 + it + 形容詞 + for + 人 + to + 動詞の原形</div>
-            <blockquote><p>An unexpected snowstorm made it impossible for them to reach the summit.<br>予想外の吹雪によって、彼らが頂上に到達することは不可能になりました。</p></blockquote>
-            <p><code>for them</code> は、<code>to reach</code> の動作をする人、つまり不定詞の意味上の主語を表しています。</p>
             </details>
             <details class="section" open>
             <summary>that節を使う形</summary>
@@ -763,11 +751,6 @@ const curriculum = {
             <p><code>homework</code> や <code>book</code> は「する」「読む」対象なので、<code>to do</code> や <code>to read</code> の目的語にあたります。<code>a chair to sit on</code> のように、動詞と結びつく前置詞が文末に残ることもあります。</p>
             </details>
             <details class="section" open>
-            <summary>名詞が不定詞の動作をする場合</summary>
-            <blockquote><p>I need someone to help me.<br>私を助けてくれる人が必要です。</p></blockquote>
-            <p><code>someone</code> が「助ける」人なので、<code>to help</code> の意味上の主語になっています。このように、名詞が不定詞の動作を受けるのか、動作をするのかを確認すると、意味を取りやすくなります。</p>
-            </details>
-            <details class="section" open>
             <summary>よく使われる表現</summary>
             <p><code>something</code>、<code>anything</code>、<code>nothing</code>、<code>a place</code>、<code>a chance</code>、<code>a way</code> などの後ろに、不定詞を置くことがあります。</p>
             <blockquote><p>Do you have anything to eat?<br>何か食べるものを持っていますか。</p><p>We need a place to stay.<br>私たちには泊まる場所が必要です。</p><p>This is a good way to learn English.<br>これは英語を学ぶよい方法です。</p></blockquote>
@@ -823,12 +806,6 @@ const curriculum = {
             <div class="formula">主語 + 動詞 ... + to + 動詞の原形</div>
             <blockquote><p>She went to the library to study English.<br>彼女は英語を勉強するために図書館へ行きました。</p></blockquote>
             <p><code>to study English</code> は、図書館へ行った目的を表しています。主節の動作が「行った」、不定詞が「何のために行ったか」を説明しています。</p>
-            </details>
-            <details class="section" open>
-            <summary>主節と不定詞の動作主</summary>
-            <p>この用法では、主節の主語と不定詞の動作主が同じになることが多いです。</p>
-            <blockquote><p>I got up early to catch the first train.<br>私は始発電車に乗るために早起きしました。</p></blockquote>
-            <p><code>I</code> が「早起きする人」であり、「始発電車に乗る人」でもあります。</p>
             </details>
             <details class="section" open>
             <summary>目的を強調する表現</summary>
@@ -1013,12 +990,6 @@ const curriculum = {
             <blockquote><p>She has enough time to finish the work.<br>彼女にはその仕事を終える十分な時間があります。</p></blockquote>
             </details>
             <details class="section" open>
-            <summary>不定詞の動作主を示す場合</summary>
-            <p>不定詞の動作をする人を示すときは、<code>for + 人 + to + 動詞の原形</code> を使います。</p>
-            <blockquote><p>This problem is too difficult for me to solve.<br>この問題は私には難しすぎて解けません。</p></blockquote>
-            <p><code>for me</code> は、<code>to solve</code> の動作をする人を表しています。</p>
-            </details>
-            <details class="section" open>
             <summary>目的を表す用法との違い</summary>
             <blockquote><p>I went to the library to study.<br>私は勉強するために図書館へ行きました。</p><p>The book is too difficult to understand.<br>その本は難しすぎて理解できません。</p></blockquote>
             <p>前の文は図書館へ行った目的です。後の文は本が難しい程度と、その結果として理解できないことを表しています。</p>
@@ -1048,7 +1019,82 @@ const curriculum = {
               text: "This problem is too difficult (　　) me to solve.",
               choices: ["for", "to", "of", "with"],
               answer: 0,
-              explanation: "不定詞の動作主を示す <code>for me</code> が必要です。"
+              explanation: "<code>too + 形容詞 + for + 人 + to + 動詞の原形</code> の形にします。"
+            }
+          ]
+        },
+        {
+          id: "infinitive-of-adjective-evaluation",
+          version: 1,
+          title: "人の性質を表す形容詞と不定詞",
+          html: `
+            <p>人の性質や行動を評価する形容詞の後ろでは、<code>of + 人 + to + 動詞の原形</code> の形を使います。「～するとは、その人は…だ」「～して、その人は…だ」と訳します。</p>
+            <details class="section" open>
+            <summary>基本の形</summary>
+            <div class="formula">It is + 形容詞 + of + 人 + to + 動詞の原形</div>
+            <blockquote><p>It was kind of you to help me.<br>手伝ってくれて、あなたは親切でした。</p></blockquote>
+            <p><code>kind</code> は、手伝った人である <code>you</code> の性質を評価しています。<code>to help me</code> は、どのような行動について評価しているのかを示します。</p>
+            </details>
+            <details class="section" open>
+            <summary>よく使われる形容詞</summary>
+            <p><code>kind</code>・<code>nice</code>・<code>polite</code>・<code>clever</code>・<code>wise</code> などは、よい性質や行動を表します。</p>
+            <p><code>careless</code>・<code>foolish</code>・<code>rude</code> などは、不注意な性質や好ましくない行動を表します。</p>
+            <blockquote><p>It was foolish of him to ignore the warning.<br>彼が警告を無視したのは愚かなことでした。</p><p>It was careless of her to forget the key.<br>彼女が鍵を忘れたのは不注意でした。</p></blockquote>
+            </details>
+            <details class="section" open>
+            <summary><code>of</code> の後ろの代名詞</summary>
+            <p><code>of</code> の後ろには目的格を置きます。</p>
+            <div class="formula">of me / of you / of him / of her / of us / of them</div>
+            <blockquote><p>It was nice of him to help us.<br>彼が私たちを助けてくれて親切でした。</p></blockquote>
+            <p><code>of he</code> や <code>of they</code> とはしません。</p>
+            </details>
+            <details class="section" open>
+            <summary><code>for</code> との違い</summary>
+            <blockquote><p>It is important for you to check the answer.<br>あなたが答えを確認することは重要です。</p><p>It was kind of you to check my answer.<br>私の答えを確認してくれて、あなたは親切でした。</p></blockquote>
+            <p><code>for + 人 + to ...</code> は不定詞の動作をする人を示します。一方、<code>of + 人 + to ...</code> は、その人の性質や行動を評価します。<code>important</code> は行動の重要性、<code>kind</code> は人の性質に注目しています。</p>
+            </details>
+            <details class="section" open>
+            <summary>書き換え</summary>
+            <p><code>It is + 形容詞 + of + 人 + to ...</code> は、<code>人 + be動詞 + 形容詞 + to ...</code> の形に書き換えられることがあります。</p>
+            <blockquote><p>It was kind of you to help me.<br>= You were kind to help me.</p></blockquote>
+            <p>どちらも「あなたが手伝ってくれて親切だった」という意味です。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <p>形容詞が人の性質や行動を評価しているかを確認します。人を評価する形容詞なら <code>of + 人 + to ...</code>、行動の重要性・難しさ・可能性などを表す形容詞なら <code>for + 人 + to ...</code> を使います。</p>
+            </details>
+            <p class="note"><code>of</code> は人への評価、<code>for</code> は不定詞の動作をする人を示す、と区別すると整理しやすくなります。</p>`,
+          questions: [
+            {
+              id: "infinitive-of-adjective-evaluation-q1",
+              text: "It was kind (　　) you to help me.",
+              choices: ["for", "of", "from", "with"],
+              answer: 1,
+              explanation: "<code>kind</code> は <code>you</code> の性質を評価する形容詞なので、<code>of you to help</code> とします。"
+            },
+            {
+              id: "infinitive-of-adjective-evaluation-q2",
+              text: "正しい英文を選びなさい。",
+              choices: [
+                "It was nice of he to help us.",
+                "It was nice of him to help us.",
+                "It was nice him to help us.",
+                "It was nice of him helping us."
+              ],
+              answer: 1,
+              explanation: "<code>of</code> の後ろには目的格の <code>him</code> を置き、不定詞は <code>to help</code> とします。"
+            },
+            {
+              id: "infinitive-of-adjective-evaluation-q3",
+              text: "人の性質や行動を評価している文を選びなさい。",
+              choices: [
+                "It is important for students to study.",
+                "It is difficult for me to answer.",
+                "It was careless of him to forget the key.",
+                "It is possible for her to join us."
+              ],
+              answer: 2,
+              explanation: "<code>careless</code> は <code>him</code> の不注意な行動を評価しているため、<code>of him to forget</code> の形です。"
             }
           ]
         }

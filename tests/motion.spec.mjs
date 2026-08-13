@@ -47,7 +47,8 @@ const infinitivesVersions = {
   "infinitive-adverbial-purpose": 1,
   "infinitive-adverbial-reason": 1,
   "infinitive-adverbial-result": 1,
-  "infinitive-adverbial-degree": 1
+  "infinitive-adverbial-degree": 1,
+  "infinitive-of-adjective-evaluation": 1
 };
 
 // 「It is time + 仮定法過去」だけを未着手のまま残した、あと1単元でマスターのfixture。
@@ -81,7 +82,8 @@ const masteredInfinitivesAnswers = {
   "infinitive-adverbial-purpose": [1, 0, 2],
   "infinitive-adverbial-reason": [1, 1, 1],
   "infinitive-adverbial-result": [1, 1, 2],
-  "infinitive-adverbial-degree": [0, 0, 0]
+  "infinitive-adverbial-degree": [0, 0, 0],
+  "infinitive-of-adjective-evaluation": [1, 1, 2]
 };
 
 function finalRecord(score, total, cleared) {
@@ -386,7 +388,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(24, 24, true)
+        infinitives: finalRecord(27, 27, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
     });
@@ -408,7 +410,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(24, 24, true)
+        infinitives: finalRecord(27, 27, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -430,7 +432,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(27, 27, true),
         participles: finalRecord(9, 9, true),
-        infinitives: finalRecord(24, 24, true)
+        infinitives: finalRecord(27, 27, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });

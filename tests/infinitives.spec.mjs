@@ -68,7 +68,6 @@ test("形式主語構文の解説を読み、既存アプリで使用済みの3�
 
   await expect(page.getByRole("heading", { name: "形式主語構文" })).toBeVisible();
   await expect(page.getByText("It is + 形容詞 + to + 動詞の原形", { exact: true })).toBeVisible();
-  await expect(page.getByText("It is + 形容詞 + for + 人 + to + 動詞の原形", { exact: true })).toBeVisible();
   await expect(page.getByText("It is + 形容詞 + that + 主語 + 動詞", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
@@ -281,6 +280,37 @@ test("不定詞の副詞的用法を4つの別単元で学び、それぞれの3
           text: "This problem is too difficult (　　) me to solve.",
           choices: ["for", "to", "of", "with"],
           answer: 0
+        }
+      ]
+    },
+    {
+      title: "人の性質を表す形容詞と不定詞",
+      marker: "It is + 形容詞 + of + 人 + to + 動詞の原形",
+      questions: [
+        {
+          text: "It was kind (　　) you to help me.",
+          choices: ["for", "of", "from", "with"],
+          answer: 1
+        },
+        {
+          text: "正しい英文を選びなさい。",
+          choices: [
+            "It was nice of he to help us.",
+            "It was nice of him to help us.",
+            "It was nice him to help us.",
+            "It was nice of him helping us."
+          ],
+          answer: 1
+        },
+        {
+          text: "人の性質や行動を評価している文を選びなさい。",
+          choices: [
+            "It is important for students to study.",
+            "It is difficult for me to answer.",
+            "It was careless of him to forget the key.",
+            "It is possible for her to join us."
+          ],
+          answer: 2
         }
       ]
     }
