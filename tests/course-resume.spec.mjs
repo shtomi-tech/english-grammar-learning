@@ -46,6 +46,11 @@ async function seedProgress(page, progress) {
   await page.reload();
 }
 
+async function switchCourse(page, courseId) {
+  await page.locator(".courseNavigator > summary").click();
+  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => localStorage.clear());
@@ -99,7 +104,7 @@ test("コースを切り替えても各コースの位置を独立に保持す�
   await expect(page.locator("#current-path")).toContainText("条件文と仮定法の違い ＞ 各論");
   await page.getByRole("button", { name: "概論へ戻る" }).click();
 
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
+  await switchCourse(page, "participles");
   await page.getByRole("button", { name: /分詞の形容詞的用法（現在分詞）へ/ }).click();
   await expect(page.locator("#current-path")).toContainText("分詞の形容詞的用法（現在分詞） ＞ 各論");
 
@@ -111,7 +116,7 @@ test("コースを切り替えても各コースの位置を独立に保持す�
   await page.getByRole("button", { name: "概論へ戻る" }).click();
 
   // 仮定法は概論へ戻ってから切り替えたので、独立して概論のまま保持されている。
-  await page.getByLabel("文法カテゴリ").selectOption("subjunctive");
+  await switchCourse(page, "subjunctive");
   await expect(page.locator("#current-path")).toContainText("仮定法 ＞ 概論");
 });
 
@@ -183,7 +188,7 @@ test("コース切替で回答・復習・修了記録を保持する", async ({
     finalChecks
   });
 
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
+  await switchCourse(page, "participles");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.answers["past-subjunctive"]).toEqual([3, 1, 2]);
   expect(saved.review).toEqual(review);

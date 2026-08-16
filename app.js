@@ -292,6 +292,14 @@ function courseProgressStats(course) {
   return { total, completed, mastered };
 }
 
+function courseQuestionCount(course) {
+  return course.lessons.reduce((sum, lesson) => sum + lesson.questions.length, 0);
+}
+
+function curriculumProgressStats() {
+  return { total: courses.length, cleared: courses.filter(courseCleared).length };
+}
+
 function finalStatusFor(course) {
   if (!courseMastered(course)) {
     const remaining = course.lessons.length - course.lessons.filter(lessonMastered).length;
@@ -537,13 +545,7 @@ function render(resetScroll = false) {
   document.querySelector("#homePanel").classList.toggle("hide", !isHome);
   document.querySelector("#sessionPanel").classList.toggle("hide", isHome);
 
-  document.querySelector("#course-selector").innerHTML = `
-    <label class="categoryPicker">
-      <span>文法カテゴリ</span>
-      <select class="categorySelect">
-        ${courses.map(courseItem => `<option value="${courseItem.id}" ${courseItem.id === course.id ? "selected" : ""}>${courseItem.title}</option>`).join("")}
-      </select>
-    </label>`;
+  document.querySelector("#course-selector").innerHTML = courseNavigatorHtml(course);
   document.querySelector("#current-path").textContent = currentPath(stage);
 
   let container;
@@ -607,6 +609,11 @@ function courseStarted(course) {
   const hasFinalAttempt = state.finalChecks?.[course.id]?.bestTotal > 0;
   const hasFinalRun = state.finalRun?.courseId === course.id && state.finalRun.order?.length > 0;
   return hasLessonProgress || hasSavedPosition || hasFinalAttempt || hasFinalRun;
+}
+
+// 概論の初期開閉。専用の永続状態は持たず、既存courseStarted()から毎回導出する。
+function overviewOpenFor(course) {
+  return !courseStarted(course);
 }
 
 function recommendedOtherCourse(currentCourse) {
@@ -705,15 +712,31 @@ function savedStateText() {
   return cloud && cloud.isEnabled() ? "現在地はクラウドとこの端末に保存済み" : "現在地はこの端末に保存済み";
 }
 
-function sessionHeadHtml(label, title, { showBack = true } = {}) {
+function sessionHeadHtml(label, title, { showBack = true, position = "" } = {}) {
   return `<div class="sessionHead">
     <div>
+      ${position ? `<p class="sessionPosition">${position}</p>` : ""}
       <p class="label">${label}</p>
       <h2 tabindex="-1">${title}</h2>
       <p class="hint savedState">${savedStateText()}</p>
     </div>
     ${showBack ? `<button type="button" class="ghost" data-action="go-home">一覧へ戻る</button>` : ""}
   </div>`;
+}
+
+// 各論・問題・修了テスト・今日の復習の画面で、スクロール中もsticky表示する現在地の文言。
+function sessionPositionText(stage) {
+  if (state.reviewSession) return `問題 ${state.reviewSession.index + 1}/最大${REVIEW_SESSION_SIZE}`;
+  const totalLessons = currentCourse().lessons.length;
+  if (stage.type === "overview") return "";
+  if (stage.type === "final") {
+    const run = state.finalRun;
+    return run ? `問題 ${Math.min(run.index + 1, run.order.length)}/${run.order.length}` : "修了テスト";
+  }
+  const lessonNo = stage.lessonIndex + 1;
+  if (stage.type === "lesson") return `単元 ${lessonNo}/${totalLessons}・各論`;
+  const inResult = state.question >= stage.lesson.questions.length;
+  return inResult ? `単元 ${lessonNo}/${totalLessons}・結果` : `単元 ${lessonNo}/${totalLessons}・問題 ${state.question + 1}/${stage.lesson.questions.length}`;
 }
 
 const SESSION_STEPS = [
@@ -747,6 +770,14 @@ function stepBarHtml(steps, activeKey) {
       const ariaDisabled = isLocked ? ' aria-disabled="true"' : "";
       return `<span class="step ${cls}"${ariaCurrent}${ariaDisabled}>${step.label}</span>`;
     }).join("")}
+  </div>`;
+}
+
+// sessionHeadとstepBarを.sessionProgressへまとめる共通helper。スクロール中もsticky表示する（styles.css）。
+function sessionProgressHtml(label, title, steps, activeKey, { showBack = true, stage = stages[state.stage] } = {}) {
+  return `<div class="sessionProgress">
+    ${sessionHeadHtml(label, title, { showBack, position: sessionPositionText(stage) })}
+    ${stepBarHtml(steps, activeKey)}
   </div>`;
 }
 
@@ -827,11 +858,114 @@ function homeHeroHtml(course, stats, model) {
     </section>`;
 }
 
+// カテゴリナビゲータ：閉じたsummaryでも現在カテゴリと教材全体の進捗が分かる。
+// 状態はcourseCardModel()/curriculumProgressStats()から導出し、新しい永続状態は持たない。
+function courseCardModel(course) {
+  const { total, completed, mastered } = courseProgressStats(course);
+  const finalStatus = finalStatusFor(course);
+  const nextLabel = finalStatus.label === "CLEAR" ? "修了テストCLEAR" : overviewActionFor(course).label;
+  return { course, total, completed, mastered, questionCount: courseQuestionCount(course), finalStatus, nextLabel };
+}
+
+function courseCardHtml(course, index, activeCourse) {
+  const model = courseCardModel(course);
+  const isActive = course.id === activeCourse.id;
+  return `<button type="button" class="courseCard ${isActive ? "active" : ""}" data-course="${course.id}" ${isActive ? 'aria-current="true"' : ""}>
+    <span class="courseCardNo">${String(index + 1).padStart(2, "0")}</span>
+    <span class="courseCardTitle">${course.title}${isActive ? "（選択中）" : ""}</span>
+    <span class="courseCardMeta">${model.total}単元・${model.questionCount}問</span>
+    <span class="courseCardProgress">完了 ${model.completed}/${model.total}単元・マスター ${model.mastered}/${model.total}</span>
+    <span class="courseCardFinal">修了テスト：${model.finalStatus.label}</span>
+    <span class="courseCardNext">${model.nextLabel}</span>
+  </button>`;
+}
+
+function courseNavigatorHtml(activeCourse) {
+  const { total: courseCount, cleared } = curriculumProgressStats();
+  const activeStats = courseProgressStats(activeCourse);
+  return `<details class="card courseNavigator">
+    <summary>
+      <span class="courseNavigatorSummary">
+        <span class="label">文法カテゴリ</span>
+        <strong>${activeCourse.title}</strong>
+        <span class="hint">${courseCount}カテゴリ中 ${cleared}カテゴリCLEAR・完了 ${activeStats.completed}/${activeStats.total}単元</span>
+      </span>
+      <span class="courseNavigatorToggle">変更する</span>
+    </summary>
+    <div class="courseGrid">
+      ${courses.map((course, index) => courseCardHtml(course, index, activeCourse)).join("")}
+    </div>
+  </details>`;
+}
+
+// 単元一覧の1カードの表示モデル。区分自体はlessonStatusLabel()を正本にし、ここでは文言を組み合わせるだけ。
+function lessonCardModel(lesson, lessonIndex) {
+  const total = lesson.questions.length;
+  const answered = lessonAnsweredCount(lesson);
+  const score = lessonScore(lesson);
+  const visited = state.visitedLessons.includes(lesson.id);
+  const status = lessonStatusLabel(lesson);
+  const stateKey = status === "未着手" ? "todo"
+    : status === "各論確認済み" ? "ready"
+    : status.startsWith("練習途中") ? "progress"
+    : status.startsWith("要復習") ? "review"
+    : "done";
+  const stateLabel = { todo: "未着手", ready: "練習へ", progress: "続きから", review: "要復習", done: "マスター" }[stateKey];
+  const nextLabel = { todo: "各論を読む", ready: "練習を始める", progress: "続きから", review: "解き直す", done: "解き直す" }[stateKey];
+  return {
+    number: lessonIndex + 1,
+    title: lesson.title,
+    stateKey,
+    stateLabel,
+    lessonStageLabel: visited ? "各論 ✓" : "各論 未確認",
+    practiceStageLabel: `練習 ${answered}/${total}`,
+    scoreLabel: answered === total ? `正解 ${score}/${total}` : "",
+    nextLabel,
+    targetStage: unitTargetStage(lesson, lessonIndex)
+  };
+}
+
+function lessonCardHtml(lesson, lessonIndex) {
+  const model = lessonCardModel(lesson, lessonIndex);
+  return `<button type="button" class="lessonCard ${model.stateKey}" data-stage="${model.targetStage}">
+    <span class="lessonCardHead">
+      <span class="lessonNo">${String(model.number).padStart(2, "0")}</span>
+      <span class="lessonState">${model.stateLabel}</span>
+    </span>
+    <strong class="lessonTitle">${model.title}</strong>
+    <span class="lessonStages">
+      <span>${model.lessonStageLabel}</span>
+      <span>${model.practiceStageLabel}</span>
+      ${model.scoreLabel ? `<span>${model.scoreLabel}</span>` : ""}
+    </span>
+    <span class="lessonNext">${model.nextLabel}</span>
+  </button>`;
+}
+
+// 修了テストは学習単元の通し番号から分離した「カテゴリ認定」カードとして描画する。
+// 解放判定・CLEAR基準・unlock演出の対象化はfinalStatusFor()等の既存関数のまま変更しない。
+function courseAssessmentHtml(course, showUnlock) {
+  const finalStatus = finalStatusFor(course);
+  const total = allCourseQuestions(course).length;
+  const passScore = finalPassScore(total);
+  const stageIndex = stagesFor(course).length - 1;
+  return `<section class="courseAssessment">
+    <p class="label">カテゴリ認定</p>
+    <button type="button" class="assessmentCard ${finalStatus.tone === "ok" ? "done" : ""} ${showUnlock ? "is-unlocking" : ""}" data-stage="${stageIndex}">
+      <span class="assessmentHead">
+        <strong>修了テスト</strong>
+        <span class="assessmentState">${showUnlock ? "修了テストが解放されました" : finalStatus.label}</span>
+      </span>
+      <span class="assessmentDetail">${finalStatus.detail}</span>
+      <span class="assessmentMeta">全${total}問・合格ライン ${passScore}/${total}問（正答率80%以上）</span>
+    </button>
+  </section>`;
+}
+
 function renderOverview(content) {
   const course = currentCourse();
   const { total, completed, mastered } = courseProgressStats(course);
   const weakCount = course.lessons.filter(lesson => lessonCompleted(lesson) && !lessonMastered(lesson)).length;
-  const finalStatus = finalStatusFor(course);
   const finalRecord = state.finalChecks?.[course.id];
   const finalBest = finalRecord?.bestScore || 0;
   const finalBestTotal = finalRecord?.bestTotal || allCourseQuestions(course).length;
@@ -842,30 +976,18 @@ function renderOverview(content) {
   content.innerHTML = `
     ${homeHeroHtml(course, { total, completed, mastered, weakCount, finalBest, finalBestTotal }, homeAction)}
     ${reviewMissionCard(course)}
-    <details class="card" open>
-      <summary><h3>${course.overview.title}</h3></summary>
+    <details class="card courseOverview" ${overviewOpenFor(course) ? "open" : ""}>
+      <summary><h3>${course.overview.title}</h3><span class="hint">概論・判断のポイント</span></summary>
       ${course.overview.html}
     </details>
     <section class="card">
       <p class="label">単元一覧</p>
       <h2>全${total}単元</h2>
       <div class="unitList">
-        ${course.lessons.map((lesson, lessonIndex) => {
-          const status = lessonStatusLabel(lesson);
-          const stateClass = lessonCompleted(lesson) ? (lessonMastered(lesson) ? "done" : "review") : "";
-          return `<button type="button" class="unitRow ${stateClass}" data-stage="${unitTargetStage(lesson, lessonIndex)}">
-            <span class="unitNo">${lessonIndex + 1}</span>
-            <span class="unitName">${lesson.title}</span>
-            <span class="unitStatus">${status}</span>
-          </button>`;
-        }).join("")}
-        <button type="button" class="unitRow ${finalStatus.tone === "ok" ? "done" : ""} ${showUnlock ? "is-unlocking" : ""}" data-stage="${stagesFor(course).length - 1}">
-          <span class="unitNo">${course.lessons.length + 1}</span>
-          <span class="unitName">修了テスト</span>
-          <span class="unitStatus">${showUnlock ? "修了テストが解放されました" : finalStatus.label}</span>
-        </button>
+        ${course.lessons.map((lesson, lessonIndex) => lessonCardHtml(lesson, lessonIndex)).join("")}
       </div>
-    </section>`;
+    </section>
+    ${courseAssessmentHtml(course, showUnlock)}`;
 }
 
 function renderLesson(content, lesson) {
@@ -877,8 +999,7 @@ function renderLesson(content, lesson) {
   const course = currentCourse();
   const backLabel = stage.lessonIndex === 0 ? "概論へ戻る" : `${course.lessons[stage.lessonIndex - 1].title}の結果へ戻る`;
   content.innerHTML = `
-    ${sessionHeadHtml(course.title, "各論")}
-    ${stepBarHtml(SESSION_STEPS, "lesson")}
+    ${sessionProgressHtml(course.title, "各論", SESSION_STEPS, "lesson", { stage })}
     <article class="flashCard">
       <h3 tabindex="-1">${lesson.title}</h3>
       ${lesson.html}
@@ -914,8 +1035,7 @@ function renderPractice(content, lesson) {
   const answers = currentAnswers(lesson);
   const selected = answers[state.question];
   content.innerHTML = `
-    ${sessionHeadHtml(lesson.title, "練習問題")}
-    ${stepBarHtml(SESSION_STEPS, "practice")}
+    ${sessionProgressHtml(lesson.title, "練習問題", SESSION_STEPS, "practice")}
     ${quizCardHtml({
       label: `問題 ${state.question + 1} / ${lesson.questions.length}`, question, selectedIndex: selected, dataAttr: "choice",
       nextLabel: state.question + 1 === lesson.questions.length ? "結果を見る" : "次の問題", nextAction: "next-question"
@@ -945,8 +1065,7 @@ function renderResult(content, lesson) {
     ? `<button type="button" class="cta" data-action="retry-wrong">間違えた${wrongIndexes.length}問を解き直す</button><button type="button" class="ghost" data-action="${forwardAction}">${forwardLabel}</button>`
     : `<button type="button" class="cta" data-action="${forwardAction}">${forwardLabel}</button>`;
   content.innerHTML = `
-    ${sessionHeadHtml(lesson.title, isLastLesson ? "全単元完了" : "単元結果", { showBack: false })}
-    ${stepBarHtml(SESSION_STEPS, "practice")}
+    ${sessionProgressHtml(lesson.title, isLastLesson ? "全単元完了" : "単元結果", SESSION_STEPS, "practice", { showBack: false, stage })}
     <section class="doneBanner ${score === lesson.questions.length ? "doneBanner--success" : ""}">
       <p class="label">学習結果</p>
       <div class="score">${score} / ${lesson.questions.length}</div>
@@ -1002,8 +1121,7 @@ function renderFinal(content, course) {
   if (!courseMastered(course)) {
     const unmastered = course.lessons.filter(lesson => !lessonMastered(lesson));
     content.innerHTML = `
-      ${sessionHeadHtml(course.title, "修了テスト")}
-      ${stepBarHtml(SESSION_STEPS, "final")}
+      ${sessionProgressHtml(course.title, "修了テスト", SESSION_STEPS, "final")}
       <section class="card" aria-labelledby="final-lock-title">
         <p class="hint">修了テストは、すべての単元の練習問題に全問正解すると挑戦できます。</p>
         <h3 id="final-lock-title">あと${unmastered.length}単元</h3>
@@ -1018,8 +1136,7 @@ function renderFinal(content, course) {
   const total = allCourseQuestions(course).length;
   const passScore = finalPassScore(total);
   content.innerHTML = `
-    ${sessionHeadHtml(course.title, "修了テスト")}
-    ${stepBarHtml(SESSION_STEPS, "final")}
+    ${sessionProgressHtml(course.title, "修了テスト", SESSION_STEPS, "final")}
     <section class="card">
       <p class="lead">全${total}問からランダムに出題します。${passScore}/${total}問以上（正答率80%以上）でCLEARです。</p>
       ${record.cleared ? `<p class="hint">CLEAR済みです（過去最高 ${record.bestScore}/${record.bestTotal}）。もう一度挑戦できます。</p>`
@@ -1032,8 +1149,7 @@ function renderFinalQuestion(content, run) {
   const { course, lesson, question } = questionIndex[run.order[run.index]];
   const selected = run.answers[run.index];
   content.innerHTML = `
-    ${sessionHeadHtml(`${course.title}　出典：${lesson.title}`, "修了テスト")}
-    ${stepBarHtml(SESSION_STEPS, "final")}
+    ${sessionProgressHtml(`${course.title}　出典：${lesson.title}`, "修了テスト", SESSION_STEPS, "final")}
     ${quizCardHtml({
       label: `問題 ${run.index + 1} / ${run.order.length}`, question, selectedIndex: selected, dataAttr: "final-choice",
       nextLabel: run.index + 1 === run.order.length ? "結果を見る" : "次の問題", nextAction: "final-next"
@@ -1063,8 +1179,7 @@ function renderFinalResult(content, course, run) {
   const wrongEntries = run.order.filter((qId, i) => run.answers[i] !== questionIndex[qId].question.answer);
 
   content.innerHTML = `
-    ${sessionHeadHtml(course.title, passed ? "修了テスト CLEAR" : "修了テスト結果", { showBack: false })}
-    ${stepBarHtml(SESSION_STEPS, "final")}
+    ${sessionProgressHtml(course.title, passed ? "修了テスト CLEAR" : "修了テスト結果", SESSION_STEPS, "final", { showBack: false })}
     <section class="doneBanner ${passed ? "doneBanner--success" : ""}">
       <p class="label">学習結果</p>
       <div class="score">${score} / ${total}</div>
@@ -1093,8 +1208,7 @@ function renderReviewSession(content) {
   const { course, lesson, question } = questionIndex[session.order[session.index]];
   const selected = session.answers[session.index];
   content.innerHTML = `
-    ${sessionHeadHtml(`出典：${course.title} ＞ ${lesson.title}`, "今日の復習", { showBack: false })}
-    ${stepBarHtml(REVIEW_STEPS, "review")}
+    ${sessionProgressHtml(`出典：${course.title} ＞ ${lesson.title}`, "今日の復習", REVIEW_STEPS, "review", { showBack: false })}
     ${quizCardHtml({
       label: `問題 ${session.index + 1} / ${session.order.length}`, question, selectedIndex: selected, dataAttr: "review-choice",
       nextLabel: session.index + 1 === session.order.length ? "結果を見る" : "次の問題", nextAction: "review-next"
@@ -1107,8 +1221,7 @@ function renderReviewSession(content) {
 function renderReviewResult(content, session) {
   const remaining = dueReviewCount();
   content.innerHTML = `
-    ${sessionHeadHtml("今日の復習", "復習完了", { showBack: false })}
-    ${stepBarHtml(REVIEW_STEPS, "review")}
+    ${sessionProgressHtml("今日の復習", "復習完了", REVIEW_STEPS, "review", { showBack: false })}
     <section class="doneBanner ${remaining === 0 ? "doneBanner--success" : ""}">
       <p class="label">学習結果</p>
       <div class="score">${session.correctCount} / ${session.order.length}</div>
@@ -1128,10 +1241,6 @@ function goBack(stage) {
   }
   setStage(state.stage - 1);
 }
-
-document.addEventListener("change", event => {
-  if (event.target.matches(".categorySelect")) switchCourse(event.target.value);
-});
 
 document.addEventListener("click", event => {
   const button = event.target.closest("button");

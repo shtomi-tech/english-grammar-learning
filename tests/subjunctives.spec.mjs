@@ -36,10 +36,15 @@ async function freshHome(page) {
   await page.reload();
 }
 
+async function switchCourse(page, courseId) {
+  await page.locator(".courseNavigator > summary").click();
+  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+}
+
 async function openUnit(page, index) {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("subjunctive");
-  await page.locator(".unitList .unitRow").nth(index).click();
+  await switchCourse(page, "subjunctive");
+  await page.locator(".unitList .lessonCard").nth(index).click();
 }
 
 async function seedProgress(page, progress) {
@@ -64,11 +69,11 @@ async function answerQuestions(page, questions) {
   }
 }
 
-test("仮定法コースは12単元を指定順で持ち、最後に修了テストを置く", async ({ page }) => {
+test("仮定法コースは12単元を指定順で持ち、修了テストは単元一覧から独立している", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("subjunctive");
+  await switchCourse(page, "subjunctive");
 
-  await expect(page.locator(".unitList .unitName")).toHaveText([
+  await expect(page.locator(".unitList .lessonTitle")).toHaveText([
     "条件文と仮定法の違い",
     "仮定法過去",
     "仮定法過去完了",
@@ -80,9 +85,9 @@ test("仮定法コースは12単元を指定順で持ち、最後に修了テス
     "It is time + 仮定法過去",
     "仮定法未来（should）",
     "仮定法未来（were to）",
-    "仮定法の倒置",
-    "修了テスト"
+    "仮定法の倒置"
   ]);
+  await expect(page.locator(".courseAssessment")).toContainText("修了テスト");
 });
 
 test("概論は通常の条件文との対比と到達範囲を示す", async ({ page }) => {
@@ -303,7 +308,7 @@ test("仮定法コースは36問で、各問題の選択肢と解説が空でな
     visitedLessons: Object.keys(masteredSubjunctiveAnswers),
     courseStructureVersions: { subjunctive: 2 }
   });
-  await page.locator(".unitList .unitRow").last().click();
+  await page.locator(".assessmentCard").click();
   await expect(page.locator("#sessionPanel")).toContainText("全36問からランダムに出題します。");
 
   const content = await page.evaluate(() => curriculum.courses.find(course => course.id === "subjunctive"));

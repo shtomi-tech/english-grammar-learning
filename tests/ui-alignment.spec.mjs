@@ -188,8 +188,9 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
 
   test("主要な操作要素は44px以上の高さを持つ", async ({ page }) => {
     await freshHome(page);
+    await page.locator(".courseNavigator > summary").click();
     const heights = await page.evaluate(() => {
-      const targets = [".cta", ".categorySelect", ".unitRow", ".card > summary"];
+      const targets = [".cta", ".courseNavigator > summary", ".courseCard", ".lessonCard", ".assessmentCard", ".card > summary"];
       return targets.map(sel => {
         const el = document.querySelector(sel);
         return { sel, height: el ? el.getBoundingClientRect().height : null };
@@ -199,6 +200,89 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
       expect(height, `${sel} の高さ`).not.toBeNull();
       expect(height, `${sel} の高さ`).toBeGreaterThanOrEqual(44);
     }
+  });
+});
+
+test.describe("カテゴリナビゲータ", () => {
+  test("summaryに現在カテゴリと教材全体の進捗が分かる文言があり、開くと3カテゴリのカードが並ぶ", async ({ page }) => {
+    await freshHome(page);
+    const nav = page.locator(".courseNavigator");
+    await expect(nav.locator("summary")).toContainText("仮定法");
+    await expect(nav.locator("summary")).toContainText("3カテゴリ中 0カテゴリCLEAR");
+    await expect(nav.locator("summary")).toContainText("完了 0/12単元");
+
+    await nav.locator("summary").click();
+    const cards = nav.locator(".courseCard");
+    await expect(cards).toHaveCount(3);
+    await expect(cards.nth(0)).toContainText("仮定法");
+    await expect(cards.nth(0)).toContainText("12単元");
+    await expect(cards.nth(0)).toContainText("36問");
+    await expect(cards.nth(1)).toContainText("分詞");
+    await expect(cards.nth(1)).toContainText("5単元");
+    await expect(cards.nth(1)).toContainText("15問");
+    await expect(cards.nth(2)).toContainText("不定詞");
+    await expect(cards.nth(2)).toContainText("13単元");
+    await expect(cards.nth(2)).toContainText("39問");
+    await expect(cards.nth(0)).toHaveAttribute("aria-current", "true");
+    await expect(cards.nth(0)).toContainText("選択中");
+  });
+
+  test("単元一覧は学習単元のカードだけを持ち、修了テストは独立したカードになる", async ({ page }) => {
+    await freshHome(page);
+    await expect(page.locator(".unitList .lessonCard")).toHaveCount(12);
+    await expect(page.locator(".courseAssessment .assessmentCard")).toHaveCount(1);
+    await expect(page.locator(".unitList")).not.toContainText("修了テスト");
+  });
+
+  test("1280pxでは単元一覧とカテゴリカードが2列、390pxでは1列になる", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await freshHome(page);
+    await page.locator(".courseNavigator > summary").click();
+    const wideColumns = await page.evaluate(() => ({
+      unit: new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size,
+      course: new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size
+    }));
+    expect(wideColumns.unit).toBe(2);
+    expect(wideColumns.course).toBe(2);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    const narrowColumns = await page.evaluate(() => ({
+      unit: new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size,
+      course: new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size
+    }));
+    expect(narrowColumns.unit).toBe(1);
+    expect(narrowColumns.course).toBe(1);
+    const width = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+    expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth);
+  });
+});
+
+test.describe("概論の初期開閉", () => {
+  test("未着手カテゴリでは概論が開いている", async ({ page }) => {
+    await freshHome(page);
+    await expect(page.locator(".courseOverview")).toHaveJSProperty("open", true);
+  });
+
+  test("各論確認済みでは概論が閉じている", async ({ page }) => {
+    await freshHome(page);
+    await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
+    await page.getByRole("button", { name: "概論へ戻る" }).click();
+    await expect(page.locator(".courseOverview")).toHaveJSProperty("open", false);
+  });
+});
+
+test.describe("sticky現在地", () => {
+  test("本文をスクロールしても.sessionProgressが上端に残る", async ({ page }) => {
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await expect(page.locator(".sessionProgress")).toContainText("単元 1/12・各論");
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const scrolled = await page.evaluate(() => window.scrollY);
+    expect(scrolled).toBeGreaterThan(0);
+    const top = await page.locator(".sessionProgress").evaluate(el => el.getBoundingClientRect().top);
+    expect(top).toBeGreaterThanOrEqual(0);
+    expect(top).toBeLessThan(10);
   });
 });
 

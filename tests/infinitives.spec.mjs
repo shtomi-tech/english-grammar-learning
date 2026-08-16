@@ -6,10 +6,15 @@ async function freshHome(page) {
   await page.reload();
 }
 
+async function switchCourse(page, courseId) {
+  await page.locator(".courseNavigator > summary").click();
+  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+}
+
 test("不定詞カテゴリから名詞的用法の3問まで進められる", async ({ page }) => {
   await freshHome(page);
 
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
   await expect(page.getByRole("heading", { name: "不定詞", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "不定詞とは", exact: true })).toBeVisible();
   await expect(page.locator("#homePanel")).toContainText("使役動詞や知覚動詞の後ろに");
@@ -25,9 +30,9 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
 
 test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
 
-  await expect(page.locator(".unitList .unitName")).toHaveText([
+  await expect(page.locator(".unitList .lessonTitle")).toHaveText([
     "不定詞の名詞的用法",
     "不定詞の形容詞的用法",
     "不定詞の副詞的用法（目的）",
@@ -40,14 +45,14 @@ test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({
     "形式目的語構文",
     "原形不定詞",
     "不定詞の否定形",
-    "完了不定詞",
-    "修了テスト"
+    "完了不定詞"
   ]);
+  await expect(page.locator(".courseAssessment")).toContainText("修了テスト");
 });
 
 test("名詞的用法には既存アプリで使用済みの主語・目的語・補語の問題を使う", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
   await page.getByRole("button", { name: "不定詞の名詞的用法へ" }).click();
   await page.getByRole("button", { name: "3問に挑戦" }).click();
 
@@ -86,7 +91,7 @@ test("名詞的用法には既存アプリで使用済みの主語・目的語�
 
 test("形式主語構文はto不定詞を中心に学び、that節を発展として開ける", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
   await page.getByRole("button", { name: /形式主語構文/ }).click();
 
   await expect(page.getByRole("heading", { name: "形式主語構文" })).toBeVisible();
@@ -133,7 +138,7 @@ test("形式主語構文はto不定詞を中心に学び、that節を発展と�
 
 test("形式目的語構文の解説と3問を確認できる", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
   await page.getByRole("button", { name: /形式目的語構文/ }).click();
 
   await expect(page.getByRole("heading", { name: "形式目的語構文" })).toBeVisible();
@@ -180,7 +185,7 @@ test("形式目的語構文の解説と3問を確認できる", async ({ page })
 
 test("不定詞の形容詞的用法の解説と3問を確認できる", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+  await switchCourse(page, "infinitives");
   await page.getByRole("button", { name: /不定詞の形容詞的用法/ }).click();
 
   await expect(page.getByRole("heading", { name: "不定詞の形容詞的用法" })).toBeVisible();
@@ -454,7 +459,7 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
 
   for (const lesson of lessons) {
     await freshHome(page);
-    await page.getByLabel("文法カテゴリ").selectOption("infinitives");
+    await switchCourse(page, "infinitives");
     await page.getByRole("button", { name: new RegExp(lesson.title) }).click();
     await expect(page.getByRole("heading", { name: lesson.title })).toBeVisible();
     await expect(page.getByText(lesson.marker, { exact: true }).first()).toBeVisible();

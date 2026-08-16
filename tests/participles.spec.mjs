@@ -17,10 +17,15 @@ async function seedProgress(page, progress) {
   await page.reload();
 }
 
+async function switchCourse(page, courseId) {
+  await page.locator(".courseNavigator > summary").click();
+  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+}
+
 async function openParticipleUnit(page, index) {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
-  await page.locator(".unitList .unitRow").nth(index).click();
+  await switchCourse(page, "participles");
+  await page.locator(".unitList .lessonCard").nth(index).click();
 }
 
 // 各問題を順に確認し、正解を選んで解説をチェックしながら回答する。
@@ -62,21 +67,21 @@ const masteredParticiplesAnswers = {
 
 test("分詞コースの単元順は補語・知覚動詞まで拡張されている", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
+  await switchCourse(page, "participles");
 
-  await expect(page.locator(".unitList .unitName")).toHaveText([
+  await expect(page.locator(".unitList .lessonTitle")).toHaveText([
     "分詞の形容詞的用法（現在分詞）",
     "分詞の形容詞的用法（過去分詞）",
     "感情動詞の分詞化",
     "補語としての分詞",
-    "知覚動詞 + 目的語 + 分詞",
-    "修了テスト"
+    "知覚動詞 + 目的語 + 分詞"
   ]);
+  await expect(page.locator(".courseAssessment")).toContainText("修了テスト");
 });
 
 test("概論は補語・知覚動詞への到達範囲と、分詞構文を扱わないことを明示する", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
+  await switchCourse(page, "participles");
 
   await expect(page.locator("#homePanel")).toContainText("補語");
   await expect(page.locator("#homePanel")).toContainText("知覚動詞");
@@ -85,7 +90,7 @@ test("概論は補語・知覚動詞への到達範囲と、分詞構文を扱�
 
 test("概論と過去分詞単元は動作完了後の状態をfallen leavesで示す", async ({ page }) => {
   await freshHome(page);
-  await page.getByLabel("文法カテゴリ").selectOption("participles");
+  await switchCourse(page, "participles");
   await expect(page.locator("#homePanel")).toContainText("fallen leaves");
   await expect(page.locator("#homePanel")).toContainText("動作が完了した後の状態");
 
@@ -185,6 +190,6 @@ test("修了テストの総問題数が15問になる", async ({ page }) => {
     visitedLessons: Object.keys(masteredParticiplesAnswers)
   });
 
-  await page.locator(".unitList .unitRow").last().click();
+  await page.locator(".assessmentCard").click();
   await expect(page.locator("#sessionPanel")).toContainText("全15問からランダムに出題します。");
 });

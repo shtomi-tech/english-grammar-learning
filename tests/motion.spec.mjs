@@ -20,7 +20,7 @@ async function seedProgress(page, progress) {
 async function openInversionLesson(page) {
   await freshHome(page);
   // 単元の位置ではなく名称で開く。順序変更の影響を受けない。
-  await page.locator(".unitList .unitRow").filter({ hasText: "仮定法の倒置" }).click();
+  await page.locator(".unitList .lessonCard").filter({ hasText: "仮定法の倒置" }).click();
 }
 
 const subjunctiveVersions = {
@@ -209,7 +209,7 @@ test.describe("各論のAccordion", () => {
 
   test("節を持たない各論ではdetails.sectionが存在せず本文がそのまま表示される", async ({ page }) => {
     await freshHome(page);
-    await page.locator(".unitList .unitRow").filter({ hasText: "仮定法過去" }).first().click();
+    await page.locator(".unitList .lessonCard").filter({ hasText: "仮定法過去" }).first().click();
     await expect(page.locator("details.section")).toHaveCount(0);
     await expect(page.locator(".flashCard")).toContainText("仮定法過去は");
   });
@@ -299,9 +299,9 @@ test.describe("修了テスト解放のunlock", () => {
     await page.getByRole("button", { name: "修了テストへ" }).click();
     await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
-    const finalRow = page.locator(".unitRow").last();
-    await expect(finalRow).toHaveClass(/is-unlocking/);
-    await expect(finalRow).toContainText("修了テストが解放されました");
+    const assessmentCard = page.locator(".assessmentCard");
+    await expect(assessmentCard).toHaveClass(/is-unlocking/);
+    await expect(assessmentCard).toContainText("修了テストが解放されました");
   });
 
   test("リロード後は同じ解放状態でもunlockモーションを再演しない", async ({ page }) => {
@@ -315,9 +315,9 @@ test.describe("修了テスト解放のunlock", () => {
       visitedLessons: Object.keys(masteredAll)
     });
 
-    const finalRow = page.locator(".unitRow").last();
-    await expect(finalRow).not.toHaveClass(/is-unlocking/);
-    await expect(finalRow).toContainText("挑戦可能");
+    const assessmentCard = page.locator(".assessmentCard");
+    await expect(assessmentCard).not.toHaveClass(/is-unlocking/);
+    await expect(assessmentCard).toContainText("挑戦可能");
   });
 });
 
