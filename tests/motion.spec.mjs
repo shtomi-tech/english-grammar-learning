@@ -57,7 +57,8 @@ const infinitivesVersions = {
   "infinitive-of-adjective-evaluation": 1,
   "dummy-subject-it": 2,
   "dummy-object-it": 2,
-  "bare-infinitive": 1,
+  "bare-infinitive": 3,
+  "perception-bare-infinitive": 1,
   "infinitive-negative-form": 2,
   "infinitive-perfect-form": 2
 };
@@ -101,7 +102,8 @@ const masteredInfinitivesAnswers = {
   "infinitive-of-adjective-evaluation": [1, 1, 2],
   "dummy-subject-it": [0, 0, 2],
   "dummy-object-it": [1, 0, 1],
-  "bare-infinitive": [0, 0, 1],
+  "bare-infinitive": [0, 0, 0],
+  "perception-bare-infinitive": [0, 0, 1],
   "infinitive-negative-form": [1, 1, 0],
   "infinitive-perfect-form": [2, 1, 2]
 };
@@ -408,7 +410,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(36, 36, true),
         participles: finalRecord(15, 15, true),
-        infinitives: finalRecord(39, 39, true)
+        infinitives: finalRecord(42, 42, true)
       },
       review: reviewForAnswers(masteredAnswers, "past-subjunctive-q1")
     });
@@ -430,7 +432,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(36, 36, true),
         participles: finalRecord(15, 15, true),
-        infinitives: finalRecord(39, 39, true)
+        infinitives: finalRecord(42, 42, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });
@@ -452,7 +454,7 @@ test.describe("修了後のホーム推薦", () => {
       finalChecks: {
         subjunctive: finalRecord(36, 36, true),
         participles: finalRecord(15, 15, true),
-        infinitives: finalRecord(39, 39, true)
+        infinitives: finalRecord(42, 42, true)
       },
       review: reviewForAnswers(masteredAnswers)
     });

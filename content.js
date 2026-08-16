@@ -753,6 +753,7 @@ const curriculum = {
     },
     {
       id: "infinitives",
+      structureVersion: 1,
       title: "不定詞",
       recommendationLead: "to + 動詞の原形で、名詞・形容詞・副詞の働きをする文法です。",
       overview: {
@@ -766,7 +767,7 @@ const curriculum = {
             <p>She went to the library to study.<br>彼女は勉強するために図書館へ行きました。</p>
           </blockquote>
           <p><code>to learn English</code> は「英語を学ぶこと」、<code>to drink</code> は <code>something</code> の内容、<code>to study</code> は目的を表しています。</p>
-          <p>不定詞は、主語・目的語・補語になったり、名詞を説明したり、目的や理由を付け加えたりします。まず基本の <code>to + 動詞の原形</code> の働きを学び、その後で、使役動詞や知覚動詞の後ろに <code>to</code> を付けずに置く「原形不定詞」を学びます。</p>
+          <p>不定詞は、主語・目的語・補語になったり、名詞を説明したり、目的や理由を付け加えたりします。まず基本の <code>to + 動詞の原形</code> の働きを学び、その後で、使役動詞と知覚動詞の後ろに <code>to</code> を付けずに置く原形不定詞を、別々の単元で学びます。</p>
           <p class="note">まず <code>to</code> の後ろが動詞の原形かを確認し、その不定詞のまとまりが文中でどの働きをしているかを見分けます。<code>to</code> が前置詞の場合は、後ろに名詞や動名詞が続くため、形だけで判断しないことが大切です。</p>`
       },
       lessons: [
@@ -1396,43 +1397,53 @@ const curriculum = {
         },
 {
           id: "bare-infinitive",
-          version: 1,
-          title: "原形不定詞",
+          version: 3,
+          title: "使役動詞と原形不定詞",
           html: `
-            <p>原形不定詞は、<code>to</code> を付けずに動詞の原形を使う形です。主に一部の使役動詞・知覚動詞の後ろで使います。通常の <code>to + 動詞の原形</code> から、自由に <code>to</code> を削除する規則ではありません。</p>
+            <p>使役動詞は、主語が別の人やものに動作をさせる関係を表します。<code>make</code>・<code>let</code>・<code>have</code> の後ろに「動作をする人・もの」を置き、その後ろに原形不定詞を続けます。</p>
+            <details class="section" open>
+            <summary>使役動詞の基本</summary>
+            <div class="formula">動詞 + 人 + 動詞の原形</div>
+            <p>使役動詞の後ろでは、能動態なら原形の前に <code>to</code> を置きません。<code>to</code> がないことだけで判断せず、前の動詞がどのような関係を作っているかを確認します。</p>
+            </details>
             <details class="section" open>
             <summary><code>make</code> と <code>let</code></summary>
-            <div class="formula">動詞 + 人 + 動詞の原形</div>
+            <div class="formula">make + 人 + 動詞の原形</div>
             <p><code>make + 人 + 動詞の原形</code> は、強制・働きかけを表し、「人に～させる」と訳します。</p>
             <blockquote><p>The teacher made us clean the room.<br>先生は私たちに部屋を掃除させました。</p></blockquote>
+            <div class="formula">let + 人 + 動詞の原形</div>
             <p><code>let + 人 + 動詞の原形</code> は、許可を表し、「人が～するのを許す」と訳します。</p>
             <blockquote><p>My parents let me go out.<br>両親は私を外出させてくれました。</p></blockquote>
-            <p>能動態では <code>to clean</code> や <code>to go</code> にはしません。</p>
+            <p><code>make</code> は強制、<code>let</code> は許可という違いに注意します。</p>
             </details>
             <details class="section" open>
-            <summary>知覚動詞</summary>
-            <p><code>see / hear + 人 + 動詞の原形</code> では、人やものがする動作を一まとまりとして知覚したことを表します。</p>
-            <blockquote><p>I saw him cross the street.<br>私は彼が通りを渡るのを見ました。</p><p>We heard her sing.<br>私たちは彼女が歌うのを聞きました。</p></blockquote>
+            <summary><code>have</code> を使う使役</summary>
+            <div class="formula">have + 人 + 動詞の原形</div>
+            <p><code>have + 人 + 動詞の原形</code> は、依頼・手配によって「人に～してもらう」という関係を表します。<code>make</code> のような強制よりも、仕事や役割を依頼する意味で使います。</p>
+            <blockquote><p>I had him check the report.<br>私は彼に報告書を確認してもらいました。</p></blockquote>
+            <p><code>make</code>・<code>let</code>・<code>have</code> は、いずれも能動態では原形の前に <code>to</code> を置きません。</p>
             </details>
             <details class="section" open>
-            <summary><code>make</code> の受動態</summary>
+            <summary>使役動詞の受動態</summary>
             <p>能動態の <code>make + 人 + 動詞の原形</code> を受動態にすると、<code>人 + be made + to + 動詞の原形</code> となり、<code>to</code> が戻ります。</p>
             <blockquote><p>The teacher made us clean the room.<br>先生は私たちに部屋を掃除させました。</p><p>We were made to clean the room by the teacher.<br>私たちは先生に部屋を掃除させられました。</p></blockquote>
+            <p><code>let + 人 + 動詞の原形</code> の「許可」は、受動態では通常 <code>be allowed to + 動詞の原形</code> で表します。</p>
+            <blockquote><p>I was allowed to go out.<br>私は外出を許されました。</p></blockquote>
             </details>
             <details class="section" open>
             <summary>助動詞との関係</summary>
-            <p><code>can play</code>、<code>must study</code> のように、助動詞の後ろにも <code>to</code> を付けず動詞の原形を置きます。ただし、この単元の中心は使役動詞・知覚動詞です。助動詞の意味・用法まではここでは扱いません。</p>
+            <p><code>can play</code>、<code>must study</code> のように、助動詞の後ろにも <code>to</code> を付けず動詞の原形を置きます。ただし、これは助動詞の規則であり、使役動詞の原形不定詞とは別の仕組みです。</p>
             </details>
             <details class="section" open>
             <summary>見分け方</summary>
             <ol>
-              <li>直前に <code>make</code>、<code>let</code>、<code>see</code>、<code>hear</code> などがあるか確認します。</li>
+              <li>直前に <code>make</code>、<code>let</code>、<code>have</code> があるか確認します。</li>
               <li>その動詞と原形の間に、動作をする人・ものがあるか確認します。</li>
               <li>能動態では原形の前に <code>to</code> を置きません。</li>
               <li><code>be made</code> の受動態では <code>to + 動詞の原形</code> にします。</li>
             </ol>
             </details>
-            <p class="note">原形不定詞は、決まった動詞の後ろで使う特別な形です。まず直前の動詞と、原形の前後の語を確認しましょう。</p>` ,
+            <p class="note">使役動詞では、主語が誰かに動作をさせる関係を読み取り、<code>make</code>・<code>let</code>・<code>have</code> の意味の違いを確認しましょう。</p>` ,
           questions: [
             {
               id: "bare-infinitive-q1",
@@ -1443,17 +1454,79 @@ const curriculum = {
             },
             {
               id: "bare-infinitive-q2",
-              text: "I saw him (　　) the street.",
-              choices: ["cross", "to cross", "crossed", "to crossed"],
+              text: "My parents let me (　　) out.",
+              choices: ["go", "to go", "going", "gone"],
               answer: 0,
-              explanation: "<code>see + 人 + 動詞の原形</code> の形で、him が渡る動作を見たことを表すため、<code>cross</code> を使います。"
+              explanation: "<code>let + 人 + 動詞の原形</code> の形なので、<code>go</code> を使います。両親が私の外出を許した、という意味です。"
             },
             {
               id: "bare-infinitive-q3",
-              text: "We were made (　　) outside.",
-              choices: ["wait", "to wait", "waiting", "waited"],
+              text: "I had him (　　) the report.",
+              choices: ["check", "to check", "checking", "checked"],
+              answer: 0,
+              explanation: "依頼・手配を表す <code>have + 人 + 動詞の原形</code> の形なので、<code>check</code> を使います。"
+            }
+          ]
+        },
+{
+          id: "perception-bare-infinitive",
+          version: 1,
+          title: "知覚動詞と原形不定詞",
+          html: `
+            <p>知覚動詞は、目や耳などで人やものの動作を捉える表現です。<code>see</code>・<code>watch</code>・<code>hear</code>・<code>feel</code> などの後ろに、動作をする人・ものと原形不定詞を置きます。</p>
+            <details class="section" open>
+            <summary>知覚動詞の基本</summary>
+            <div class="formula">知覚動詞 + 人・もの + 動詞の原形</div>
+            <blockquote><p>I saw him cross the street.<br>私は彼が通りを渡るのを見ました。</p><p>We heard her sing.<br>私たちは彼女が歌うのを聞きました。</p><p>I watched the children play in the park.<br>私は子どもたちが公園で遊ぶのを見ました。</p><p>I felt the ground shake.<br>私は地面が揺れるのを感じました。</p></blockquote>
+            <p>原形不定詞は、動作の全体を一まとまりとして捉えるときに使います。見る・聞く・感じる対象が、どの動作をしたかを表します。</p>
+            </details>
+            <details class="section" open>
+            <summary>動作の全体と途中</summary>
+            <div class="formula">知覚動詞 + 人・もの + 動詞-ing</div>
+            <blockquote><p>I saw him crossing the street.<br>私は彼が通りを渡っている途中なのを見ました。</p></blockquote>
+            <p><code>I saw him cross the street.</code> は動作の全体、<code>I saw him crossing the street.</code> は動作の途中に焦点を当てます。<code>-ing</code> を使うと、知覚した場面の途中の様子を表せます。</p>
+            </details>
+            <details class="section" open>
+            <summary>使役動詞との違い</summary>
+            <p><code>make</code>・<code>let</code>・<code>have</code> は、主語が別の人・ものに動作をさせる使役動詞です。一方、<code>see</code>・<code>watch</code>・<code>hear</code>・<code>feel</code> は、人・ものがする動作を主語が知覚したことを表します。</p>
+            <p>どちらも <code>動詞 + 人・もの + 動詞の原形</code> になりますが、前の動詞の意味によって、使役か知覚かを判断します。</p>
+            </details>
+            <details class="section" open>
+            <summary>見分け方</summary>
+            <ol>
+              <li>前の動詞が知覚を表しているか確認します。</li>
+              <li>知覚の対象となる人・ものを、動詞と原形の間から探します。</li>
+              <li>動作の全体なら原形、動作の途中の場面なら <code>-ing</code> も使えます。</li>
+              <li>受動態の <code>be made to ...</code> は知覚ではなく、使役動詞 <code>make</code> の受動態です。</li>
+            </ol>
+            </details>
+            <p class="note">知覚動詞では、誰がどの動作をしたのかを確認し、動作の全体か途中かに応じて原形と <code>-ing</code> を捉え分けます。</p>` ,
+          questions: [
+            {
+              id: "perception-bare-infinitive-q1",
+              text: "I saw him (　　) the street.",
+              choices: ["cross", "to cross", "crossed", "to crossed"],
+              answer: 0,
+              explanation: "<code>see + 人 + 動詞の原形</code> の形で、him が渡る動作を知覚したことを表すため、<code>cross</code> を使います。"
+            },
+            {
+              id: "perception-bare-infinitive-q2",
+              text: "We heard her (　　).",
+              choices: ["sing", "to sing", "singing", "sang"],
+              answer: 0,
+              explanation: "<code>hear + 人 + 動詞の原形</code> の形なので、<code>sing</code> を使います。"
+            },
+            {
+              id: "perception-bare-infinitive-q3",
+              text: "動作の途中を表す文を選びなさい。",
+              choices: [
+                "I saw him cross the street.",
+                "I saw him crossing the street.",
+                "I heard her sing.",
+                "My parents let me go out."
+              ],
               answer: 1,
-              explanation: "<code>make + 人 + 動詞の原形</code> の受動態では <code>be made to + 動詞の原形</code> となるため、<code>to wait</code> が正解です。"
+              explanation: "<code>I saw him crossing the street.</code> は <code>-ing</code> によって、通りを渡っている途中の場面に焦点を当てています。"
             }
           ]
         },

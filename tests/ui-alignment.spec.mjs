@@ -221,8 +221,8 @@ test.describe("カテゴリナビゲータ", () => {
     await expect(cards.nth(1)).toContainText("5単元");
     await expect(cards.nth(1)).toContainText("15問");
     await expect(cards.nth(2)).toContainText("不定詞");
-    await expect(cards.nth(2)).toContainText("13単元");
-    await expect(cards.nth(2)).toContainText("39問");
+    await expect(cards.nth(2)).toContainText("14単元");
+    await expect(cards.nth(2)).toContainText("42問");
     await expect(cards.nth(0)).toHaveAttribute("aria-current", "true");
     await expect(cards.nth(0)).toContainText("選択中");
   });

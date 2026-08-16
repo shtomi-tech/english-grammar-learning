@@ -17,7 +17,7 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
   await switchCourse(page, "infinitives");
   await expect(page.getByRole("heading", { name: "不定詞", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "不定詞とは", exact: true })).toBeVisible();
-  await expect(page.locator("#homePanel")).toContainText("使役動詞や知覚動詞の後ろに");
+  await expect(page.locator("#homePanel")).toContainText("使役動詞と知覚動詞の後ろに");
 
   await page.getByRole("button", { name: "不定詞の名詞的用法へ" }).click();
   await expect(page.getByRole("heading", { name: "不定詞の名詞的用法" })).toBeVisible();
@@ -43,7 +43,8 @@ test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({
     "人の性質を表す形容詞と不定詞",
     "形式主語構文",
     "形式目的語構文",
-    "原形不定詞",
+    "使役動詞と原形不定詞",
+    "知覚動詞と原形不定詞",
     "不定詞の否定形",
     "完了不定詞"
   ]);
@@ -387,9 +388,14 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
       ]
     },
     {
-      title: "原形不定詞",
+      title: "使役動詞と原形不定詞",
       marker: "動詞 + 人 + 動詞の原形",
-      bodyText: ["My parents let me go out.", "We were made to clean the room by the teacher.", "can play"],
+      bodyText: [
+        "My parents let me go out.",
+        "I had him check the report.",
+        "We were made to clean the room by the teacher.",
+        "can play"
+      ],
       questions: [
         {
           text: "The teacher made us (　　) the room.",
@@ -397,13 +403,40 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
           answer: 0
         },
         {
+          text: "My parents let me (　　) out.",
+          choices: ["go", "to go", "going", "gone"],
+          answer: 0
+        },
+        {
+          text: "I had him (　　) the report.",
+          choices: ["check", "to check", "checking", "checked"],
+          answer: 0
+        }
+      ]
+    },
+    {
+      title: "知覚動詞と原形不定詞",
+      marker: "知覚動詞 + 人・もの + 動詞の原形",
+      bodyText: ["I saw him cross the street.", "I saw him crossing the street.", "We heard her sing."],
+      questions: [
+        {
           text: "I saw him (　　) the street.",
           choices: ["cross", "to cross", "crossed", "to crossed"],
           answer: 0
         },
         {
-          text: "We were made (　　) outside.",
-          choices: ["wait", "to wait", "waiting", "waited"],
+          text: "We heard her (　　).",
+          choices: ["sing", "to sing", "singing", "sang"],
+          answer: 0
+        },
+        {
+          text: "動作の途中を表す文を選びなさい。",
+          choices: [
+            "I saw him cross the street.",
+            "I saw him crossing the street.",
+            "I heard her sing.",
+            "My parents let me go out."
+          ],
           answer: 1
         }
       ]
@@ -465,6 +498,14 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
     await expect(page.getByText(lesson.marker, { exact: true }).first()).toBeVisible();
     for (const bodyText of lesson.bodyText ?? []) {
       await expect(page.locator("#session-content p, #session-content blockquote, #session-content li").filter({ hasText: bodyText }).first()).toBeVisible();
+    }
+    if (lesson.title === "使役動詞と原形不定詞") {
+      await expect(page.getByText("使役動詞の基本", { exact: true })).toBeVisible();
+    }
+    if (lesson.title === "知覚動詞と原形不定詞") {
+      await expect(page.getByText("知覚動詞の基本", { exact: true })).toBeVisible();
+      await expect(page.locator("#session-content")).toContainText("動作の全体");
+      await expect(page.locator("#session-content")).toContainText("動作の途中");
     }
 
     await page.getByRole("button", { name: "3問に挑戦" }).click();
