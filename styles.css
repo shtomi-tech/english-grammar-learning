@@ -176,6 +176,9 @@ details.section > .sectionBody.is-entering { opacity: 0; transform: translateY(6
 .wrap .stat--secondary strong { font-size: 18px; }
 
 .wrap .reviewMission { border-left: 4px solid var(--clay); }
+.wrap .reviewBreakdown { margin: 20px 0; }
+.wrap .reviewBreakdown > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 700; }
+.wrap .reviewBreakdown[open] > summary { margin-bottom: 16px; }
 .wrap .reviewMetrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); margin: 20px 0; }
 .wrap .intervalGrid { display: grid; grid-template-columns: repeat(6, 1fr); margin: 0 0 20px; border: 1px solid var(--line); border-radius: var(--radius-control); overflow: hidden; }
 .wrap .intervalCell { padding: 10px 6px; border-left: 1px solid var(--line); background: var(--parchment); text-align: center; }
@@ -183,6 +186,7 @@ details.section > .sectionBody.is-entering { opacity: 0; transform: translateY(6
 .wrap .intervalCell strong, .wrap .intervalCell span { display: block; }
 .wrap .intervalCell strong { font-size: 20px; }
 .wrap .intervalCell span { color: var(--muted); font-size: 11px; }
+.wrap .reviewTodayCount { margin: 20px 0 12px; font-weight: 700; }
 
 .wrap .card.utility { padding: 16px 4px; background: transparent; border-radius: 0; border-top: 1px solid var(--line); }
 .wrap .card.utility summary { cursor: pointer; font-weight: 700; }

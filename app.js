@@ -231,13 +231,17 @@ function currentCourse() {
   return courseFor(state.courseId);
 }
 
-function switchCourse(courseId) {
+function switchCourse(courseId, { advanceFromHome = false } = {}) {
   rememberCurrentCoursePosition();
   state.courseId = validCourseId(courseId);
   stages = stagesFor(currentCourse());
   const position = normalizePosition(state.courseId, state.coursePositions[state.courseId]);
   state.stage = position.stage;
   state.question = position.question;
+  if (advanceFromHome && state.stage === 0) {
+    state.stage = recommendedStageFor(currentCourse());
+    state.question = 0;
+  }
   backfillVisitedLessons();
   saveState();
   render(true);
@@ -435,15 +439,19 @@ function reviewMissionCard(course) {
       <p class="label">間隔復習</p>
       <h2>今日の復習</h2>
       <p class="lead">通常学習を全問回答済みの単元から、1回最大${REVIEW_SESSION_SIZE}問を出題します。正解すると1・3・7・14日後の間隔へ進みます。</p>
-      <div class="reviewMetrics">
-        ${statHtml(candidates.length, Object.keys(questionIndex).length, "対象問題")}
-        ${statHtml(due, candidates.length, "今すぐ復習")}
-      </div>
-      <div class="intervalGrid" aria-label="復習間隔別内訳">
-        ${REVIEW_INTERVALS.map(({ label }) => `<div class="intervalCell"><strong>${counts[label]}</strong><span>${label}</span></div>`).join("")}
-      </div>
+      <details class="reviewBreakdown">
+        <summary>復習の内訳</summary>
+        <div class="reviewMetrics">
+          ${statHtml(candidates.length, Object.keys(questionIndex).length, "対象問題")}
+          ${statHtml(due, candidates.length, "今すぐ復習")}
+        </div>
+        <div class="intervalGrid" aria-label="復習間隔別内訳">
+          ${REVIEW_INTERVALS.map(({ label }) => `<div class="intervalCell"><strong>${counts[label]}</strong><span>${label}</span></div>`).join("")}
+        </div>
+      </details>
       ${midProgress ? `<p class="hint">通常学習の続きがあるため、先に再開するのがおすすめです。</p>` : ""}
-      <button type="button" class="${midProgress ? "ghost secondaryCta" : "cta reviewCta"}" data-action="start-review" ${due === 0 ? "disabled" : ""}>${ctaLabel}</button>
+      <p class="reviewTodayCount">今日やる：${due}問</p>
+      <button type="button" class="ghost secondaryCta" data-action="start-review" ${due === 0 ? "disabled" : ""}>${ctaLabel}</button>
     </section>`;
 }
 
@@ -672,8 +680,9 @@ function homePrimaryActionFor(course) {
       lead: nextCourse.recommendationLead,
       primary: {
         label: started ? `続きから：${nextCourse.title}` : `${nextCourse.title}の学習を始める`,
-        dataAttribute: "course",
-        value: nextCourse.id,
+        dataAttribute: "action",
+        value: "start-course",
+        courseId: nextCourse.id,
         className: "cta"
       },
       secondary: {
@@ -851,7 +860,8 @@ document.addEventListener("keydown", handleQuizKeydown);
 
 function homeActionButtonHtml(action) {
   if (!action) return "";
-  return `<button type="button" class="${action.className}" data-${action.dataAttribute}="${action.value}">${action.label}</button>`;
+  const courseAttribute = action.courseId ? ` data-course="${action.courseId}"` : "";
+  return `<button type="button" class="${action.className}" data-${action.dataAttribute}="${action.value}"${courseAttribute}>${action.label}</button>`;
 }
 
 function homeHeroHtml(course, stats, model) {
@@ -873,7 +883,7 @@ function homeHeroHtml(course, stats, model) {
         ${statHtml(stats.completed, stats.total, "完了単元")}
         ${statHtml(stats.weakCount, stats.total, "要復習単元")}
         ${statHtml(stats.mastered, stats.total, "マスター済み", true)}
-        ${statHtml(stats.finalBest, stats.finalBestTotal, "修了BEST", true)}
+        ${statHtml(stats.finalBest, stats.finalBestTotal, "修了テストBEST", true)}
       </div>
     </section>`;
 }
@@ -1017,14 +1027,14 @@ function renderLesson(content, lesson) {
   }
   const stage = stages[state.stage];
   const course = currentCourse();
-  const backLabel = stage.lessonIndex === 0 ? "概論へ戻る" : `${course.lessons[stage.lessonIndex - 1].title}の結果へ戻る`;
+  const backButton = stage.lessonIndex === 0 ? "" : `<button type="button" class="ghost" data-action="back">${course.lessons[stage.lessonIndex - 1].title}の結果へ戻る</button>`;
   content.innerHTML = `
     ${sessionProgressHtml(course.title, "各論", SESSION_STEPS, "lesson", { stage })}
     <article class="flashCard">
       <h3 tabindex="-1">${lesson.title}</h3>
       ${lesson.html}
     </article>
-    <div class="actions"><button type="button" class="ghost" data-action="back">${backLabel}</button><button type="button" class="cta" data-action="next">3問に挑戦</button></div>`;
+    <div class="actions">${backButton}<button type="button" class="cta" data-action="next">3問に挑戦</button></div>`;
   enhanceAccordions(content);
 }
 
@@ -1085,7 +1095,7 @@ function renderResult(content, lesson) {
     ? `<button type="button" class="cta" data-action="retry-wrong">間違えた${wrongIndexes.length}問を解き直す</button><button type="button" class="ghost" data-action="${forwardAction}">${forwardLabel}</button>`
     : `<button type="button" class="cta" data-action="${forwardAction}">${forwardLabel}</button>`;
   content.innerHTML = `
-    ${sessionProgressHtml(lesson.title, isLastLesson ? "全単元完了" : "単元結果", SESSION_STEPS, "practice", { showBack: false, stage })}
+    ${sessionProgressHtml(lesson.title, isLastLesson ? "全単元完了" : "単元結果", SESSION_STEPS, "practice", { stage })}
     <section class="doneBanner ${score === lesson.questions.length ? "doneBanner--success" : ""}">
       <p class="label">学習結果</p>
       <div class="score">${score} / ${lesson.questions.length}</div>
@@ -1140,6 +1150,8 @@ function renderFinal(content, course) {
 
   if (!courseMastered(course)) {
     const unmastered = course.lessons.filter(lesson => !lessonMastered(lesson));
+    const firstUnmasteredIndex = course.lessons.findIndex(lesson => !lessonMastered(lesson));
+    const firstUnmastered = course.lessons[firstUnmasteredIndex];
     content.innerHTML = `
       ${sessionProgressHtml(course.title, "修了テスト", SESSION_STEPS, "final")}
       <section class="card" aria-labelledby="final-lock-title">
@@ -1148,7 +1160,8 @@ function renderFinal(content, course) {
         <ol class="review-list">
           ${unmastered.map(lesson => `<li><span>${lesson.title}（${lessonScore(lesson)}/${lesson.questions.length}）</span></li>`).join("")}
         </ol>
-      </section>`;
+      </section>
+      <div class="actions"><button type="button" class="cta" data-stage="${unitTargetStage(firstUnmastered, firstUnmasteredIndex)}">${firstUnmastered.title}へ</button></div>`;
     return;
   }
 
@@ -1216,7 +1229,7 @@ function renderFinalResult(content, course, run) {
       </ol>
     </section>` : ""}
     <div class="actions">
-      <button type="button" class="ghost" data-action="overview">ホームへ戻る</button>
+      <button type="button" class="ghost" data-action="overview">一覧へ戻る</button>
       <button type="button" class="cta" data-action="start-final">もう一度挑戦する</button>
     </div>`;
 }
@@ -1248,10 +1261,10 @@ function renderReviewResult(content, session) {
       <p>正解した問題は次の復習日まで表示されません。間違えた問題はまた近いうちに出題されます。</p>
     </section>
     ${remaining > 0
-      ? `<p class="hint">今日の復習：残り${remaining}問</p>
-         <div class="actions"><button type="button" class="ghost" data-action="review-exit">学習に戻る</button><button type="button" class="cta reviewCta" data-action="review-continue">続けて復習する</button></div>`
-      : `<p class="hint">今日の復習はすべて終わりました。</p>
-         <div class="actions"><button type="button" class="cta" data-action="review-exit">学習に戻る</button></div>`}`;
+       ? `<p class="hint">今日の復習：残り${remaining}問</p>
+          <div class="actions"><button type="button" class="ghost" data-action="review-exit">一覧へ戻る</button><button type="button" class="cta reviewCta" data-action="review-continue">続けて復習する</button></div>`
+       : `<p class="hint">今日の復習はすべて終わりました。</p>
+          <div class="actions"><button type="button" class="cta" data-action="review-exit">一覧へ戻る</button></div>`}`;
 }
 
 function goBack(stage) {
@@ -1299,6 +1312,10 @@ document.addEventListener("click", event => {
     // 復習前にいた位置（state.stage）はそのままに、復習だけを終了して通常処理へ進む。
     state.reviewSession = null;
     saveState();
+  }
+  if (button.dataset.action === "start-course") {
+    switchCourse(button.dataset.course, { advanceFromHome: true });
+    return;
   }
   if (button.dataset.course) {
     switchCourse(button.dataset.course);

@@ -102,7 +102,7 @@ test("コースを切り替えても各コースの位置を独立に保持す�
   // そのカテゴリの位置として保存される。深い位置（各論・練習途中）の保持はリロード時に検証する。
   await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
   await expect(page.locator("#current-path")).toContainText("条件文と仮定法の違い ＞ 各論");
-  await page.getByRole("button", { name: "概論へ戻る" }).click();
+  await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
   await switchCourse(page, "participles");
   await page.getByRole("button", { name: /分詞の形容詞的用法（現在分詞）へ/ }).click();
@@ -113,7 +113,7 @@ test("コースを切り替えても各コースの位置を独立に保持す�
   await expect(page.locator("#current-path")).toContainText("分詞の形容詞的用法（現在分詞） ＞ 各論");
 
   // カテゴリ切替はホームからのみ行えるため、一度概論へ戻る。
-  await page.getByRole("button", { name: "概論へ戻る" }).click();
+  await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
   // 仮定法は概論へ戻ってから切り替えたので、独立して概論のまま保持されている。
   await switchCourse(page, "subjunctive");
@@ -124,13 +124,73 @@ test("未着手なら最初の各論を案内する", async ({ page }) => {
   await expect(page.getByRole("button", { name: "条件文と仮定法の違いへ" })).toBeVisible();
 });
 
+test("単元結果から一覧へ1操作で戻れる", async ({ page }) => {
+  await seedProgress(page, {
+    courseId: "subjunctive",
+    stage: 2,
+    question: 3,
+    answers: { "conditionals-vs-subjunctive": [0, 1, 2] },
+    versions: subjunctiveVersions,
+    visitedLessons: ["conditionals-vs-subjunctive"],
+    courseStructureVersions: { subjunctive: 2 }
+  });
+
+  await expect(page.getByRole("heading", { name: "単元結果" })).toBeVisible();
+  await page.getByRole("button", { name: "一覧へ戻る" }).click();
+  await expect(page.locator("#homePanel")).toBeVisible();
+  await expect(page.locator("#current-path")).toHaveText("仮定法 ＞ 概論");
+});
+
+test("修了テスト結果の一覧導線を統一する", async ({ page }) => {
+  await seedProgress(page, {
+    courseId: "subjunctive",
+    stage: 25,
+    question: 0,
+    answers: {},
+    courseStructureVersions: { subjunctive: 2 },
+    finalRun: {
+      courseId: "subjunctive",
+      order: ["conditionals-vs-subjunctive-q1"],
+      index: 1,
+      correctCount: 1,
+      answers: [0]
+    }
+  });
+
+  await expect(page.getByRole("button", { name: "一覧へ戻る" })).toBeVisible();
+});
+
+test("復習完了の一覧導線を統一する", async ({ page }) => {
+  await seedProgress(page, {
+    courseId: "subjunctive",
+    stage: 0,
+    question: 0,
+    answers: {},
+    reviewSession: {
+      order: ["conditionals-vs-subjunctive-q1"],
+      index: 1,
+      correctCount: 1,
+      answers: [0]
+    }
+  });
+
+  await expect(page.getByRole("button", { name: "一覧へ戻る" })).toBeVisible();
+});
+
+test("修了テスト未解放画面から最初の不足単元へ進める", async ({ page }) => {
+  await page.locator(".assessmentCard").click();
+  await expect(page.locator("#final-lock-title")).toBeVisible();
+  await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
+  await expect(page.locator("#current-path")).toContainText("条件文と仮定法の違い ＞ 各論");
+});
+
 test("問題途中なら概論から続きの問題へ戻れる", async ({ page }) => {
   await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
   await page.getByRole("button", { name: "3問に挑戦" }).click();
   await page.getByRole("button", { name: /1.*rains/ }).click();
   await page.getByRole("button", { name: "次の問題" }).click();
   await page.getByRole("button", { name: "各論へ戻る" }).click();
-  await page.getByRole("button", { name: "概論へ戻る" }).click();
+  await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
   const action = page.getByRole("button", { name: "続きから：条件文と仮定法の違い 練習問題" });
   await expect(action).toBeVisible();

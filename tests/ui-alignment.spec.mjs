@@ -324,8 +324,13 @@ test.describe("概論の初期開閉", () => {
   test("各論確認済みでは概論が閉じている", async ({ page }) => {
     await freshHome(page);
     await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
-    await page.getByRole("button", { name: "概論へ戻る" }).click();
+    await page.getByRole("button", { name: "一覧へ戻る" }).click();
     await expect(page.locator(".courseOverview")).toHaveJSProperty("open", false);
+  });
+
+  test("4指標のラベルを設計正本どおり表示する", async ({ page }) => {
+    await freshHome(page);
+    await expect(page.locator(".stats .stat").nth(3).locator("span")).toHaveText("修了テストBEST");
   });
 });
 
@@ -345,7 +350,7 @@ test.describe("sticky現在地", () => {
 });
 
 test.describe("操作ボタンの配置", () => {
-  test("1280pxでは.actionsがflexで折り返し・間隔12px・戻るボタンと主CTAが重ならない", async ({ page }) => {
+  test("1280pxでは.actionsがflexで折り返し、一覧へ戻ると主CTAを分離する", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
@@ -360,10 +365,9 @@ test.describe("操作ボタンの配置", () => {
     expect(style.flexWrap).toBe("wrap");
     expect(style.gap).toBe("12px");
 
-    const buttons = actions.locator(":scope > button");
-    const backBox = await buttons.nth(0).boundingBox();
-    const ctaBox = await buttons.nth(1).boundingBox();
-    expect(backBox.x + backBox.width).toBeLessThanOrEqual(ctaBox.x);
+    await expect(page.getByRole("button", { name: "一覧へ戻る" })).toBeVisible();
+    const ctaBox = await actions.getByRole("button", { name: "3問に挑戦" }).boundingBox();
+    expect(ctaBox?.height).toBeGreaterThanOrEqual(48);
   });
 
   test("640px以下では.actionsが縦並びになり、ボタン・決定操作グループが幅いっぱいになる", async ({ page }) => {
