@@ -100,10 +100,10 @@ test.describe("ホームとセッション", () => {
     await expect(page.locator("#homePanel [data-stage]").first()).toBeVisible();
   });
 
-  test("学習画面にsessionHeadとstepBarがある", async ({ page }) => {
+  test("学習画面にsessionBarとstepBarがある", async ({ page }) => {
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
-    await expect(page.locator("#sessionPanel .sessionHead")).toBeVisible();
+    await expect(page.locator("#sessionPanel .sessionBar")).toBeVisible();
     await expect(page.locator("#sessionPanel .stepBar")).toBeVisible();
   });
 });
@@ -140,13 +140,13 @@ test.describe("キーボード操作とレスポンシブCTA", () => {
     await expect(page.locator(".quiz")).not.toHaveClass(/quiz--answered/);
   });
 
-  test("1280pxでは次への操作が画面下部に固定され、390pxでは固定されない", async ({ page }) => {
+  test("回答後の次への操作は全幅共通でインライン表示される", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
     await page.getByRole("button", { name: "3問に挑戦" }).click();
     await page.locator(".choice").first().click();
-    await expect(page.locator(".quizNextAction")).toHaveCSS("position", "fixed");
+    await expect(page.locator(".quizNextAction")).toHaveCSS("position", "static");
 
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(page.locator(".quizNextAction")).toHaveCSS("position", "static");
@@ -230,13 +230,15 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
     });
   }
 
-  test("画面高760px以下のセッション中は共通ヘッダーを隠す", async ({ page }) => {
+  test("画面高760px以下のセッション中は見出しだけを隠す", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 700 });
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
-    await expect(page.locator(".top")).toBeHidden();
+    await expect(page.locator(".top h1")).toBeHidden();
+    await expect(page.locator(".top .crumb")).toBeHidden();
+    await expect(page.locator("#save-status")).toBeVisible();
     await page.locator('[data-action="go-home"]').click();
-    await expect(page.locator(".top")).toBeVisible();
+    await expect(page.locator(".top #save-status")).toBeVisible();
   });
 
   test("ホームは読み込み後にaria-busyが外れる", async ({ page }) => {
@@ -338,7 +340,7 @@ test.describe("sticky現在地", () => {
   test("本文をスクロールしても.sessionProgressが上端に残る", async ({ page }) => {
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
-    await expect(page.locator(".sessionProgress")).toContainText("単元 1/12・各論");
+    await expect(page.locator(".sessionProgress")).toContainText("単元 1/12");
 
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     const scrolled = await page.evaluate(() => window.scrollY);

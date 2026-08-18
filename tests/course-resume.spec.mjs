@@ -195,7 +195,7 @@ test("問題途中なら概論から続きの問題へ戻れる", async ({ page 
   const action = page.getByRole("button", { name: "続きから：条件文と仮定法の違い 練習問題" });
   await expect(action).toBeVisible();
   await action.click();
-  await expect(page.locator(".sessionHead")).toContainText("条件文と仮定法の違い");
+  await expect(page.locator(".sessionBar")).toContainText("条件文と仮定法の違い");
   await expect(page.getByText(/問題 2 \/ 3/)).toBeVisible();
 });
 
@@ -212,7 +212,7 @@ test("全単元回答済みで要復習なら最初の弱点結果へ案内す�
   const action = page.getByRole("button", { name: "復習する：仮定法過去" });
   await expect(action).toBeVisible();
   await action.click();
-  await expect(page.locator(".sessionHead")).toContainText("仮定法過去");
+  await expect(page.locator(".sessionBar")).toContainText("仮定法過去");
   await expect(page.getByRole("heading", { name: "単元結果" })).toBeVisible();
 });
 
@@ -229,7 +229,7 @@ test("全単元マスター済みなら修了テストへ案内する", async ({
   const action = page.getByRole("button", { name: "修了テストへ", exact: true });
   await expect(action).toBeVisible();
   await action.click();
-  await expect(page.locator(".sessionHead")).toContainText("仮定法");
+  await expect(page.locator(".sessionBar")).toContainText("仮定法");
   await expect(page.getByRole("heading", { name: "修了テスト", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "修了テストを始める" })).toBeVisible();
 });

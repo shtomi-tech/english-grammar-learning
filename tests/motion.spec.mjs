@@ -292,13 +292,12 @@ test.describe("Step Progress", () => {
     await freshHome(page);
     await page.locator('[data-stage="1"]').first().click();
     const steps = page.locator(".stepBar .step");
-    await expect(steps).toHaveCount(4);
-    await expect(steps.nth(0)).toHaveClass(/cleared/);
-    await expect(steps.nth(1)).toHaveClass(/active/);
-    await expect(steps.nth(1)).toHaveAttribute("aria-current", "step");
+    await expect(steps).toHaveCount(3);
+    await expect(steps.nth(0)).toHaveClass(/active/);
+    await expect(steps.nth(0)).toHaveAttribute("aria-current", "step");
+    await expect(steps.nth(1)).toHaveClass(/locked/);
+    await expect(steps.nth(1)).toHaveAttribute("aria-disabled", "true");
     await expect(steps.nth(2)).toHaveClass(/locked/);
-    await expect(steps.nth(2)).toHaveAttribute("aria-disabled", "true");
-    await expect(steps.nth(3)).toHaveClass(/locked/);
   });
 
   test("練習問題へ進むと各論がcleared、練習がactiveになる", async ({ page }) => {
@@ -306,8 +305,9 @@ test.describe("Step Progress", () => {
     await page.locator('[data-stage="1"]').first().click();
     await page.getByRole("button", { name: "3問に挑戦" }).click();
     const steps = page.locator(".stepBar .step");
-    await expect(steps.nth(1)).toHaveClass(/cleared/);
-    await expect(steps.nth(2)).toHaveClass(/active/);
+    await expect(steps).toHaveCount(3);
+    await expect(steps.nth(0)).toHaveClass(/cleared/);
+    await expect(steps.nth(1)).toHaveClass(/active/);
   });
 
   test("ホームからセッションへ最初に入るときはsettleモーションを再生しない", async ({ page }) => {
@@ -329,6 +329,110 @@ test.describe("Step Progress", () => {
     await page.getByRole("button", { name: "3問に挑戦" }).click();
     await page.locator(".choice").first().click(); // practice段階のまま再描画
     await expect(page.locator(".stepBar .step.active")).not.toHaveClass(/is-settling/);
+  });
+
+  test("単元結果では結果がactiveになり、単元をまたいでも3段階を保つ", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 2,
+      question: 3,
+      answers: { "conditionals-vs-subjunctive": [0, 1, 2] },
+      versions: subjunctiveVersions,
+      visitedLessons: ["conditionals-vs-subjunctive"],
+      courseStructureVersions: { subjunctive: 2 }
+    });
+    await expect(page.locator(".stepBar .step")).toHaveCount(3);
+    await expect(page.locator(".stepBar .step.active")).toHaveText("結果");
+
+    await page.evaluate(key => {
+      const saved = JSON.parse(localStorage.getItem(key));
+      saved.stage = 4;
+      saved.question = 0;
+      localStorage.setItem(key, JSON.stringify(saved));
+    }, STORAGE_KEY);
+    await page.reload();
+    await expect(page.locator(".stepBar .step")).toHaveCount(3);
+    await expect(page.locator(".stepBar .step.active")).toHaveText("練習");
+  });
+
+  test("今日の復習・修了テストにステップバーを出さない", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 25,
+      question: 0,
+      answers: masteredSubjunctiveAnswers,
+      versions: subjunctiveVersions,
+      visitedLessons: Object.keys(masteredSubjunctiveAnswers),
+      courseStructureVersions: { subjunctive: 2 }
+    });
+    await expect(page.locator(".stepBar")).toHaveCount(0);
+    await page.getByRole("button", { name: "修了テストを始める" }).click();
+    await expect(page.locator(".stepBar")).toHaveCount(0);
+
+    await page.evaluate(key => {
+      const saved = JSON.parse(localStorage.getItem(key));
+      saved.stage = 0;
+      saved.reviewSession = {
+        order: ["conditionals-vs-subjunctive-q1"],
+        index: 0,
+        correctCount: 0,
+        answers: []
+      };
+      localStorage.setItem(key, JSON.stringify(saved));
+    }, STORAGE_KEY);
+    await page.reload();
+    await expect(page.locator(".stepBar")).toHaveCount(0);
+  });
+});
+
+test.describe("学習セッション画面の構造", () => {
+  test("回答直後に正誤パネルがビューポート内へ入り、次の操作はその後ろに来る", async ({ page }) => {
+    for (const viewport of [
+      { width: 1280, height: 720 },
+      { width: 1280, height: 900 },
+      { width: 375, height: 812 },
+      { width: 320, height: 800 }
+    ]) {
+      await page.setViewportSize(viewport);
+      await freshHome(page);
+      await page.locator('[data-stage="1"]').first().click();
+      await page.getByRole("button", { name: "3問に挑戦" }).click();
+      await page.locator(".choice").first().click();
+
+      const verdict = await page.locator(".feedbackVerdict").boundingBox();
+      expect(verdict?.y, `${viewport.width}x${viewport.height} feedback top`).toBeGreaterThanOrEqual(0);
+      expect(verdict?.y, `${viewport.width}x${viewport.height} feedback bottom`).toBeLessThan(viewport.height);
+      const feedback = await page.locator(".feedback").boundingBox();
+      const next = await page.locator(".quizNextAction").boundingBox();
+      expect(next?.y).toBeGreaterThan(feedback?.y ?? -1);
+    }
+  });
+
+  test("保存状態はセッション画面内に1つだけ表示される", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await expect(page.locator("#save-status")).toBeVisible();
+    await expect(page.locator(".sessionBar #save-status")).toHaveCount(1);
+    await expect(page.locator(".savedState")).toHaveCount(0);
+  });
+
+  test("レビュー中でもstickyの一覧へ戻るでホームへ戻れる", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 0,
+      question: 0,
+      answers: {},
+      reviewSession: {
+        order: ["conditionals-vs-subjunctive-q1"],
+        index: 0,
+        correctCount: 0,
+        answers: []
+      }
+    });
+    await expect(page.locator(".sessionBar")).toContainText("今日の復習");
+    await page.getByRole("button", { name: "一覧へ戻る" }).click();
+    await expect(page.locator("#homePanel")).toBeVisible();
   });
 });
 
