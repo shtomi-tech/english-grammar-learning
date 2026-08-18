@@ -166,6 +166,60 @@ test.describe("正誤フィードバックのモーション", () => {
     await expect(feedback).toHaveAttribute("role", "status");
     await expect(feedback).toBeFocused();
   });
+
+  test("回答後は判定・正解・完成文・ポイントを分けて表示する", async ({ page }) => {
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").first().click();
+
+    await expect(page.locator(".feedbackVerdict")).toHaveText("○ 正解");
+    await expect(page.locator(".feedbackAnswer")).toContainText("rains");
+    await expect(page.locator(".feedbackSentence")).toContainText("rains");
+    await expect(page.locator(".feedbackSentence .blankFill")).toHaveText("rains");
+    await expect(page.locator(".feedbackPoint h4")).toHaveText("ポイント");
+  });
+
+  test("空所のない問題では完成文ブロックを表示しない", async ({ page }) => {
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").nth(0).click();
+    await page.getByRole("button", { name: "次の問題" }).click();
+    await page.locator(".choice").nth(0).click();
+    await page.getByRole("button", { name: "次の問題" }).click();
+    await expect(page.locator(".questionText")).toContainText("選びなさい");
+    await page.locator(".choice").nth(2).click();
+
+    await expect(page.locator(".feedbackSentence")).toHaveCount(0);
+    await expect(page.locator(".feedbackPoint")).toBeVisible();
+  });
+
+  test("回答後に日本語訳と一行ルールを表示する", async ({ page }) => {
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").first().click();
+
+    await expect(page.locator(".feedbackTranslation")).toContainText("明日は雨の可能性が高い");
+    await expect(page.locator(".feedbackTakeaway")).toContainText("現実に起こり得る未来の条件");
+  });
+
+  test("図解を表示し、320pxでは縦積みにする", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").first().click();
+
+    await expect(page.locator(".feedbackDiagram")).toBeVisible();
+    await expect(page.locator(".feedbackDiagram")).toHaveAttribute("role", "group");
+    await expect(page.locator(".feedbackDiagramLabel")).toContainText("現実的な条件");
+    const columns = await page.locator(".feedbackDiagram").evaluate(element =>
+      getComputedStyle(element).gridTemplateColumns.trim().split(/\\s+/).length
+    );
+    expect(columns).toBe(1);
+  });
 });
 
 test.describe("各論のAccordion", () => {

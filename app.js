@@ -783,9 +783,17 @@ function sessionProgressHtml(label, title, steps, activeKey, { showBack = true, 
 
 // 練習問題・今日の復習・修了テストの問題画面で共有する4択カード。採点・保存はここでは行わない。
 // 回答後の「次へ」はカード内の.quizNextActionに置き、デスクトップでは画面下部に固定表示される。
+const BLANK = /[(（][\s　]*[)）]/;
+
+function filledSentence(question) {
+  if (!BLANK.test(question.text)) return null;
+  return question.text.replace(BLANK, `<b class="blankFill">${question.choices[question.answer]}</b>`);
+}
+
 function quizCardHtml({ label, question, selectedIndex, dataAttr, nextLabel, nextAction }) {
   const answered = Number.isInteger(selectedIndex);
   const correct = selectedIndex === question.answer;
+  const filled = filledSentence(question);
   return `
     <section class="quiz ${answered ? "quiz--answered" : "is-entering"}">
       <p class="label">${label}</p>
@@ -798,8 +806,20 @@ function quizCardHtml({ label, question, selectedIndex, dataAttr, nextLabel, nex
       </div>
       ${!answered ? `<p class="hint kbdHint">キーボード: 1〜4で回答</p>` : `
       <div class="feedback ${correct ? "ok" : "ng"}" role="status" tabindex="-1">
-        <h3>${correct ? "○ 正解" : `× 不正解　正解は ${question.answer + 1}. ${question.choices[question.answer]}`}</h3>
-        ${question.explanation}
+        <p class="feedbackVerdict">${correct ? "○ 正解" : "× 不正解"}</p>
+        <h3 class="feedbackAnswer"><span class="feedbackBadge">正解</span>${question.choices[question.answer]}</h3>
+        ${filled ? `<p class="feedbackSentence">${filled}</p>` : ""}
+        ${question.translation ? `<p class="feedbackTranslation"><span class="feedbackBadge">日本語訳</span>${question.translation}</p>` : ""}
+        <div class="feedbackPoint">
+          <h4>ポイント</h4>
+          ${question.explanation}
+        </div>
+        ${question.diagram ? `<div class="feedbackDiagram" role="group" aria-label="文法の関係図">
+          <div class="feedbackDiagramCell">${question.diagram.left}</div>
+          <div class="feedbackDiagramLabel">${question.diagram.label}</div>
+          <div class="feedbackDiagramCell">${question.diagram.right}</div>
+        </div>` : ""}
+        ${question.takeaway ? `<p class="feedbackTakeaway">${question.takeaway}</p>` : ""}
       </div>
       <p class="hint kbdHint">Enterで次の問題へ</p>
       <div class="quizNextAction"><button type="button" class="cta next" data-action="${nextAction}">${nextLabel}</button></div>`}
