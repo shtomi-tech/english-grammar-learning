@@ -34,7 +34,6 @@
   --card-padding: 24px;
   --grid-gap: 12px;
   --step-gap: 8px;
-  --text-measure: 44rem;
 
   --radius-container: 12px;
   --radius-control: 8px;
@@ -70,7 +69,7 @@ button:focus-visible, select:focus-visible, summary:focus-visible, a:focus-visib
 h1, h2 { margin: 0; font-family: var(--serif); line-height: 1.25; text-wrap: balance; }
 h1 { font-size: clamp(32px, 6vw, 52px); }
 h2 { font-size: clamp(25px, 4vw, 34px); }
-h3 { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
+h3, h4 { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
 p { margin: 0 0 12px; text-wrap: pretty; }
 .label { color: var(--muted); font-size: 12px; font-weight: 700; }
 .lead { font-size: 17px; }
@@ -253,18 +252,22 @@ details.section > .sectionBody.is-entering { opacity: 0; transform: translateY(6
 @keyframes feedbackReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .wrap .feedback.ok { border-color: var(--ok); }
 .wrap .feedback.ng { border-color: var(--ng); }
-.wrap .feedbackVerdict { font-size: 14px; font-weight: 700; }
+/* 余白は margin-top だけで与える。既定マージン・隣接マージン相殺に依存しない。
+   グループ内 8〜12px、グループ境界（判定/正解→解説→結論）20px。 */
+.wrap .feedback > * { margin-bottom: 0; }
+.wrap .feedbackPoint > p:last-child { margin-bottom: 0; }
+.wrap .feedbackVerdict { margin-top: 0; font-size: 14px; font-weight: 700; }
 .wrap .feedback.ok .feedbackVerdict { color: var(--ok); }
 .wrap .feedback.ng .feedbackVerdict { color: var(--ng); }
 .wrap .feedbackBadge { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--ink); color: var(--parchment); font-size: 12px; font-weight: 700; vertical-align: middle; }
-.wrap .feedbackAnswer { margin: 4px 0 12px; font-size: 22px; }
-.wrap .feedbackSentence { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--paper); }
-.wrap .blankFill { color: var(--clay); text-decoration: underline; text-underline-offset: 4px; }
+.wrap .feedbackAnswer { margin-top: 12px; font-size: 22px; }
+.wrap .feedbackSentence { margin-top: 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--paper); }
+.wrap .blankFill { color: var(--color-accent-strong); text-decoration: underline; text-underline-offset: 4px; }
 .wrap .feedbackTranslation { margin-top: 8px; color: var(--muted); }
-.wrap .feedbackPoint { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
-.wrap .feedbackPoint h4 { margin-bottom: 6px; font-size: 15px; color: var(--clay); }
-.wrap .feedbackTakeaway { margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--clay) 10%, var(--parchment)); font-weight: 700; }
-.wrap .feedbackDiagram { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 8px; margin-top: 16px; }
+.wrap .feedbackPoint { margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--line); }
+.wrap .feedbackPoint h4 { margin-top: 0; margin-bottom: 6px; font-size: 15px; color: var(--clay); }
+.wrap .feedbackTakeaway { margin-top: 20px; padding: 10px 12px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--clay) 10%, var(--parchment)); font-weight: 700; }
+.wrap .feedbackDiagram { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 8px; margin-top: 12px; }
 .wrap .feedbackDiagramCell { display: grid; min-height: 44px; place-items: center; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--paper); text-align: center; overflow-wrap: anywhere; }
 .wrap .feedbackDiagramLabel { display: grid; min-width: 84px; place-items: center; color: var(--clay); font-size: 12px; font-weight: 700; text-align: center; }
 .wrap .feedbackDiagramLabel::before { content: "→"; display: block; color: var(--clay); font-size: 18px; line-height: 1; }
@@ -302,9 +305,10 @@ details.section > .sectionBody.is-entering { opacity: 0; transform: translateY(6
   .wrap .stepBar { grid-auto-columns: minmax(84px, 1fr); overflow-x: auto; padding-bottom: 2px; }
   .wrap .unitList, .wrap .courseGrid { grid-template-columns: 1fr; }
   .wrap .quiz--answered { margin-bottom: 0; }
-  .wrap .quizNextAction { position: static; left: auto; bottom: auto; transform: none; z-index: auto; width: auto; margin: 16px 0 0; padding: 0; border-top: 0; background: none; }
+  .wrap .quizNextAction { position: static; left: auto; bottom: auto; transform: none; z-index: auto; width: calc(100% + var(--card-padding) + var(--card-padding)); margin: 16px 0 0 calc(0px - var(--card-padding)); padding: 0; border-top: 0; background: none; justify-content: stretch; }
+  .wrap .quizNextAction .cta { width: 100%; }
   .wrap .feedbackDiagram { grid-template-columns: 1fr; }
-  .wrap .feedbackDiagramLabel { grid-template-columns: auto 1fr; gap: 8px; min-width: 0; min-height: 24px; }
+  .wrap .feedbackDiagramLabel { grid-template-columns: auto auto; justify-content: center; gap: 8px; min-width: 0; min-height: 24px; }
   .wrap .feedbackDiagramLabel::before { content: "↓"; }
   .kbdHint { display: none; }
 }

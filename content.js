@@ -50,7 +50,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "実際には番号を知らないという文脈で、現実から距離を置いた仮定です。現在の仮定法なので過去形の knew を選びます。",
           translation: "私は彼女の番号を知らない。もし知っていれば、彼女に電話するのに。",
-          takeaway: "現在の事実に反する仮定は、if節を過去形にする。"
+          takeaway: "現在の事実に反する仮定は、if節を過去形にする。",
+          diagram: { left: "if + knew", label: "現在の反実仮想", right: "would + call" }
         },
         {
           id: "conditionals-vs-subjunctive-q3",
@@ -59,7 +60,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "3は列車が遅れる可能性を述べる現実的な条件です。現実的な条件では if節に現在形 is、主節に will を使います。",
           translation: "列車が遅れたら、あなたに電話します。",
-          takeaway: "通常の未来条件では、if節に現在形、主節にwillを使う。"
+          takeaway: "通常の未来条件では、if節に現在形、主節にwillを使う。",
+          diagram: { left: "if節: is", label: "通常の未来条件", right: "主節: will + 原形" }
         }
       ]
     },
@@ -92,7 +94,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "十分なお金がない現在の反実仮想です。結果は現在の可能なので、could + 動詞の原形の could buy を選びます。現在の反事実と過去の反事実を混同しません。",
           translation: "もし十分なお金があれば、新しい自転車を買えるのに。",
-          takeaway: "現在の反実仮想の結果は、could・would・might + 動詞の原形。"
+          takeaway: "現在の反実仮想の結果は、could・would・might + 動詞の原形。",
+          diagram: { left: "If + had money", label: "現在の仮定", right: "could + buy" }
         },
         {
           id: "past-subjunctive-q3",
@@ -101,7 +104,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "今は鍵を持っているという事実から距離を置いた現在の仮定です。現実から距離を置く結果なので、wouldn’t be able to とします。",
           translation: "今は鍵を持っています。もしそれをなくしたら、ドアに鍵をかけられないでしょう。",
-          takeaway: "if節が現在の反実仮想なら、主節もwould + 原形でそろえる。"
+          takeaway: "if節が現在の反実仮想なら、主節もwould + 原形でそろえる。",
+          diagram: { left: "If I lost it", label: "現在の仮定", right: "wouldn't be able" }
         }
       ]
     },
@@ -133,7 +137,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "条件節はすでに had listened で示されています。ここでは過去の結果節なので、would have + 過去分詞の would have avoided を使います。",
           translation: "もし彼がその助言を聞いていたら、その間違いを避けられただろう。",
-          takeaway: "過去の反実仮想の結果節は、would・could・might have + 過去分詞。"
+          takeaway: "過去の反実仮想の結果節は、would・could・might have + 過去分詞。",
+          diagram: { left: "had listened", label: "過去の条件", right: "would have avoided" }
         },
         {
           id: "past-perfect-subjunctive-q3",
@@ -142,7 +147,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "last year が条件を過去に置き、immediately がその直後の過去の結果を示します。結果も過去なので、would have bought を選びます。",
           translation: "もし去年宝くじに当たっていたら、すぐに新しい車を買っていただろう。でも、私は当たらなかった。",
-          takeaway: "条件と結果の時点を確認し、過去の結果ならwould have + 過去分詞。"
+          takeaway: "条件と結果の時点を確認し、過去の結果ならwould have + 過去分詞。",
+          diagram: { left: "last year", label: "過去の結果", right: "would have bought" }
         }
       ]
     },
@@ -174,7 +180,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "yesterday’s test は過去の出来事です。過去への後悔なので wish + had + 過去分詞の had studied を使います。",
           translation: "昨日の試験に向けて、もっと一生懸命勉強していればよかったのに。",
-          takeaway: "過去の事実への後悔は、wish + had + 過去分詞。"
+          takeaway: "過去の事実への後悔は、wish + had + 過去分詞。",
+              diagram: { left: "wish + had + pp", label: "過去の後悔", right: "yesterday's test" }
         },
         {
           id: "wish-subjunctive-q3",
@@ -183,7 +190,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "雨という話し手が制御できない状況の変化を望んでいます。状況の変化なので wish + would の would stop を使います。",
           translation: "もうすぐ雨がやめばいいのに。",
-          takeaway: "自分で制御しにくい状況の変化を望むときは、wish + would。"
+          takeaway: "自分で制御しにくい状況の変化を望むときは、wish + would。",
+          diagram: { left: "wish + would", label: "状況の変化", right: "stop raining" }
         }
       ]
     },
@@ -215,7 +223,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "これは現在の能力についての強い願望です。能力を表す could + 動詞の原形の could play を使います。",
           translation: "もっと上手にピアノを弾けたらいいのに。",
-          takeaway: "現在の能力への強い願望では、could + 動詞の原形を使う。"
+          takeaway: "現在の能力への強い願望では、could + 動詞の原形を使う。",
+          diagram: { left: "could + 原形", label: "現在の能力", right: "play better" }
         },
         {
           id: "if-only-subjunctive-q3",
@@ -224,7 +233,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "yesterday の過去の出来事への、過去の強い後悔です。had + 過去分詞の had caught を使います。",
           translation: "昨日、もっと早い列車に乗っていればよかったのに。",
-          takeaway: "If only + had + 過去分詞は、過去への強い後悔を表す。"
+          takeaway: "If only + had + 過去分詞は、過去への強い後悔を表す。",
+          diagram: { left: "If only + had", label: "過去の後悔", right: "caught train" }
         }
       ]
     },
@@ -257,7 +267,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "then が過去の条件、now が現在の結果を示しています。現在の結果なので would be を使います。",
           translation: "もしそのとき君の助言を聞いていたら、今ごろもっと幸せだろう。",
-          takeaway: "thenは過去、nowは現在。結果の時点に合わせてwould be。"
+          takeaway: "thenは過去、nowは現在。結果の時点に合わせてwould be。",
+          diagram: { left: "then: had + pp", label: "過去の条件", right: "now: would be" }
         },
         {
           id: "mixed-subjunctive-q3",
@@ -266,7 +277,8 @@ const subjunctiveCourse = {
           answer: 0,
           explanation: "過去に早く寝なかったことが now の現在の疲労につながっています。結果は現在なので would not be を使います。",
           translation: "もしもっと早く寝ていたら、今こんなに疲れていないだろう。",
-          takeaway: "条件の時点と結果の時点が異なるとき、主節の形は結果の時点で決める。"
+          takeaway: "条件の時点と結果の時点が異なるとき、主節の形は結果の時点で決める。",
+          diagram: { left: "earlier: had gone", label: "nowの結果", right: "wouldn't be tired" }
         }
       ]
     },
@@ -299,7 +311,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "実際には太陽が存在する現在の仮定です。主節は could + 動詞の原形の could live になります。",
           translation: "太陽がなければ、地球上で何も生きられないだろう。",
-          takeaway: "If it were not forの主節は、would・could・might + 原形。"
+          takeaway: "If it were not forの主節は、would・could・might + 原形。",
+          diagram: { left: "nothing", label: "主節の可能", right: "could live" }
         },
         {
           id: "if-it-were-not-for-q3",
@@ -308,7 +321,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "実際には過去に助言があったため、重大な間違いをしなかったという文脈です。過去の If it had not been for を使います。",
           translation: "あなたの助言がなければ、私は重大な間違いをしていただろう。",
-          takeaway: "過去の「〜がなければ」はIf it had not been for + 名詞。"
+          takeaway: "過去の「〜がなければ」はIf it had not been for + 名詞。",
+          diagram: { left: "had not been for", label: "過去の条件", right: "would have made" }
         }
       ]
     },
@@ -347,7 +361,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "but I am an adult が現在の事実を示します。同じ時点の反事実で、be動詞の標準形 were を使います。",
           translation: "彼女は、私が大人なのに、まるで子どものように私を扱う。",
-          takeaway: "be動詞の現在の反実仮想は、主語に関係なくwere。"
+          takeaway: "be動詞の現在の反実仮想は、主語に関係なくwere。",
+          diagram: { left: "I am an adult", label: "事実と反対", right: "as if I were" }
         },
         {
           id: "as-if-subjunctive-q3",
@@ -356,7 +371,8 @@ const subjunctiveCourse = {
           answer: 3,
           explanation: "but she had not から、幽霊を見ていない反事実です。見る出来事は looked より前なので had seen を使います。",
           translation: "彼女は、実際には見ていないのに、幽霊を見たかのような様子だった。",
-          takeaway: "主節より前の反実仮想は、as if + had + 過去分詞。"
+          takeaway: "主節より前の反実仮想は、as if + had + 過去分詞。",
+          diagram: { left: "looked", label: "過去より前", right: "as if had seen" }
         }
       ]
     },
@@ -388,7 +404,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "まだ始めていないことへの催促を含むのは、It is time + 主語 + 過去形の It is time we started the meeting. です。",
           translation: "私たちは会議を始める時間です。",
-          takeaway: "to不定詞は単なる時刻、主語付き過去形は未実施への催促を含む。"
+          takeaway: "to不定詞は単なる時刻、主語付き過去形は未実施への催促を含む。",
+          diagram: { left: "未実施の行動", label: "もう始める時期", right: "we started" }
         },
         {
           id: "it-is-time-subjunctive-past-q3",
@@ -397,7 +414,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "It is high time + 主語 + 過去形は、強い催促や不満を表します。過去形の found を使います。",
           translation: "彼はもう仕事を見つけてもよいころだ。",
-          takeaway: "It is high time + 主語 + 過去形は、強い催促や不満を表す。"
+          takeaway: "It is high time + 主語 + 過去形は、強い催促や不満を表す。",
+          diagram: { left: "It is high time", label: "強い催促", right: "he found" }
         }
       ]
     },
@@ -429,7 +447,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "should の後ろは主語に関係なく動詞の原形です。ここでは get を選びます。",
           translation: "もし天気が悪化するようなことがあれば、試合を中止します。",
-          takeaway: "shouldは主語に関係なく原形と組み合わせる。"
+          takeaway: "shouldは主語に関係なく原形と組み合わせる。",
+          diagram: { left: "weather should", label: "後ろは原形", right: "get worse" }
         },
         {
           id: "future-subjunctive-should-q3",
@@ -438,7 +457,8 @@ const subjunctiveCourse = {
           answer: 0,
           explanation: "「万一列車が遅れるようなことがあれば」という慎重な未来条件です。ここでの should は義務ではなく、if節の仮定法未来を作っています。",
           translation: "もし列車が遅れるようなことがあれば、私に連絡してください。",
-          takeaway: "ここでのshouldは義務ではなく、万一の条件を表す。"
+          takeaway: "ここでのshouldは義務ではなく、万一の条件を表す。",
+              diagram: { left: "train + should", label: "万一の条件", right: "please call" }
         }
       ]
     },
@@ -470,7 +490,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "were to の後ろには動詞の原形を置きます。change が正解です。",
           translation: "もし彼女が仕事を変えるようなことがあれば、別の都市へ引っ越すかもしれない。",
-          takeaway: "were toの後ろは必ず動詞の原形。"
+          takeaway: "were toの後ろは必ず動詞の原形。",
+          diagram: { left: "were to", label: "後ろは原形", right: "change jobs" }
         },
         {
           id: "future-subjunctive-were-to-q3",
@@ -479,7 +500,8 @@ const subjunctiveCourse = {
           answer: 1,
           explanation: "仮の未来条件の主節には would / could / might + 動詞の原形を使います。would not survive となります。",
           translation: "もし太陽が消えるようなことがあれば、地球上の生命は生き残れないだろう。",
-          takeaway: "were toの主節は、would・could・might + 原形。"
+          takeaway: "were toの主節は、would・could・might + 原形。",
+          diagram: { left: "were to disappear", label: "仮の未来条件", right: "would not survive" }
         }
       ]
     },
@@ -511,7 +533,8 @@ const subjunctiveCourse = {
           answer: 2,
           explanation: "If I were you ... の if を省略した形です。Were I you は「もし私があなたなら」という反事実を表します。",
           translation: "もし私があなたなら、その申し出を受け入れるだろう。",
-          takeaway: "Were + 主語は、If + 主語 + wereの倒置。"
+          takeaway: "Were + 主語は、If + 主語 + wereの倒置。",
+          diagram: { left: "Were I you", label: "wereの倒置", right: "would accept" }
         },
         {
           id: "subjunctive-inversion-q3",
@@ -520,7 +543,8 @@ const subjunctiveCourse = {
           answer: 3,
           explanation: "If you should need ... の if を省略し、should を主語の前に出した倒置です。元の文は「万一助けが必要になったら」です。",
           translation: "もし万一助けが必要なら、私に連絡してください。",
-          takeaway: "Should + 主語 + 原形は、If + 主語 + should + 原形の倒置。"
+          takeaway: "Should + 主語 + 原形は、If + 主語 + should + 原形の倒置。",
+          diagram: { left: "Should you need", label: "shouldの倒置", right: "please contact" }
         }
       ]
     }
@@ -609,7 +633,8 @@ const curriculum = {
               answer: 1,
               explanation: "standing by the door は「ドアのそばに立っている」という意味で、the man を後ろから説明しています。who is standing by the door を短くした形です。",
               translation: "ドアのそばに立っている男性は私の叔父です。",
-              takeaway: "現在分詞は「〜している」という能動・進行の意味。"
+              takeaway: "現在分詞は「〜している」という能動・進行の意味。",
+              diagram: { left: "the man", label: "後ろから説明", right: "standing by door" }
             },
             {
               id: "participles-as-adjectives-present-q3",
@@ -618,7 +643,8 @@ const curriculum = {
               answer: 2,
               explanation: "swimming が boy を説明しているため、現在分詞の形容詞的用法です。1と4は動名詞、2は進行形です。",
               translation: "泳いでいる男の子が私に手を振った。",
-              takeaway: "同じ-ingでも、名詞を説明すれば形容詞的用法、主語や動詞の一部なら別の用法。"
+              takeaway: "同じ-ingでも、名詞を説明すれば形容詞的用法、主語や動詞の一部なら別の用法。",
+              diagram: { left: "swimming", label: "名詞を説明", right: "boy" }
             }
           ]
         },
@@ -683,7 +709,8 @@ const curriculum = {
               answer: 2,
               explanation: "written in English は「英語で書かれた」という意味で、the books を後ろから説明しています。that were written in English を短くした形です。",
               translation: "英語で書かれた本は机の上にあります。",
-              takeaway: "過去分詞は「〜された／〜されている」という受動の意味。"
+              takeaway: "過去分詞は「〜された／〜されている」という受動の意味。",
+              diagram: { left: "the books", label: "受動・完了", right: "written in English" }
             },
             {
               id: "participles-as-adjectives-past-q3",
@@ -692,7 +719,8 @@ const curriculum = {
               answer: 2,
               explanation: "自転車は「盗む側」ではなく「盗まれる側」なので、過去分詞 stolen を使います。",
               translation: "私は駅の近くで盗まれた自転車を見つけた。",
-              takeaway: "名詞と分詞の主語・動作関係を確認して、能動か受動かを選ぶ。"
+              takeaway: "名詞と分詞の主語・動作関係を確認して、能動か受動かを選ぶ。",
+              diagram: { left: "bicycle", label: "動作を受ける", right: "stolen" }
             }
           ]
         },
@@ -729,7 +757,8 @@ const curriculum = {
               answer: 2,
               explanation: "「私」は混乱させられた側なので、過去分詞 confused を使います。",
               translation: "私は複雑な説明に混乱した。",
-              takeaway: "人が感情を受けた状態なら、過去分詞。"
+              takeaway: "人が感情を受けた状態なら、過去分詞。",
+              diagram: { left: "人", label: "受けた感情", right: "confused" }
             },
             {
               id: "emotion-verb-participles-q3",
@@ -738,7 +767,8 @@ const curriculum = {
               answer: 0,
               explanation: "講義は退屈させる側なので boring、学生は退屈を感じる側なので bored を使います。",
               translation: "講義は退屈だったので、学生たちは退屈していると感じた。",
-              takeaway: "「〜させる」は-ing、「〜している／させられた」は-ed。"
+              takeaway: "「〜させる」は-ing、「〜している／させられた」は-ed。",
+              diagram: { left: "lecture", label: "原因と受け手", right: "boring / bored" }
             }
           ]
         },
@@ -792,7 +822,8 @@ const curriculum = {
               answer: 1,
               explanation: "engine は run する側です。running が目的語 engine の状態を説明する目的格補語になります。",
               translation: "私たちは待っている間、エンジンを動かし続けた。",
-              takeaway: "keep + 目的語 + -ingは、目的語が動作中の状態を保つ。"
+              takeaway: "keep + 目的語 + -ingは、目的語が動作中の状態を保つ。",
+              diagram: { left: "keep + engine", label: "動作中の状態", right: "running" }
             },
             {
               id: "participle-complements-q3",
@@ -801,7 +832,8 @@ const curriculum = {
               answer: 1,
               explanation: "door は鍵をかける側ではなく、鍵をかけられた状態に保たれます。Q2の running とは逆に、目的語が動作を受ける側なので過去分詞 locked を使います。",
               translation: "出かけるときはドアに鍵をかけたままにしてください。",
-              takeaway: "目的語が動作を受けるなら、keep + 目的語 + 過去分詞。"
+              takeaway: "目的語が動作を受けるなら、keep + 目的語 + 過去分詞。",
+              diagram: { left: "keep + door", label: "受けた状態", right: "locked" }
             }
           ]
         },
@@ -855,7 +887,8 @@ const curriculum = {
               answer: 1,
               explanation: "勉強している最中に、someone がノックしている音を聞きました。目的語が動作をする側で、進行中の場面なので現在分詞 knocking を使います。",
               translation: "勉強中、誰かがドアをノックしている音が聞こえた。",
-              takeaway: "目的語が動作主で、進行中なら現在分詞。"
+              takeaway: "目的語が動作主で、進行中なら現在分詞。",
+              diagram: { left: "someone", label: "動作主・進行", right: "knocking" }
             },
             {
               id: "perception-verb-participles-q3",
@@ -864,7 +897,8 @@ const curriculum = {
               answer: 1,
               explanation: "name は呼ぶ側ではなく呼ばれる側です。my name was called という関係になるため、過去分詞 called を使います。",
               translation: "部屋の後ろから自分の名前が呼ばれるのが聞こえた。",
-              takeaway: "目的語が動作を受けるなら、知覚動詞 + O + 過去分詞。"
+              takeaway: "目的語が動作を受けるなら、知覚動詞 + O + 過去分詞。",
+              diagram: { left: "my name", label: "動作を受ける", right: "called" }
             }
           ]
         }
@@ -951,7 +985,8 @@ const curriculum = {
               answer: 0,
               explanation: "want の後ろで「食べたい内容」を表すので、want to + 動詞の原形 とします。to eat quickly and cheaply 全体がwantの目的語です。",
               translation: "ファストフード店が人気なのは、多くの人が早く安く食べたいと思うからです。",
-              takeaway: "wantの後ろには、望む内容を表すto + 動詞の原形を置く。"
+              takeaway: "wantの後ろには、望む内容を表すto + 動詞の原形を置く。",
+              diagram: { left: "want", label: "目的語の内容", right: "to eat" }
             },
             {
               id: "infinitive-nominal-use-q3",
@@ -965,7 +1000,8 @@ const curriculum = {
               answer: 3,
               explanation: "My dream is ... の後ろで、夢の内容を to look after ... が説明しています。to + 動詞の原形 の不定詞が補語となり、「病院で多くの病人の世話をすること」という意味です。",
               translation: "私の夢は、病院で多くの病人の世話をすることです。",
-              takeaway: "be動詞の後ろで主語の内容を説明する不定詞は補語になる。"
+              takeaway: "be動詞の後ろで主語の内容を説明する不定詞は補語になる。",
+              diagram: { left: "My dream is", label: "補語", right: "to look after" }
             }
           ]
         },
@@ -1020,7 +1056,8 @@ const curriculum = {
               answer: 0,
               explanation: "<code>someone</code> が「手伝う」人なので、<code>to help me</code> が <code>someone</code> を説明します。",
               translation: "この仕事を手伝ってくれる人が必要です。",
-              takeaway: "something・someone + to不定詞は「〜するもの／人」。"
+              takeaway: "something・someone + to不定詞は「〜するもの／人」。",
+              diagram: { left: "someone", label: "名詞の内容", right: "to help me" }
             },
             {
               id: "infinitive-adjective-use-q3",
@@ -1034,7 +1071,8 @@ const curriculum = {
               answer: 2,
               explanation: "<code>to do</code> が <code>homework</code> を説明し、「するべき宿題」という意味になっています。",
               translation: "私はするべき宿題をたくさん持っています。",
-              takeaway: "名詞と不定詞の意味関係を確認して、「〜する／される」を訳す。"
+              takeaway: "名詞と不定詞の意味関係を確認して、「〜する／される」を訳す。",
+              diagram: { left: "homework", label: "するべき内容", right: "to do" }
             }
           ]
         },
@@ -1084,7 +1122,8 @@ const curriculum = {
               answer: 0,
               explanation: "否定の目的は <code>so as not to + 動詞の原形</code> で表します。",
               translation: "彼女は赤ちゃんを起こさないように静かに話した。",
-              takeaway: "否定の目的は、not to + 動詞の原形。"
+              takeaway: "否定の目的は、not to + 動詞の原形。",
+              diagram: { left: "spoke quietly", label: "否定の目的", right: "not to wake" }
             },
             {
               id: "infinitive-adverbial-purpose-q3",
@@ -1098,7 +1137,8 @@ const curriculum = {
               answer: 2,
               explanation: "<code>to get some fresh air</code> は、外へ行った目的を表しています。",
               translation: "彼は新鮮な空気を吸うために外へ出た。",
-              takeaway: "to不定詞が「何のために」を答えていれば副詞的用法（目的）。"
+              takeaway: "to不定詞が「何のために」を答えていれば副詞的用法（目的）。",
+              diagram: { left: "went outside", label: "動作の目的", right: "to get air" }
             }
           ]
         },
@@ -1153,7 +1193,8 @@ const curriculum = {
               answer: 1,
               explanation: "驚いた理由を表すので、<code>to hear</code> を使います。",
               translation: "彼女はその結果を聞いて驚いた。",
-              takeaway: "glad・surprisedなどの感情と、to以下の原因を結びつける。"
+              takeaway: "glad・surprisedなどの感情と、to以下の原因を結びつける。",
+              diagram: { left: "was surprised", label: "驚いた理由", right: "to hear" }
             },
             {
               id: "infinitive-adverbial-reason-q3",
@@ -1162,7 +1203,8 @@ const curriculum = {
               answer: 1,
               explanation: "<code>to keep us waiting</code> は、申し訳なく思った理由を表しています。",
               translation: "彼は私たちを待たせてしまって申し訳なく思った。",
-              takeaway: "to以下が「なぜその感情になったか」を示せば原因・理由の副詞的用法。"
+              takeaway: "to以下が「なぜその感情になったか」を示せば原因・理由の副詞的用法。",
+              diagram: { left: "was sorry", label: "感情の原因", right: "to keep waiting" }
             }
           ]
         },
@@ -1221,7 +1263,8 @@ const curriculum = {
               answer: 1,
               explanation: "<code>only to + 動詞の原形</code> で、急いだ目的ではなく、その後に実際に起きた予想外の結果を表します。",
               translation: "彼女は駅へ急いだが、列車が出たことに気づく結果になった。",
-              takeaway: "only to + 動詞の原形は、予想外の結果を表す。"
+              takeaway: "only to + 動詞の原形は、予想外の結果を表す。",
+              diagram: { left: "hurried", label: "予想外の結果", right: "only to find" }
             },
             {
               id: "infinitive-adverbial-result-q3",
@@ -1235,7 +1278,8 @@ const curriculum = {
               answer: 2,
               explanation: "<code>to find nobody there</code> は、ドアを開けた目的ではなく、開けた後に実際に分かった結果を表しています。",
               translation: "彼女はドアを開けたところ、そこには誰もいなかった。",
-              takeaway: "to以下が主動作の後に起きた事実なら、結果の副詞的用法。"
+              takeaway: "to以下が主動作の後に起きた事実なら、結果の副詞的用法。",
+              diagram: { left: "opened the door", label: "後に分かった事実", right: "to find nobody" }
             }
           ]
         },
@@ -1286,7 +1330,8 @@ const curriculum = {
               answer: 0,
               explanation: "<code>形容詞 + enough + to + 動詞の原形</code> の形を使います。",
               translation: "その部屋は50人を収容できるほど広い。",
-              takeaway: "形容詞 + enough + to + 原形は、「…できるほど〜」。"
+              takeaway: "形容詞 + enough + to + 原形は、「…できるほど〜」。",
+              diagram: { left: "large enough", label: "できる程度", right: "to hold 50" }
             },
             {
               id: "infinitive-adverbial-degree-q3",
@@ -1295,7 +1340,8 @@ const curriculum = {
               answer: 0,
               explanation: "「私には解けない」という意味になるため、<code>for</code> が正解です。",
               translation: "この問題は私には難しすぎて解けない。",
-              takeaway: "不定詞の動作主を示すときは、for + 人 + to + 原形。"
+              takeaway: "不定詞の動作主を示すときは、for + 人 + to + 原形。",
+              diagram: { left: "too difficult", label: "動作主を示す", right: "for me to solve" }
             }
           ]
         },
@@ -1345,7 +1391,8 @@ const curriculum = {
               answer: 0,
               explanation: "children が understand の意味上の主語です。<code>for children + to + 動詞の原形</code> なので、<code>to understand</code> を使います。",
               translation: "子どもたちがその規則を理解するのは難しい。",
-              takeaway: "for childrenの後ろには、動詞の原形を伴うto不定詞。"
+              takeaway: "for childrenの後ろには、動詞の原形を伴うto不定詞。",
+              diagram: { left: "children", label: "動作主", right: "to understand rule" }
             },
             {
               id: "infinitive-logical-subject-for-q3",
@@ -1359,7 +1406,8 @@ const curriculum = {
               answer: 2,
               explanation: "不定詞の動作主を示す <code>for + 人</code> と、前置詞 for の後ろの目的格 <code>him</code> が必要なので、<code>It is important for him to study.</code> が正解です。",
               translation: "彼が勉強することは重要です。",
-              takeaway: "前置詞forの後ろは目的格なので、heではなくhim。"
+              takeaway: "前置詞forの後ろは目的格なので、heではなくhim。",
+              diagram: { left: "for + 人", label: "前置詞の目的格", right: "him to study" }
             }
           ]
         },
@@ -1432,7 +1480,8 @@ const curriculum = {
               answer: 1,
               explanation: "<code>of</code> の後ろには目的格の <code>him</code> を置き、不定詞は <code>to help</code> とします。",
               translation: "彼が私たちを助けてくれたのは親切でした。",
-              takeaway: "ofの後ろは目的格、動作はto + 原形。"
+              takeaway: "ofの後ろは目的格、動作はto + 原形。",
+              diagram: { left: "nice of him", label: "人の行動を評価", right: "to help us" }
             },
             {
               id: "infinitive-of-adjective-evaluation-q3",
@@ -1446,7 +1495,8 @@ const curriculum = {
               answer: 2,
               explanation: "<code>careless</code> は <code>him</code> の不注意な行動を評価しているため、<code>of him to forget</code> の形です。",
               translation: "彼が鍵を忘れたのは不注意でした。",
-              takeaway: "kind・nice・carelessなど、人を評価する形容詞はofを使う。"
+              takeaway: "kind・nice・carelessなど、人を評価する形容詞はofを使う。",
+              diagram: { left: "careless of him", label: "性質の評価", right: "to forget key" }
             }
           ]
         },
@@ -1501,7 +1551,8 @@ const curriculum = {
               answer: 0,
               explanation: "形式主語 it の内容を表す不定詞なので、to + 動詞の原形の to find を使います。",
               translation: "その答えを見つけるのは難しい。",
-              takeaway: "It is + 形容詞 + to + 原形で、後ろの不定詞が内容を表す。"
+              takeaway: "It is + 形容詞 + to + 原形で、後ろの不定詞が内容を表す。",
+              diagram: { left: "It is difficult", label: "形式主語", right: "to find answer" }
             },
             {
               id: "dummy-subject-it-q3",
@@ -1515,7 +1566,8 @@ const curriculum = {
               answer: 2,
               explanation: "It is useful to read every day. では it が具体的なものを指さず、to read every day が内容上の主語です。",
               translation: "毎日読書をすることは役に立つ。",
-              takeaway: "itが具体的なものを指さず、to不定詞が内容上の主語なら形式主語構文。"
+              takeaway: "itが具体的なものを指さず、to不定詞が内容上の主語なら形式主語構文。",
+              diagram: { left: "it = 内容", label: "本当の主語", right: "to read daily" }
             }
           ]
         },
@@ -1571,7 +1623,8 @@ const curriculum = {
               answer: 0,
               explanation: "think it important not to do の形です。不定詞を否定するため、not to + 動詞の原形 の not to give を使います。",
               translation: "リサは途中であきらめないことが重要だと考えている。",
-              takeaway: "不定詞を否定するときは、not to + 動詞の原形。"
+              takeaway: "不定詞を否定するときは、not to + 動詞の原形。",
+              diagram: { left: "think it", label: "否定の内容", right: "not to give up" }
             },
             {
               id: "dummy-object-it-q3",
@@ -1580,7 +1633,8 @@ const curriculum = {
               answer: 1,
               explanation: "予想外の吹雪によって登頂が不可能になったため、impossible が適切です。",
               translation: "予想外の吹雪で、彼らが頂上に到達することは不可能になった。",
-              takeaway: "make it + 形容詞 + for 人 + to不定詞で、結果を表す。"
+              takeaway: "make it + 形容詞 + for 人 + to不定詞で、結果を表す。",
+              diagram: { left: "made it", label: "結果の評価", right: "impossible" }
             }
           ]
         },
@@ -1651,7 +1705,8 @@ const curriculum = {
               answer: 0,
               explanation: "<code>let + 人 + 動詞の原形</code> の形なので、<code>go</code> を使います。両親が私の外出を許した、という意味です。",
               translation: "両親は私を外出させてくれた。",
-              takeaway: "let + 人 + 動詞の原形は、「人が〜するのを許す」。"
+              takeaway: "let + 人 + 動詞の原形は、「人が〜するのを許す」。",
+              diagram: { left: "let + 人", label: "許可", right: "go out" }
             },
             {
               id: "bare-infinitive-q3",
@@ -1660,7 +1715,8 @@ const curriculum = {
               answer: 0,
               explanation: "依頼・手配を表す <code>have + 人 + 動詞の原形</code> の形なので、<code>check</code> を使います。",
               translation: "私は彼に報告書を確認してもらった。",
-              takeaway: "have + 人 + 動詞の原形は、人に依頼・手配して〜してもらう。"
+              takeaway: "have + 人 + 動詞の原形は、人に依頼・手配して〜してもらう。",
+              diagram: { left: "have + 人", label: "依頼・手配", right: "check report" }
             }
           ]
         },
@@ -1715,7 +1771,8 @@ const curriculum = {
               answer: 0,
               explanation: "<code>hear + 人 + 動詞の原形</code> の形なので、<code>sing</code> を使います。",
               translation: "私たちは彼女が歌うのを聞いた。",
-              takeaway: "知覚動詞の後ろの人が動作主なので、toのない原形を置く。"
+              takeaway: "知覚動詞の後ろの人が動作主なので、toのない原形を置く。",
+              diagram: { left: "hear + 人", label: "動作主", right: "sing" }
             },
             {
               id: "perception-bare-infinitive-q3",
@@ -1729,7 +1786,8 @@ const curriculum = {
               answer: 1,
               explanation: "<code>I saw him crossing the street.</code> は <code>-ing</code> によって、通りを渡っている途中の場面に焦点を当てています。",
               translation: "私は彼が通りを渡っている途中を見た。",
-              takeaway: "動作の途中に焦点を当てるなら、知覚動詞 + O + -ing。"
+              takeaway: "動作の途中に焦点を当てるなら、知覚動詞 + O + -ing。",
+              diagram: { left: "saw him", label: "動作の途中", right: "crossing" }
             }
           ]
         },
@@ -1798,7 +1856,8 @@ const curriculum = {
               answer: 1,
               explanation: "「～しないために」は <code>in order not to + 動詞の原形</code> で表します。",
               translation: "彼は列車に乗り遅れないよう、早く家を出た。",
-              takeaway: "in order not to + 原形は、「〜しないために」。"
+              takeaway: "in order not to + 原形は、「〜しないために」。",
+              diagram: { left: "in order", label: "否定の目的", right: "not to miss" }
             },
             {
               id: "infinitive-negative-form-q3",
@@ -1812,7 +1871,8 @@ const curriculum = {
               answer: 0,
               explanation: "<code>try not to + 動詞の原形</code> は「～しないように努める」という意味です。",
               translation: "彼女は笑わないように努めた。",
-              takeaway: "try not to doは、「〜しないように努める」。"
+              takeaway: "try not to doは、「〜しないように努める」。",
+              diagram: { left: "try", label: "しない努力", right: "not to laugh" }
             }
           ]
         },
@@ -1879,7 +1939,8 @@ const curriculum = {
               answer: 1,
               explanation: "<code>seems</code> は現在の判断で、鍵を忘れたのはそれより前の出来事なので、<code>to have forgotten</code> が正解です。",
               translation: "彼女は鍵を忘れたようです。",
-              takeaway: "seem + to have + 過去分詞は、過去の出来事を現在判断している。"
+              takeaway: "seem + to have + 過去分詞は、過去の出来事を現在判断している。",
+              diagram: { left: "seems", label: "現在の判断", right: "to have forgotten" }
             },
             {
               id: "infinitive-perfect-form-q3",
@@ -1888,7 +1949,8 @@ const curriculum = {
               answer: 2,
               explanation: "完了不定詞の受動態は <code>to have been + 過去分詞</code> です。<code>to have been chosen</code> で「選ばれたこと」を表します。",
               translation: "彼女はチームに選ばれたことを誇りに思っていました。",
-              takeaway: "完了不定詞の受動態は、to have been + 過去分詞。"
+              takeaway: "完了不定詞の受動態は、to have been + 過去分詞。",
+              diagram: { left: "to have been", label: "受動の完了", right: "chosen" }
             }
           ]
         }
@@ -1918,6 +1980,7 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
   check(allQuestions.every(question => typeof question.text === "string" && question.text.trim() && typeof question.explanation === "string" && question.explanation.trim()), "全問に問題文と解説があること");
   check(allQuestions.every(question => typeof question.translation === "string" && question.translation.trim()), "全問に日本語訳があること");
   check(allQuestions.every(question => typeof question.takeaway === "string" && question.takeaway.trim()), "全問に締めルールがあること");
+  check(allQuestions.every(question => question.diagram), "全問に図解があること");
   check(allQuestions.every(question => !question.diagram || (typeof question.diagram.left === "string" && question.diagram.left.trim() && typeof question.diagram.label === "string" && question.diagram.label.trim() && typeof question.diagram.right === "string" && question.diagram.right.trim())), "図解の3要素がそろっていること");
   check(allQuestions.every(question => new Set(question.choices).size === question.choices.length && question.choices.every(choice => typeof choice === "string" && choice.trim())), "各問題の選択肢が重複せず空でないこと");
   check(courses.filter(course => course.structureVersion !== undefined).every(course => Number.isInteger(course.structureVersion) && course.structureVersion > 0), "構造versionが正の整数であること");

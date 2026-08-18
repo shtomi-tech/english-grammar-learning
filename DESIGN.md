@@ -24,6 +24,7 @@
   2. ステップバー（`.stepBar`）：`概論 / 各論 / 練習 / 修了` を基本とし、現在段階を`active`、完了段階を`cleared`で示す
   3. 各論カード（`.flashCard`相当）または問題カード（`.quiz`）
   4. 戻る・次への操作（`.actions`）
+- 正誤パネル（`.feedback`）は「判定・正解」「解説」「結論」の3グループで構成する。グループ内は8〜12px、グループ境界は20pxを空ける。余白は`margin-top`だけで与え、ブラウザ既定マージンや隣接マージン相殺に依存しない（`.feedback > * { margin-bottom: 0 }`）。例文（`.feedbackSentence`）・訳（`.feedbackTranslation`）・図解（`.feedbackDiagram`）・結論（`.feedbackTakeaway`）の4要素を全問必須とする。
 - カテゴリナビゲータはホームにのみ置く（セッション中は選べない）。閉じたsummaryでも現在カテゴリ名と「3カテゴリ中 nカテゴリCLEAR」「完了 x/y単元」の教材全体の進捗が分かる。開くと3カテゴリを`.courseGrid`の2列カード（`.courseCard`）で比較でき、各カードは教材順の番号・単元数／問題数・完了単元数／マスター済み数・修了テスト状態・次操作文言を持つ。選択中カードには`aria-current="true"`と「選択中」の文言を付ける。これらの進捗は`courseCardModel()`/`curriculumProgressStats()`が既存の判定関数（`courseProgressStats()`・`finalStatusFor()`・`overviewActionFor()`等）から毎回導出し、新しい永続状態は持たない。カード（`data-course`）のクリックは既存`switchCourse()`をそのまま通る。切替時はそのカテゴリを最後に離れた位置（ホームから切り替えるため通常は概論）へ戻る。リロード時は、そのとき保存されていた段階・問題位置をそのまま復元する（既存の `coursePositions` ロジックを維持）。
 - 概論（`.courseOverview`）の初期開閉は`overviewOpenFor(course)`（`!courseStarted(course)`）で導出する。完全な未着手カテゴリでは開き、各論確認・練習回答・修了テスト受験のいずれかがあれば閉じる。開閉専用の永続状態は持たず、手動での開閉はそのページ内でのみ有効。summaryには概論見出しに加え「概論・判断のポイント」を補足する。
 - 単元一覧の各カード（`.lessonCard`）は2桁番号・単元名・状態ラベル・各論確認状況（`各論 未確認／✓`）・練習回答数（`練習 n/3`）・回答完了後の正解数（`正解 n/3`）・次操作文言を持ち、状態を色だけに依存させない。区分自体は既存`lessonStatusLabel()`を正本とし、「未着手／各論確認済み／練習途中 n/3／要復習 n/3／全問正解」の5区分をカード表示用の文言（未着手／練習へ／続きから／要復習／マスター）に組み替える。
@@ -101,10 +102,12 @@
 | `--color-ink-secondary` | `#615c54` | 補助文字・ラベル・ヒント |
 | `--color-border` | `#ddd5c8` | 罫線・区切り |
 | `--color-control-border` | `#8a8478` | select・ghost button・選択肢など操作要素の通常時境界 |
-| `--color-accent` | `#a9583e` | 要復習・間隔復習の強調 |
-| `--color-accent-strong` | `#8a4732` | accentのhover/active |
+| `--color-accent` | `#a9583e` | 要復習・間隔復習の強調／情報強調（ポイント見出し・図解の関係ラベルと矢印・結論の背景面） |
+| `--color-accent-strong` | `#8a4732` | accentのhover/active／面上（`--color-surface-primary`）に置くaccent文字（AA確保） |
 | `--color-success` | `#136b31` | 正解のみ |
 | `--color-danger` | `#b42318` | 不正解・エラーのみ |
+
+accentを情報強調に使う場合は、見出し・矢印・下線・背景面など色以外の手がかりを必ず併用し、「要復習」状態と混同しない位置に置く。
 
 旧トークン（`--parchment` `--paper` `--ink` `--muted` `--clay` `--ok` `--ng` 等）は互換エイリアスとして残すが、値は上記の役割トークンを指す（`--paper` → `--color-surface-primary` など）。移行が完了したクラスから旧トークン参照を削除し、エイリアス自体もTask 8で不要になったものを整理する。
 
@@ -117,6 +120,8 @@
 | section title | clamp(25px, 4vw, 34px) | Georgia/Yu Mincho | `h2`（概論・各論・結果見出し） |
 | question title | clamp(26px, 5vw, 38px) | Georgia/Yu Mincho | 練習問題・修了テストの問題文 |
 | body | 16px / line-height 1.7 | Segoe UI系 | 本文・選択肢・解説 |
+| answer | 22px / 700 | Segoe UI系 | 正誤パネルの正解語（`.feedbackAnswer`） |
+| sub-heading | 15px / 700 | Segoe UI系 | パネル内の小見出し（`.feedbackPoint h4`） |
 | helper | 13-14px | Segoe UI系 | ヒント・補助文・保存状態 |
 | label | 12px, 700, uppercase | Segoe UI系 | セクションラベルのみ（日本語ラベルは非uppercase） |
 | numeric | `font-variant-numeric: tabular-nums` | — | 統計値・スコア・進捗番号 |
@@ -186,7 +191,7 @@ Kinetics（参考: https://kinetics.colorion.co/）のAccordion Spring・Icon Mo
 - カード内側: デスクトップ24px、スマートフォン18px。
 - 基本グリッド間隔: 12px。ステップバー間隔: 8px。
 - ブレークポイント: 640px以下で4指標・間隔復習を2列/3列にする。カテゴリカード・単元カードは641px以上2列、640px以下1列。
-- 説明文・解説の読み幅: 最大44rem。問題文・選択肢は内容に応じて全幅を使う。
+- 本文・解説・問題文・選択肢はいずれも内容レール（最大920px）の全幅を使う。行幅の別枠上限は設けない。
 - 画面高760px以下の学習中は共通ヘッダーを隠し、学習見出しと操作を同じ画面内に収める。セッション中は`.sessionProgress`（現在地・一覧へ戻る・ステップ）が画面上端にsticky表示され、共通ヘッダーの代わりに現在地を示す。
 
 ## コンポーネント役割

@@ -812,7 +812,7 @@ function quizCardHtml({ label, question, selectedIndex, dataAttr, nextLabel, nex
         ${question.translation ? `<p class="feedbackTranslation"><span class="feedbackBadge">日本語訳</span>${question.translation}</p>` : ""}
         <div class="feedbackPoint">
           <h4>ポイント</h4>
-          ${question.explanation}
+          <p class="feedbackPointBody">${question.explanation}</p>
         </div>
         ${question.diagram ? `<div class="feedbackDiagram" role="group" aria-label="文法の関係図">
           <div class="feedbackDiagramCell">${question.diagram.left}</div>

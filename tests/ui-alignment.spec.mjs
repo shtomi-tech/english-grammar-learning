@@ -153,6 +153,64 @@ test.describe("キーボード操作とレスポンシブCTA", () => {
     const width = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
     expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth);
   });
+
+  test("640px以下では主CTAが副CTAと同幅になる", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").first().click();
+
+    const widths = await page.evaluate(() => ({
+      primary: document.querySelector(".quizNextAction .cta").getBoundingClientRect().width,
+      secondary: document.querySelector(".actions .ghost").getBoundingClientRect().width,
+    }));
+    expect(widths.primary).toBeCloseTo(widths.secondary, 0);
+  });
+});
+
+test.describe("正誤パネルの数値規則", () => {
+  async function showFirstFeedback(page) {
+    await freshHome(page);
+    await page.locator('[data-stage="1"]').first().click();
+    await page.getByRole("button", { name: "3問に挑戦" }).click();
+    await page.locator(".choice").first().click();
+    await expect(page.locator(".feedback")).toBeVisible();
+  }
+
+  test("余白はグループ内8〜12px、境界20px、上下padding16pxでそろう", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await showFirstFeedback(page);
+    const metrics = await page.locator(".feedback").evaluate(feedback => {
+      const box = selector => feedback.querySelector(selector).getBoundingClientRect();
+      const gap = (before, after) => box(after).top - box(before).bottom;
+      const style = getComputedStyle(feedback);
+      return {
+        translationToPoint: gap(".feedbackTranslation", ".feedbackPoint"),
+        pointToDiagram: gap(".feedbackPoint", ".feedbackDiagram"),
+        diagramToTakeaway: gap(".feedbackDiagram", ".feedbackTakeaway"),
+        paddingTop: parseFloat(style.paddingTop),
+        paddingBottom: parseFloat(style.paddingBottom),
+      };
+    });
+    expect(metrics.translationToPoint).toBeCloseTo(20, 0);
+    expect(metrics.pointToDiagram).toBeCloseTo(12, 0);
+    expect(metrics.diagramToTakeaway).toBeCloseTo(20, 0);
+    expect(metrics.paddingTop).toBe(16);
+    expect(metrics.paddingBottom).toBe(16);
+  });
+
+  test("blankFillのコントラスト比が4.5:1以上になる", async ({ page }) => {
+    await showFirstFeedback(page);
+    const ratio = await page.locator(".blankFill").evaluate(blankFill => {
+      const rgb = value => value.match(/[\d.]+/g).slice(0, 3).map(Number).map(channel => channel / 255);
+      const luminance = value => value.map(channel => channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4).reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+      const foreground = luminance(rgb(getComputedStyle(blankFill).color));
+      const background = luminance(rgb(getComputedStyle(blankFill.parentElement).backgroundColor));
+      return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
 });
 
 test.describe("レスポンシブ・状態・アクセシビリティ", () => {
