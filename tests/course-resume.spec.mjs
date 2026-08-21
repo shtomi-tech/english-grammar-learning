@@ -47,19 +47,18 @@ async function seedProgress(page, progress) {
 }
 
 async function switchCourse(page, courseId) {
-  await page.locator(".courseNavigator > summary").click();
-  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+  await page.goto(`/#/c/${courseId}`);
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/#/c/subjunctive");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 });
 
 test("概論がエラーなく表示される", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "仮定法とは" })).toBeVisible();
-  await expect(page.locator("#current-path")).toHaveText("仮定法 ＞ 概論");
+  await expect(page.locator("#current-path")).toHaveText("カタログ / 仮定法");
 });
 
 test("coursePositionsのない旧v3データを現在位置から移行する", async ({ page }) => {
@@ -72,7 +71,7 @@ test("coursePositionsのない旧v3データを現在位置から移行する", 
     visitedLessons: ["participles-as-adjectives-present"]
   });
 
-  await expect(page.locator("#current-path")).toContainText("分詞 ＞ 分詞の形容詞的用法（現在分詞） ＞ 練習問題");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 練習問題");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });
 });
@@ -90,7 +89,7 @@ test("保存されたstageとquestionをコース範囲内へ補正する", asyn
     }
   });
 
-  await expect(page.locator("#current-path")).toHaveText("分詞 ＞ 修了テスト");
+  await expect(page.locator("#current-path")).toHaveText("カタログ / 分詞 / 修了テスト");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.coursePositions.unknown).toBeUndefined();
   expect(saved.coursePositions.participles.question).toBe(0);
@@ -101,23 +100,23 @@ test("コースを切り替えても各コースの位置を独立に保持す�
   // カテゴリ切替はホームからのみ行える設計のため、切替直前の位置（通常は概論）が
   // そのカテゴリの位置として保存される。深い位置（各論・練習途中）の保持はリロード時に検証する。
   await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
-  await expect(page.locator("#current-path")).toContainText("条件文と仮定法の違い ＞ 各論");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 仮定法 / 条件文と仮定法の違い / 各論");
   await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
   await switchCourse(page, "participles");
   await page.getByRole("button", { name: /分詞の形容詞的用法（現在分詞）へ/ }).click();
-  await expect(page.locator("#current-path")).toContainText("分詞の形容詞的用法（現在分詞） ＞ 各論");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 各論");
 
   // 分詞は各論の位置に留まったままリロード：深い位置が保存・復元されることを確認する。
   await page.reload();
-  await expect(page.locator("#current-path")).toContainText("分詞の形容詞的用法（現在分詞） ＞ 各論");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 各論");
 
   // カテゴリ切替はホームからのみ行えるため、一度概論へ戻る。
   await page.getByRole("button", { name: "一覧へ戻る" }).click();
 
   // 仮定法は概論へ戻ってから切り替えたので、独立して概論のまま保持されている。
   await switchCourse(page, "subjunctive");
-  await expect(page.locator("#current-path")).toContainText("仮定法 ＞ 概論");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 仮定法");
 });
 
 test("未着手なら最初の各論を案内する", async ({ page }) => {
@@ -138,7 +137,7 @@ test("単元結果から一覧へ1操作で戻れる", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "単元結果" })).toBeVisible();
   await page.getByRole("button", { name: "一覧へ戻る" }).click();
   await expect(page.locator("#homePanel")).toBeVisible();
-  await expect(page.locator("#current-path")).toHaveText("仮定法 ＞ 概論");
+  await expect(page.locator("#current-path")).toHaveText("カタログ / 仮定法");
 });
 
 test("修了テスト結果の一覧導線を統一する", async ({ page }) => {
@@ -181,7 +180,7 @@ test("修了テスト未解放画面から最初の不足単元へ進める", as
   await page.locator(".assessmentCard").click();
   await expect(page.locator("#final-lock-title")).toBeVisible();
   await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
-  await expect(page.locator("#current-path")).toContainText("条件文と仮定法の違い ＞ 各論");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 仮定法 / 条件文と仮定法の違い / 各論");
 });
 
 test("問題途中なら概論から続きの問題へ戻れる", async ({ page }) => {
@@ -209,7 +208,7 @@ test("全単元回答済みで要復習なら最初の弱点結果へ案内す�
     visitedLessons: Object.keys(masteredSubjunctiveAnswers)
   });
 
-  const action = page.getByRole("button", { name: "復習する：仮定法過去" });
+  const action = page.getByRole("button", { name: "復習する：仮定法過去", exact: true });
   await expect(action).toBeVisible();
   await action.click();
   await expect(page.locator(".sessionBar")).toContainText("仮定法過去");
@@ -283,7 +282,7 @@ test("クラウドからの旧形式データもコース位置を補完する",
   }, cloudProgress);
   await page.goto("/?s=student-a&t=token");
 
-  await expect(page.locator("#current-path")).toContainText("分詞 ＞ 分詞の形容詞的用法（現在分詞） ＞ 練習問題");
+  await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 練習問題");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });
   expect(pageErrors).toEqual([]);
@@ -295,7 +294,7 @@ test("375pxでも概論CTAをキーボードで実行でき横にはみ出さな
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 
-  const action = page.getByRole("button", { name: "条件文と仮定法の違いへ" });
+  const action = page.getByRole("button", { name: "条件文と仮定法の違いへ", exact: true });
   await action.focus();
   await expect(action).toBeFocused();
   await page.keyboard.press("Enter");
@@ -307,7 +306,7 @@ test("375pxでも概論CTAをキーボードで実行でき横にはみ出さな
   expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth);
 });
 
-test("1280pxでは内容レールが920px以下の1カラムになる", async ({ page }) => {
+test("1280pxでは3ペインを収容するシェルになり、サイドバーは各論だけに出る", async ({ page }) => {
   const consoleMessages = [];
   const pageErrors = [];
   page.on("console", message => {
@@ -322,7 +321,7 @@ test("1280pxでは内容レールが920px以下の1カラムになる", async ({
     wrapWidth: document.querySelector(".wrap").getBoundingClientRect().width
   }));
   expect(metrics.sidebarExists).toBe(false);
-  expect(metrics.wrapWidth).toBeLessThanOrEqual(920);
+  expect(metrics.wrapWidth).toBeGreaterThan(920);
   expect(consoleMessages).toEqual([]);
   expect(pageErrors).toEqual([]);
 });

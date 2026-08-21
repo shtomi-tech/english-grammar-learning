@@ -37,8 +37,7 @@ async function freshHome(page) {
 }
 
 async function switchCourse(page, courseId) {
-  await page.locator(".courseNavigator > summary").click();
-  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+  await page.goto(`/#/c/${courseId}`);
 }
 
 async function openUnit(page, index) {
@@ -92,6 +91,7 @@ test("仮定法コースは12単元を指定順で持ち、修了テストは単
 
 test("概論は通常の条件文との対比と到達範囲を示す", async ({ page }) => {
   await freshHome(page);
+  await switchCourse(page, "subjunctive");
   await expect(page.locator("#homePanel")).toContainText("if を使う文がすべて仮定法ではありません");
   await expect(page.locator("#homePanel")).toContainText("If I have time tonight, I will read this book.");
   await expect(page.locator("#homePanel")).toContainText("I wish");
@@ -308,6 +308,7 @@ test("仮定法コースは36問で、各問題の選択肢と解説が空でな
     visitedLessons: Object.keys(masteredSubjunctiveAnswers),
     courseStructureVersions: { subjunctive: 2 }
   });
+  await page.goto("/#/c/subjunctive");
   await page.locator(".assessmentCard").click();
   await expect(page.locator("#sessionPanel")).toContainText("全36問からランダムに出題します。");
 
@@ -346,7 +347,7 @@ test("構造バージョン不一致では仮定法の位置だけを概論へ�
   }, { key: STORAGE_KEY, versions: subjunctiveVersions });
   await page.reload();
 
-  await expect(page.locator("#current-path")).toHaveText("仮定法 ＞ 概論");
+  await expect(page.locator("#current-path")).toHaveText("カタログ");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.coursePositions.subjunctive).toEqual({ stage: 0, question: 0 });
   expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });
@@ -387,7 +388,7 @@ test("クラウド由来の旧構造も仮定法の位置だけを概論へ戻�
   }, cloudProgress);
   await page.goto("/?s=student-a&t=token");
 
-  await expect(page.locator("#current-path")).toHaveText("仮定法 ＞ 概論");
+  await expect(page.locator("#current-path")).toHaveText("カタログ");
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
   expect(saved.coursePositions.subjunctive).toEqual({ stage: 0, question: 0 });
   expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });

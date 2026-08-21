@@ -9,8 +9,8 @@ test.describe("_site 成果物スモークテスト", () => {
     expect(response.status()).toBe(200);
   });
 
-  test("/styles.css?v=0.3.0 がHTTP 200で応答する", async ({ request }) => {
-    const response = await request.get("/styles.css?v=0.3.0");
+  test("/styles.css?v=0.4.0 がHTTP 200で応答する", async ({ request }) => {
+    const response = await request.get("/styles.css?v=0.4.0");
     expect(response.status()).toBe(200);
   });
 
@@ -24,10 +24,12 @@ test.describe("_site 成果物スモークテスト", () => {
     const containerMax = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--container-max").trim()
     );
-    expect(containerMax).toBe("920px");
+    expect(containerMax).toBe("1200px");
 
     const wrapWidth = await page.locator(".wrap").evaluate(el => el.getBoundingClientRect().width);
-    expect(wrapWidth).toBeLessThanOrEqual(920);
+    expect(wrapWidth).toBeGreaterThan(920);
+    const catalogWidth = await page.locator(".catalogPage").evaluate(el => el.getBoundingClientRect().width);
+    expect(catalogWidth).toBeLessThanOrEqual(920);
 
     expect(pageErrors).toEqual([]);
   });
