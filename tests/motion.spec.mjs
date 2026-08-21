@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 const STORAGE_KEY = "englishGrammarLearning.v3";
 
 async function freshHome(page) {
-  await page.goto("/");
+  await page.goto("/#/c/subjunctive");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 }
@@ -474,6 +474,7 @@ test.describe("修了テスト解放のunlock", () => {
       versions: subjunctiveVersions,
       visitedLessons: Object.keys(masteredAll)
     });
+    await page.goto("/#/c/subjunctive");
 
     const assessmentCard = page.locator(".assessmentCard");
     await expect(assessmentCard).not.toHaveClass(/is-unlocking/);
@@ -499,7 +500,7 @@ test.describe("修了後のホーム推薦", () => {
     const action = page.getByRole("button", { name: "分詞の学習を始める" });
     await expect(action).toBeVisible();
     await action.click();
-    await expect(page.locator("#current-path")).toContainText("分詞 ＞ 分詞の形容詞的用法（現在分詞） ＞ 各論");
+    await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 各論");
     await expect(page.getByRole("button", { name: "修了テストへ", exact: true })).toHaveCount(0);
   });
 
@@ -583,11 +584,11 @@ test.describe("修了後のホーム推薦", () => {
       }
     });
 
-    const action = page.getByRole("button", { name: "続きから：分詞" });
+    const action = page.getByRole("button", { name: "続きから：分詞", exact: true });
     await expect(action).toBeVisible();
     await action.click();
 
-    await expect(page.locator("#current-path")).toContainText("分詞 ＞ 分詞の形容詞的用法（現在分詞） ＞ 練習問題");
+    await expect(page.locator("#current-path")).toContainText("カタログ / 分詞 / 分詞の形容詞的用法（現在分詞） / 練習問題");
     await expect(page.getByText("問題 2 / 3")).toBeVisible();
     const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
     expect(saved.courseId).toBe("participles");

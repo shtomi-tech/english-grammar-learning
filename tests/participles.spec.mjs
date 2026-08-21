@@ -18,8 +18,7 @@ async function seedProgress(page, progress) {
 }
 
 async function switchCourse(page, courseId) {
-  await page.locator(".courseNavigator > summary").click();
-  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+  await page.goto(`/#/c/${courseId}`);
 }
 
 async function openParticipleUnit(page, index) {
@@ -190,6 +189,7 @@ test("修了テストの総問題数が15問になる", async ({ page }) => {
     visitedLessons: Object.keys(masteredParticiplesAnswers)
   });
 
+  await page.goto("/#/c/participles");
   await page.locator(".assessmentCard").click();
   await expect(page.locator("#sessionPanel")).toContainText("全15問からランダムに出題します。");
 });

@@ -1,5 +1,17 @@
 const subjunctiveCourse = {
   structureVersion: 2,
+  objectives: [
+    "通常の条件文と仮定法を、現実との距離から見分けられる。",
+    "現在・過去・未来の仮定に合う動詞の形を選べる。",
+    "願望・後悔・類似表現で、wish や If only の形を使い分けられる。",
+    "混合仮定法や定型表現、倒置を文の意味と結び付けて読める。"
+  ],
+  sections: [
+    { id: "reality-and-distance", title: "現実と仮定の区別", lead: "通常の条件文と、現実から距離を置く仮定法を見分けます。", lessonIds: ["conditionals-vs-subjunctive", "past-subjunctive", "past-perfect-subjunctive"] },
+    { id: "wishes-and-regrets", title: "願望と後悔", lead: "現在・過去の願望や後悔を wish と If only で表します。", lessonIds: ["wish-subjunctive", "if-only-subjunctive", "mixed-subjunctive"] },
+    { id: "fixed-expressions", title: "定型表現", lead: "条件以外の場面で使う仮定法の定型表現を整理します。", lessonIds: ["if-it-were-not-for", "as-if-subjunctive", "it-is-time-subjunctive-past"] },
+    { id: "future-and-inversion", title: "未来の仮定と倒置", lead: "可能性の低い未来の仮定と、if を省略する形を学びます。", lessonIds: ["future-subjunctive-should", "future-subjunctive-were-to", "subjunctive-inversion"] }
+  ],
   overview: {
     title: "仮定法とは",
     html: `
@@ -558,6 +570,8 @@ const curriculum = {
       title: "仮定法",
       structureVersion: subjunctiveCourse.structureVersion,
       recommendationLead: "現実と異なる想像・願望・後悔を、動詞の形で表す文法です。",
+      objectives: subjunctiveCourse.objectives,
+      sections: subjunctiveCourse.sections,
       overview: subjunctiveCourse.overview,
       lessons: subjunctiveCourse.lessons
     },
@@ -565,6 +579,16 @@ const curriculum = {
       id: "participles",
       title: "分詞",
       recommendationLead: "動詞の形を使って、名詞や人・物の状態を説明する文法です。",
+      objectives: [
+        "現在分詞と過去分詞を、名詞との意味関係から選べる。",
+        "分詞が名詞を直接説明する用法を読み取れる。",
+        "感情を表す分詞や、補語としての分詞を使い分けられる。",
+        "知覚動詞の後ろで、目的語がする動作・受ける動作を表せる。"
+      ],
+      sections: [
+        { id: "adjectival-participles", title: "名詞を説明する分詞", lead: "分詞と名詞の関係を確認し、現在分詞・過去分詞を選びます。", lessonIds: ["participles-as-adjectives-present", "participles-as-adjectives-past"] },
+        { id: "states-and-perception", title: "状態と知覚", lead: "感情・補語・知覚動詞の文で分詞の働きを見分けます。", lessonIds: ["emotion-verb-participles", "participle-complements", "perception-verb-participles"] }
+      ],
       overview: {
         title: "分詞とは",
         html: `
@@ -909,6 +933,19 @@ const curriculum = {
       structureVersion: 1,
       title: "不定詞",
       recommendationLead: "to + 動詞の原形で、名詞・形容詞・副詞の働きをする文法です。",
+      objectives: [
+        "to + 動詞の原形を見つけ、そのまとまりの文中での働きを説明できる。",
+        "名詞的・形容詞的・副詞的用法を、文の意味から使い分けられる。",
+        "意味上の主語や形式主語・形式目的語を含む文の構造を読める。",
+        "使役・知覚動詞の原形不定詞、否定形、完了形を使える。"
+      ],
+      sections: [
+        { id: "core-uses", title: "基本の3用法", lead: "不定詞が名詞・形容詞・副詞として働く基本を押さえます。", lessonIds: ["infinitive-nominal-use", "infinitive-adjective-use"] },
+        { id: "adverbial-uses", title: "副詞的用法", lead: "目的・原因・結果・程度を表す不定詞を読み分けます。", lessonIds: ["infinitive-adverbial-purpose", "infinitive-adverbial-reason", "infinitive-adverbial-result", "infinitive-adverbial-degree"] },
+        { id: "logical-subject-and-evaluation", title: "意味上の主語と評価", lead: "不定詞の動作主と、形容詞と組み合わさる表現を整理します。", lessonIds: ["infinitive-logical-subject-for", "infinitive-of-adjective-evaluation"] },
+        { id: "dummy-subject-and-object", title: "形式主語・形式目的語", lead: "長い不定詞句を it で受ける文の構造を見抜きます。", lessonIds: ["dummy-subject-it", "dummy-object-it"] },
+        { id: "special-forms", title: "特別な形", lead: "原形不定詞・否定形・完了不定詞を文型とともに学びます。", lessonIds: ["bare-infinitive", "perception-bare-infinitive", "infinitive-negative-form", "infinitive-perfect-form"] }
+      ],
       overview: {
         title: "不定詞とは",
         html: `
@@ -1986,6 +2023,17 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
   check(courses.filter(course => course.structureVersion !== undefined).every(course => Number.isInteger(course.structureVersion) && course.structureVersion > 0), "構造versionが正の整数であること");
   check(courses.every(course => typeof course.recommendationLead === "string" && course.recommendationLead.trim().length > 0), "全カテゴリに推薦紹介文があること");
   check(courses.every(course => !/[<>]/.test(course.recommendationLead)), "推薦紹介文にHTMLを含めないこと");
+  check(courses.every(course => !course.objectives || (Array.isArray(course.objectives) && course.objectives.length >= 4 && course.objectives.length <= 8 && course.objectives.every(objective => typeof objective === "string" && objective.trim() && !/[<>]/.test(objective)))), "学習目標が4〜8件のテキストであること");
+  courses.filter(course => course.sections !== undefined).forEach(course => {
+    const sections = course.sections;
+    const lessonIds = Array.isArray(sections) ? sections.flatMap(section => Array.isArray(section.lessonIds) ? section.lessonIds : []) : [];
+    const courseLessonIds = course.lessons.map(lesson => lesson.id);
+    check(Array.isArray(sections) && sections.length > 0, `${course.title}の章が1件以上あること`);
+    check(Array.isArray(sections) && sections.every(section => typeof section.id === "string" && section.id.trim() && typeof section.title === "string" && section.title.trim() && typeof section.lead === "string" && section.lead.trim()), `${course.title}の章にID・タイトル・説明があること`);
+    check(new Set(lessonIds).size === lessonIds.length, `${course.title}の章で単元IDが重複しないこと`);
+    check(lessonIds.length === courseLessonIds.length && courseLessonIds.every(id => lessonIds.includes(id)), `${course.title}の章が全単元を重複なく覆うこと`);
+    check(lessonIds.every(id => courseLessonIds.includes(id)), `${course.title}の章が存在する単元IDだけを参照すること`);
+  });
   if (failures.length > 0) {
     failures.forEach(message => console.error(`CONTENT_CHECK_NG: ${message}`));
     process.exitCode = 1;

@@ -7,8 +7,7 @@ async function freshHome(page) {
 }
 
 async function switchCourse(page, courseId) {
-  await page.locator(".courseNavigator > summary").click();
-  await page.locator(`.courseCard[data-course="${courseId}"]`).click();
+  await page.goto(`/#/c/${courseId}`);
 }
 
 test("不定詞カテゴリから名詞的用法の3問まで進められる", async ({ page }) => {
@@ -500,10 +499,10 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
       await expect(page.locator("#session-content p, #session-content blockquote, #session-content li").filter({ hasText: bodyText }).first()).toBeVisible();
     }
     if (lesson.title === "使役動詞と原形不定詞") {
-      await expect(page.getByText("使役動詞の基本", { exact: true })).toBeVisible();
+      await expect(page.locator(".flashCard details.section > summary").filter({ hasText: "使役動詞の基本" })).toBeVisible();
     }
     if (lesson.title === "知覚動詞と原形不定詞") {
-      await expect(page.getByText("知覚動詞の基本", { exact: true })).toBeVisible();
+      await expect(page.locator(".flashCard details.section > summary").filter({ hasText: "知覚動詞の基本" })).toBeVisible();
       await expect(page.locator("#session-content")).toContainText("動作の全体");
       await expect(page.locator("#session-content")).toContainText("動作の途中");
     }

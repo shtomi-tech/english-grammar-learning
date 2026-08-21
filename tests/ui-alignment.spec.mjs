@@ -18,7 +18,13 @@ const EXPECTED_RADII = {
 };
 
 async function freshHome(page) {
-  await page.goto("/");
+  await page.goto("/#/c/subjunctive");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+}
+
+async function freshCatalog(page) {
+  await page.goto("/#/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 }
@@ -50,12 +56,12 @@ test.describe("デザイントークン", () => {
     }
   });
 
-  test("内容レールの上限が920pxである", async ({ page }) => {
+  test("シェルの最大幅は3ペインを収容する", async ({ page }) => {
     await freshHome(page);
     const containerMax = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--container-max").trim()
     );
-    expect(containerMax).toBe("920px");
+    expect(containerMax).toBe("1200px");
   });
 });
 
@@ -84,15 +90,15 @@ test.describe("シェル", () => {
 
 test.describe("ホームとセッション", () => {
   test("ホームに「まずはここから」の主CTAがある", async ({ page }) => {
-    await freshHome(page);
-    await expect(page.locator("#homePanel .recommend")).toBeVisible();
+    await freshCatalog(page);
+    await expect(page.locator("#homePanel .catalogPage .recommend")).toBeVisible();
     await expect(page.getByText("まずはここから")).toBeVisible();
   });
 
   test("ホームに4指標がある", async ({ page }) => {
-    await freshHome(page);
-    await expect(page.locator("#homePanel .stats")).toBeVisible();
-    await expect(page.locator("#homePanel .stats .stat")).toHaveCount(4);
+    await freshCatalog(page);
+    await expect(page.locator("#homePanel .catalogStats")).toBeVisible();
+    await expect(page.locator("#homePanel .catalogStats .stat")).toHaveCount(4);
   });
 
   test("ホームに単元一覧がある", async ({ page }) => {
@@ -247,10 +253,9 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
   });
 
   test("主要な操作要素は44px以上の高さを持つ", async ({ page }) => {
-    await freshHome(page);
-    await page.locator(".courseNavigator > summary").click();
+    await freshCatalog(page);
     const heights = await page.evaluate(() => {
-      const targets = [".cta", ".courseNavigator > summary", ".courseCard", ".lessonCard", ".assessmentCard", ".card > summary"];
+      const targets = [".cta", ".courseCard"];
       return targets.map(sel => {
         const el = document.querySelector(sel);
         return { sel, height: el ? el.getBoundingClientRect().height : null };
@@ -260,19 +265,25 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
       expect(height, `${sel} の高さ`).not.toBeNull();
       expect(height, `${sel} の高さ`).toBeGreaterThanOrEqual(44);
     }
+    await page.locator('.courseCard[data-course="subjunctive"]').click();
+    const detailHeights = await page.evaluate(() => [".lessonCard", ".assessmentCard", ".card > summary"].map(sel => {
+      const el = document.querySelector(sel);
+      return { sel, height: el ? el.getBoundingClientRect().height : null };
+    }));
+    for (const { sel, height } of detailHeights) {
+      expect(height, `${sel} の高さ`).not.toBeNull();
+      expect(height, `${sel} の高さ`).toBeGreaterThanOrEqual(44);
+    }
   });
 });
 
-test.describe("カテゴリナビゲータ", () => {
-  test("summaryに現在カテゴリと教材全体の進捗が分かる文言があり、開くと3カテゴリのカードが並ぶ", async ({ page }) => {
-    await freshHome(page);
-    const nav = page.locator(".courseNavigator");
-    await expect(nav.locator("summary")).toContainText("仮定法");
-    await expect(nav.locator("summary")).toContainText("3カテゴリ中 0カテゴリCLEAR");
-    await expect(nav.locator("summary")).toContainText("完了 0/12単元");
-
-    await nav.locator("summary").click();
-    const cards = nav.locator(".courseCard");
+test.describe("カタログ", () => {
+  test("カタログに進捗と3カテゴリのカードが常設される", async ({ page }) => {
+    await freshCatalog(page);
+    const catalog = page.locator(".catalogPage");
+    await expect(catalog).toContainText("英文法を学ぶ");
+    await expect(catalog.locator(".catalogStats .stat")).toHaveCount(4);
+    const cards = catalog.locator(".courseCard");
     await expect(cards).toHaveCount(3);
     await expect(cards.nth(0)).toContainText("仮定法");
     await expect(cards.nth(0)).toContainText("12単元");
@@ -289,29 +300,27 @@ test.describe("カテゴリナビゲータ", () => {
 
   test("単元一覧は学習単元のカードだけを持ち、修了テストは独立したカードになる", async ({ page }) => {
     await freshHome(page);
-    await expect(page.locator(".unitList .lessonCard")).toHaveCount(12);
+    await expect(page.locator(".courseSections .unitList .lessonCard")).toHaveCount(12);
     await expect(page.locator(".courseAssessment .assessmentCard")).toHaveCount(1);
-    await expect(page.locator(".unitList")).not.toContainText("修了テスト");
+    await expect(page.locator(".courseSections")).not.toContainText("修了テスト");
   });
 
   test("1280pxでは単元一覧とカテゴリカードが2列、390pxでは1列になる", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await freshHome(page);
-    await page.locator(".courseNavigator > summary").click();
-    const wideColumns = await page.evaluate(() => ({
-      unit: new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size,
-      course: new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size
-    }));
-    expect(wideColumns.unit).toBe(2);
-    expect(wideColumns.course).toBe(2);
+    const wideUnitColumns = await page.evaluate(() => new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size);
+    expect(wideUnitColumns).toBe(2);
+    await page.goto("/#/");
+    const wideCourseColumns = await page.evaluate(() => new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size);
+    expect(wideCourseColumns).toBe(2);
 
     await page.setViewportSize({ width: 390, height: 844 });
-    const narrowColumns = await page.evaluate(() => ({
-      unit: new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size,
-      course: new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size
-    }));
-    expect(narrowColumns.unit).toBe(1);
-    expect(narrowColumns.course).toBe(1);
+    await page.goto("/#/c/subjunctive");
+    const narrowUnitColumns = await page.evaluate(() => new Set(Array.from(document.querySelectorAll(".unitList .lessonCard")).map(el => el.getBoundingClientRect().left)).size);
+    expect(narrowUnitColumns).toBe(1);
+    await page.goto("/#/");
+    const narrowCourseColumns = await page.evaluate(() => new Set(Array.from(document.querySelectorAll(".courseGrid .courseCard")).map(el => el.getBoundingClientRect().left)).size);
+    expect(narrowCourseColumns).toBe(1);
     const width = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
     expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth);
   });
@@ -331,8 +340,8 @@ test.describe("概論の初期開閉", () => {
   });
 
   test("4指標のラベルを設計正本どおり表示する", async ({ page }) => {
-    await freshHome(page);
-    await expect(page.locator(".stats .stat").nth(3).locator("span")).toHaveText("修了テストBEST");
+    await freshCatalog(page);
+    await expect(page.locator(".catalogStats .stat").nth(3).locator("span")).toHaveText("修了テストBEST");
   });
 });
 
