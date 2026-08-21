@@ -143,7 +143,7 @@ blockquote p:last-child { margin-bottom: 0; }
 .wrap .courseGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
 .wrap .courseCard { display: grid; gap: 4px; min-height: 44px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--parchment); color: var(--ink); text-align: left; cursor: pointer; transition: border-color var(--transition-hover), background-color var(--transition-hover); }
 .wrap .courseCard:hover { border-color: var(--ink); }
-.wrap .courseCard.active { border: 2px solid var(--ink); background: var(--paper); }
+.wrap .courseCard.active { border: 1px solid var(--ink); outline: 1px solid var(--ink); outline-offset: -2px; background: var(--paper); }
 .wrap .courseCardNo { color: var(--muted); font-size: 12px; font-weight: 700; }
 .wrap .courseCardTitle { font-size: 16px; font-weight: 700; }
 .wrap .courseCardMeta, .wrap .courseCardProgress, .wrap .courseCardFinal { color: var(--muted); font-size: 13px; }
@@ -204,7 +204,7 @@ blockquote p:last-child { margin-bottom: 0; }
 
 .wrap .sessionProgress { position: sticky; top: 0; z-index: 15; margin-bottom: 24px; padding-top: max(4px, env(safe-area-inset-top, 0px)); background: var(--parchment); border-bottom: 1px solid var(--line); }
 .wrap .sessionBar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-height: 44px; padding-bottom: 4px; }
-.wrap .sessionBar .ghost { min-height: 44px; padding: 8px 12px; }
+.wrap .sessionBar .ghost { min-height: 48px; padding: 10px 16px; }
 .wrap .sessionBar .label { flex: 1; min-width: 0; margin: 0; }
 .wrap .sessionBar .sessionPosition { margin: 0; white-space: nowrap; }
 .wrap .sessionBar .saveSlot { flex: none; min-width: 0; }
@@ -346,7 +346,8 @@ blockquote p:last-child { margin-bottom: 0; }
 .courseCardMeta { line-height: 1.5; }
 .catalogBack { margin-bottom: 24px; }
 .courseDetailHero { margin-bottom: 28px; }
-.courseOverview h3 { margin-bottom: 4px; }
+.courseOverview { border-top: 3px solid var(--color-accent); }
+.courseOverview h3 { margin-bottom: 4px; font-family: var(--serif); font-size: clamp(25px, 3vw, 30px); line-height: 1.25; }
 .courseOverview > .hint { margin-bottom: 20px; }
 .courseMeta { display: flex; flex-wrap: wrap; gap: 8px 0; margin: 20px 0 0; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 .courseMeta span + span::before { content: "·"; margin: 0 8px; color: var(--line); }
@@ -377,7 +378,7 @@ blockquote p:last-child { margin-bottom: 0; }
 .outlineLessonMark { color: var(--color-success); font-weight: 700; text-align: center; }
 .lessonToc { position: sticky; top: 104px; }
 .lessonToc li + li { margin-top: 8px; }
-.lessonTocLink { display: block; padding-left: 10px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.45; text-decoration: none; overflow-wrap: anywhere; }
+.lessonTocLink { display: flex; min-height: 36px; align-items: center; padding: 8px 0 8px 10px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.45; text-decoration: none; overflow-wrap: anywhere; }
 .lessonTocLink:hover, .lessonTocLink:focus-visible { border-left-color: var(--ink); color: var(--ink); }
 .lessonTocInline, .sessionOutlineMobile { display: none; }
 .lessonTocInline { margin: 24px 0; padding: 0 18px; border: 1px solid var(--line); border-radius: var(--radius-control); }
@@ -412,4 +413,20 @@ blockquote p:last-child { margin-bottom: 0; }
   .courseMeta span + span::before { content: ""; margin: 0; }
   .courseMeta span { overflow-wrap: anywhere; }
   .catalogHero .recommend { margin-left: 0; margin-right: 0; }
+  .courseDetailHero { margin-bottom: 20px; }
+  .wrap .courseObjectives { margin-bottom: 12px; }
+  .courseObjectives .label { margin-bottom: 8px; }
+  .courseObjectives h3 { margin-bottom: 4px; }
+  .courseObjectives ul { margin-top: 8px; }
+  .courseObjectives li { font-size: 15px; line-height: 1.4; }
+  .courseObjectives li + li { margin-top: 4px; }
+  .wrap .sessionBar--has-next {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px 10px;
+  }
+  .wrap .sessionBar--has-next > .label { grid-column: 2; grid-row: 1; }
+  .wrap .sessionBar--has-next > .sessionNextAction { grid-column: 1; grid-row: 2; }
+  .wrap .sessionBar--has-next > .sessionPosition { grid-column: 3; grid-row: 1; }
+  .wrap .sessionBar--has-next > .saveSlot { grid-column: 3; grid-row: 2; justify-self: end; }
 }

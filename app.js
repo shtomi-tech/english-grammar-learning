@@ -874,7 +874,8 @@ function statHtml(value, total, label, secondary = false) {
 
 /* ---- セッション画面（各論・練習・修了テスト・今日の復習）の共通部品 ---- */
 function sessionBarHtml(label, { showBack = true, position = "", nextAction = null } = {}) {
-  return `<div class="sessionBar">
+  const nextClass = nextAction ? " sessionBar--has-next" : "";
+  return `<div class="sessionBar${nextClass}">
     ${showBack ? `<button type="button" class="ghost" data-action="go-home">一覧へ戻る</button>` : ""}
     <p class="label">${label}</p>
     ${nextAction ? `<button type="button" class="ghost sessionNextAction" data-action="${nextAction.action}">${nextAction.label}</button>` : ""}
@@ -1135,7 +1136,7 @@ function renderCourseOverview(content) {
   if (showUnlock) justUnlockedCourseId = null;
   content.innerHTML = `
     <div class="courseDetail">
-      <button type="button" class="ghost catalogBack" data-action="catalog">カタログへ戻る</button>
+      <button type="button" class="ghost catalogBack" data-action="catalog">一覧へ戻る</button>
       <section class="courseDetailHero" aria-labelledby="course-detail-title">
         <p class="label">文法カテゴリ</p>
         <h2 id="course-detail-title" tabindex="-1">${course.title}</h2>
@@ -1143,12 +1144,12 @@ function renderCourseOverview(content) {
         ${courseMetaHtml(course)}
         <div class="actions"><button type="button" class="cta" data-stage="${action.targetStage}">${action.label}</button></div>
       </section>
-      ${objectivesHtml(course)}
       <section class="card courseOverview" aria-labelledby="course-overview-title">
         <h3 id="course-overview-title">${course.overview.title}</h3>
         <p class="hint">概論・判断のポイント</p>
         ${course.overview.html}
       </section>
+      ${objectivesHtml(course)}
       <section class="courseSections" aria-labelledby="course-sections-title">
         <p class="label">学習単元</p>
         <h2 id="course-sections-title">全${course.lessons.length}単元</h2>
