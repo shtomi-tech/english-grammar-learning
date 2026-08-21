@@ -222,45 +222,32 @@ test.describe("正誤フィードバックのモーション", () => {
   });
 });
 
-test.describe("各論のAccordion", () => {
-  test("各論の節は初期表示ですべてopenになり、矢印も回転する", async ({ page }) => {
+test.describe("各論の常時表示", () => {
+  test("各論の節は折りたたみUIを持たず、見出しと本文を表示する", async ({ page }) => {
     await openInversionLesson(page);
-    const sections = page.locator("details.section");
+    const sections = page.locator(".section");
     await expect(sections).toHaveCount(3);
-
-    const statesAndTransforms = await sections.evaluateAll(els => els.map(el => ({
-      open: el.open,
-      transform: getComputedStyle(el.querySelector("summary"), "::before").transform
-    })));
-    expect(statesAndTransforms.map(section => section.open)).toEqual([true, true, true]);
-    for (const section of statesAndTransforms) {
-      expect(section.transform).not.toBe("none");
+    await expect(page.locator("details.section")).toHaveCount(0);
+    await expect(page.locator(".section summary")).toHaveCount(0);
+    for (let i = 0; i < await sections.count(); i++) {
+      await expect(sections.nth(i).locator(".sectionHeading")).toBeVisible();
     }
   });
 
-  test("summaryクリックで開閉し、矢印の回転がopen属性と一致する", async ({ page }) => {
+  test("発展内容も操作なしで最初から表示される", async ({ page }) => {
     await openInversionLesson(page);
-    const second = page.locator("details.section").nth(1);
-    const summaryTransform = () => second.locator("summary").evaluate(el => getComputedStyle(el, "::before").transform);
-
-    await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(false);
-    // 回転はtransition中のため、最終状態に落ち着くまでポーリングする。
-    await expect.poll(summaryTransform).toBe("none");
-
-    await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(true);
-    await expect.poll(summaryTransform).not.toBe("none");
+    const second = page.locator(".section").nth(1);
+    await expect(second.locator(".sectionHeading")).toBeVisible();
+    await expect(second.locator(".sectionBody")).toBeVisible();
   });
 
-  test("Spaceキーで開閉できる", async ({ page }) => {
+  test("説明の見出しはキーボードで閉じる操作を持たない", async ({ page }) => {
     await openInversionLesson(page);
-    const third = page.locator("details.section").nth(2);
-    await third.locator("summary").focus();
-    await page.keyboard.press("Space");
-    expect(await third.evaluate(el => el.open)).toBe(false);
-    await page.keyboard.press("Space");
-    expect(await third.evaluate(el => el.open)).toBe(true);
+    const interactiveAttrs = await page.locator(".sectionHeading").evaluateAll(elements => elements.map(element => ({
+      role: element.getAttribute("role"),
+      tabindex: element.getAttribute("tabindex")
+    })));
+    expect(interactiveAttrs.every(attrs => attrs.role === null && attrs.tabindex === null)).toBe(true);
   });
 
   test("節を持たない各論ではdetails.sectionが存在せず本文がそのまま表示される", async ({ page }) => {
@@ -270,15 +257,11 @@ test.describe("各論のAccordion", () => {
     await expect(page.locator(".flashCard")).toContainText("仮定法過去は");
   });
 
-  test("320pxで全節を開いても横スクロールが発生しない", async ({ page }) => {
+  test("320pxでも全節が表示され、横スクロールが発生しない", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 });
     await openInversionLesson(page);
-    const summaries = page.locator("details.section summary");
-    const count = await summaries.count();
-    for (let i = 0; i < count; i++) {
-      const details = page.locator("details.section").nth(i);
-      if (!(await details.evaluate(el => el.open))) await summaries.nth(i).click();
-    }
+    await expect(page.locator(".section .sectionBody")).toHaveCount(3);
+    await expect(page.locator(".section .sectionBody").nth(2)).toBeVisible();
     const size = await page.evaluate(() => ({
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth
@@ -483,6 +466,34 @@ test.describe("修了テスト解放のunlock", () => {
 });
 
 test.describe("修了後のホーム推薦", () => {
+  test("修了テストCLEAR結果から次カテゴリへ直接進める", async ({ page }) => {
+    await seedProgress(page, {
+      courseId: "subjunctive",
+      stage: 25,
+      question: 0,
+      answers: masteredSubjunctiveAnswers,
+      versions: subjunctiveVersions,
+      visitedLessons: Object.keys(masteredSubjunctiveAnswers),
+      courseStructureVersions: { subjunctive: 2 },
+      finalChecks: { subjunctive: finalRecord(36, 36, true) },
+      finalRun: {
+        courseId: "subjunctive",
+        order: ["conditionals-vs-subjunctive-q1"],
+        index: 1,
+        correctCount: 1,
+        answers: [0]
+      }
+    });
+    await page.goto("/#/c/subjunctive/final");
+
+    const action = page.getByRole("button", { name: "分詞の学習を始める", exact: true });
+    await expect(action).toBeVisible();
+    await action.click();
+
+    await expect(page).toHaveURL(/#\/c\/participles\/l\/participles-as-adjectives-present$/);
+    await expect(page.locator(".sessionBar")).toContainText("分詞");
+  });
+
   test("仮定法CLEAR後は未CLEARの分詞を主導線にする", async ({ page }) => {
     await seedProgress(page, {
       courseId: "subjunctive",
@@ -753,15 +764,11 @@ test.describe("reduced motion", () => {
     }
   });
 
-  test("各論のdetails開閉（矢印のtransition）が即時になる", async ({ page }) => {
+  test("各論の説明は常時表示のままである", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await openInversionLesson(page);
-    const second = page.locator("details.section").nth(1);
-    await second.locator("summary").click();
-    expect(await second.evaluate(el => el.open)).toBe(false);
-    const transitionDuration = await second.locator("summary").evaluate(
-      el => getComputedStyle(el, "::before").transitionDuration
-    );
-    expect(transitionDuration).toBe("0s");
+    await expect(page.locator("details.section")).toHaveCount(0);
+    await expect(page.locator(".section .sectionBody")).toHaveCount(3);
+    await expect(page.locator(".section .sectionBody").nth(1)).toBeVisible();
   });
 });

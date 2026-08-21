@@ -266,7 +266,7 @@ test.describe("レスポンシブ・状態・アクセシビリティ", () => {
       expect(height, `${sel} の高さ`).toBeGreaterThanOrEqual(44);
     }
     await page.locator('.courseCard[data-course="subjunctive"]').click();
-    const detailHeights = await page.evaluate(() => [".lessonCard", ".assessmentCard", ".card > summary"].map(sel => {
+    const detailHeights = await page.evaluate(() => [".lessonCard", ".assessmentCard", ".courseOverview"].map(sel => {
       const el = document.querySelector(sel);
       return { sel, height: el ? el.getBoundingClientRect().height : null };
     }));
@@ -326,17 +326,19 @@ test.describe("カタログ", () => {
   });
 });
 
-test.describe("概論の初期開閉", () => {
-  test("未着手カテゴリでは概論が開いている", async ({ page }) => {
+test.describe("概論の常時表示", () => {
+  test("未着手カテゴリでは概論が最初から表示されている", async ({ page }) => {
     await freshHome(page);
-    await expect(page.locator(".courseOverview")).toHaveJSProperty("open", true);
+    await expect(page.locator(".courseOverview")).toBeVisible();
+    await expect(page.locator(".courseOverview summary")).toHaveCount(0);
   });
 
-  test("各論確認済みでは概論が閉じている", async ({ page }) => {
+  test("学習途中のカテゴリでも概論が最初から表示されている", async ({ page }) => {
     await freshHome(page);
     await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
     await page.getByRole("button", { name: "一覧へ戻る" }).click();
-    await expect(page.locator(".courseOverview")).toHaveJSProperty("open", false);
+    await expect(page.locator(".courseOverview")).toBeVisible();
+    await expect(page.locator(".courseOverview summary")).toHaveCount(0);
   });
 
   test("4指標のラベルを設計正本どおり表示する", async ({ page }) => {

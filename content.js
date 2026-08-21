@@ -1549,7 +1549,7 @@ const curriculum = {
             <blockquote><p>It is important to check the answer.<br>答えを確認することは大切です。</p></blockquote>
             <p><code>it</code> は具体的なものを指していません。内容上の主語は <code>to check the answer</code> です。<code>To check the answer is important.</code> としても意味は通りますが、長い主語を後ろに置く形式主語構文のほうが自然です。</p>
             </details>
-            <details class="section" data-initially-closed>
+            <details class="section">
             <summary>that節を使う形（発展）</summary>
             <div class="formula">It is + 形容詞 + that + 主語 + 動詞</div>
             <blockquote><p>It is surprising that Ken solved the problem.<br>ケンがその問題を解いたことは驚きです。</p></blockquote>
@@ -1626,7 +1626,7 @@ const curriculum = {
             <blockquote><p>A lot of people may feel it easy to answer this question.<br>この問題に答えることは簡単だと、多くの人が感じているかもしれません。</p><p>Lisa thinks it important not to give up halfway.<br>リサは、途中であきらめないことが重要だと考えています。</p></blockquote>
             <p>不定詞を否定するときは、<code>not to + 動詞の原形</code> とします。この形は後の「不定詞の否定形」で詳しく学びます。</p>
             </details>
-            <details class="section" data-initially-closed>
+            <details class="section">
             <summary>that節を使う形（発展）</summary>
             <div class="formula">主語 + 動詞 + it + 形容詞 + that + 主語 + 動詞</div>
             <blockquote><p>We made it clear that the plan must change.<br>私たちは、その計画を変更しなければならないことを明確にしました。</p></blockquote>

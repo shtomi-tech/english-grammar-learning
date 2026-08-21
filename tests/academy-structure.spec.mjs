@@ -83,7 +83,34 @@ test.describe("Academy構造", () => {
 
     await page.setViewportSize({ width: 899, height: 900 });
     await expect(page.locator(".lessonOutline")).toBeHidden();
+    await expect(page.locator(".lessonToc")).toBeHidden();
+    await expect(page.locator(".lessonTocInline")).toBeVisible();
     await expect(page.locator(".sessionOutlineMobile")).toBeVisible();
+
+    await page.setViewportSize({ width: 320, height: 800 });
+    await expect(page.locator(".lessonToc")).toBeHidden();
+    await expect(page.locator(".lessonTocInline")).toBeVisible();
+    const width = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth
+    }));
+    expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth);
+  });
+
+  test("長い各論でもstickyヘッダーから練習問題へ進める", async ({ page }) => {
+    await freshCatalog(page);
+    await page.locator('.courseCard[data-course="subjunctive"]').click();
+    await page.getByRole("button", { name: "条件文と仮定法の違いへ" }).click();
+    await page.setViewportSize({ width: 320, height: 800 });
+
+    const action = page.getByRole("button", { name: "練習問題へ", exact: true });
+    await expect(action).toBeVisible();
+    const box = await action.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    await action.click();
+
+    await expect(page).toHaveURL(/#\/c\/subjunctive\/l\/conditionals-vs-subjunctive\/practice$/);
+    await expect(page.getByRole("heading", { name: "練習問題" })).toBeVisible();
     const width = await page.evaluate(() => ({
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth

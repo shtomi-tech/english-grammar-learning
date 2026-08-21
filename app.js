@@ -770,11 +770,6 @@ function courseStarted(course) {
   return hasLessonProgress || hasSavedPosition || hasFinalAttempt || hasFinalRun;
 }
 
-// 概論の初期開閉。専用の永続状態は持たず、既存courseStarted()から毎回導出する。
-function overviewOpenFor(course) {
-  return !courseStarted(course);
-}
-
 function recommendedOtherCourse(currentCourse) {
   const candidates = courses.filter(course => course.id !== currentCourse.id && !courseCleared(course));
   const started = candidates.find(courseStarted);
@@ -786,6 +781,16 @@ function recommendedOtherCourse(currentCourse) {
     if (course.id !== currentCourse.id && !courseCleared(course)) return course;
   }
   return null;
+}
+
+function nextCourseActionFor(course) {
+  const nextCourse = recommendedOtherCourse(course);
+  if (!nextCourse) return null;
+  return {
+    course: nextCourse,
+    label: courseStarted(nextCourse) ? `続きから：${nextCourse.title}` : `${nextCourse.title}の学習を始める`,
+    hint: nextCourse.recommendationLead
+  };
 }
 
 function homePrimaryActionFor(course) {
@@ -821,16 +826,16 @@ function homePrimaryActionFor(course) {
     };
   }
 
-  const nextCourse = recommendedOtherCourse(course);
-  if (nextCourse) {
-    const started = courseStarted(nextCourse);
+  const nextCourseAction = nextCourseActionFor(course);
+  if (nextCourseAction) {
+    const nextCourse = nextCourseAction.course;
     return {
       mode: "next-course",
       eyebrow: `${course.title} 修了`,
       title: `次は「${nextCourse.title}」を学びましょう`,
-      lead: nextCourse.recommendationLead,
+      lead: nextCourseAction.hint,
       primary: {
-        label: started ? `続きから：${nextCourse.title}` : `${nextCourse.title}の学習を始める`,
+        label: nextCourseAction.label,
         dataAttribute: "action",
         value: "start-course",
         courseId: nextCourse.id,
@@ -868,10 +873,11 @@ function statHtml(value, total, label, secondary = false) {
 }
 
 /* ---- セッション画面（各論・練習・修了テスト・今日の復習）の共通部品 ---- */
-function sessionBarHtml(label, { showBack = true, position = "" } = {}) {
+function sessionBarHtml(label, { showBack = true, position = "", nextAction = null } = {}) {
   return `<div class="sessionBar">
     ${showBack ? `<button type="button" class="ghost" data-action="go-home">一覧へ戻る</button>` : ""}
     <p class="label">${label}</p>
+    ${nextAction ? `<button type="button" class="ghost sessionNextAction" data-action="${nextAction.action}">${nextAction.label}</button>` : ""}
     ${position ? `<p class="sessionPosition">${position}</p>` : ""}
     <div class="saveSlot"></div>
   </div>`;
@@ -924,9 +930,9 @@ function stepBarHtml(steps, activeKey) {
 }
 
 // sessionBarとstepBarを.sessionProgressへまとめる共通helper。スクロール中もsticky表示する（styles.css）。
-function sessionProgressHtml(label, steps, activeKey, { showBack = true, stage = stages[state.stage], lessonId = null, outlineCourse = currentCourse() } = {}) {
+function sessionProgressHtml(label, steps, activeKey, { showBack = true, stage = stages[state.stage], lessonId = null, outlineCourse = currentCourse(), nextAction = null } = {}) {
   return `<div class="sessionProgress">
-    ${sessionBarHtml(label, { showBack, position: sessionPositionText(stage) })}
+    ${sessionBarHtml(label, { showBack, position: sessionPositionText(stage), nextAction })}
     ${steps?.length ? stepBarHtml(steps, activeKey) : ""}
     ${lessonId ? sessionOutlineMobileHtml(outlineCourse, lessonId) : ""}
   </div>`;
@@ -1138,10 +1144,11 @@ function renderCourseOverview(content) {
         <div class="actions"><button type="button" class="cta" data-stage="${action.targetStage}">${action.label}</button></div>
       </section>
       ${objectivesHtml(course)}
-      <details class="card courseOverview" ${overviewOpenFor(course) ? "open" : ""}>
-        <summary><h3>${course.overview.title}</h3><span class="hint">概論・判断のポイント</span></summary>
+      <section class="card courseOverview" aria-labelledby="course-overview-title">
+        <h3 id="course-overview-title">${course.overview.title}</h3>
+        <p class="hint">概論・判断のポイント</p>
         ${course.overview.html}
-      </details>
+      </section>
       <section class="courseSections" aria-labelledby="course-sections-title">
         <p class="label">学習単元</p>
         <h2 id="course-sections-title">全${course.lessons.length}単元</h2>
@@ -1240,11 +1247,11 @@ function buildLessonToc(container) {
   const toc = container.querySelector(".lessonToc");
   const inline = container.querySelector(".lessonTocInline");
   if (!main || !toc) return;
-  const items = Array.from(main.querySelectorAll("details.section > summary")).map((summary, index) => {
-    const details = summary.parentElement;
+  const items = Array.from(main.querySelectorAll(".section > .sectionHeading")).map((heading, index) => {
+    const section = heading.parentElement;
     const id = `lesson-section-${index + 1}`;
-    details.id = id;
-    return { id, title: summary.textContent.trim() };
+    section.id = id;
+    return { id, title: heading.textContent.trim() };
   });
   const links = items.map(item => `<li><a class="lessonTocLink" href="#${item.id}" data-toc-target="#${item.id}">${item.title}</a></li>`).join("");
   toc.querySelector(".lessonTocList").innerHTML = links;
@@ -1289,31 +1296,45 @@ function renderLesson(content, lesson) {
     ${lesson.html}
     <details class="lessonTocInline"><summary>ページ内目次</summary><ol class="lessonTocList"></ol></details>`;
   content.innerHTML = `
-    ${sessionProgressHtml(course.title, LESSON_STEPS, "lesson", { stage, lessonId: lesson.id, outlineCourse: course })}
+    ${sessionProgressHtml(course.title, LESSON_STEPS, "lesson", {
+      stage,
+      lessonId: lesson.id,
+      outlineCourse: course,
+      nextAction: { action: "next", label: "練習問題へ" }
+    })}
     ${sessionWorkspaceHtml(`<article class="flashCard">${lessonMain}</article>`, { course, lessonId: lesson.id, hasOutline: true })}
     <div class="actions">${backButton}<button type="button" class="cta" data-action="next">3問に挑戦</button></div>`;
-  enhanceAccordions(content);
+  renderExplanationSections(content);
   buildLessonToc(content);
 }
 
-// 各論本文内の details.section を初期表示ですべて開き、矢印transform＋本文opacity/translateYで開閉するよう補強する。
-// 教材本文（content.js）自体は変更せず、描画時にsummary以外の子要素だけをwrapperへ移す。
-function enhanceAccordions(container) {
-  container.querySelectorAll("details.section").forEach(details => {
-    let body = details.querySelector(":scope > .sectionBody");
-    if (!body) {
-      body = document.createElement("div");
-      body.className = "sectionBody";
-      Array.from(details.children).filter(child => child.tagName !== "SUMMARY").forEach(child => body.appendChild(child));
-      details.appendChild(body);
-    }
-    details.open = !details.hasAttribute("data-initially-closed");
-    details.addEventListener("toggle", () => {
-      if (!details.open) return;
-      body.classList.add("is-entering");
-      void body.offsetWidth;
-      body.classList.remove("is-entering");
+// 教材本文のdetails.sectionは、説明を隠せない静的sectionへ正規化する。
+// content.jsの既存記法は維持し、描画時にsummaryを見出し、本文を常時表示のbodyへ変換する。
+function renderExplanationSections(container) {
+  Array.from(container.querySelectorAll("details.section")).forEach(details => {
+    const section = document.createElement("section");
+    section.className = details.className;
+    Array.from(details.attributes).forEach(attribute => {
+      if (!["class", "open"].includes(attribute.name)) {
+        section.setAttribute(attribute.name, attribute.value);
+      }
     });
+
+    const summary = details.querySelector(":scope > summary");
+    if (summary) {
+      const heading = document.createElement("h4");
+      heading.className = "sectionHeading";
+      heading.innerHTML = summary.innerHTML;
+      section.appendChild(heading);
+    }
+
+    const body = document.createElement("div");
+    body.className = "sectionBody";
+    Array.from(details.children)
+      .filter(child => child.tagName !== "SUMMARY")
+      .forEach(child => body.appendChild(child));
+    section.appendChild(body);
+    details.replaceWith(section);
   });
 }
 
@@ -1481,6 +1502,7 @@ function renderFinalResult(content, course, run) {
   const score = run.correctCount;
   const passScore = finalPassScore(total);
   const passed = score >= passScore;
+  const nextCourseAction = passed ? nextCourseActionFor(course) : null;
 
   const wrongEntries = run.order.filter((qId, i) => run.answers[i] !== questionIndex[qId].question.answer);
 
@@ -1505,8 +1527,9 @@ function renderFinalResult(content, course, run) {
     ${sessionProgressHtml(course.title, null, null, { showBack: false })}
     ${sessionWorkspaceHtml(finalResultMain)}
     <div class="actions">
+      ${nextCourseAction ? `<button type="button" class="cta" data-action="start-course" data-course="${nextCourseAction.course.id}">${nextCourseAction.label}</button>` : ""}
       <button type="button" class="ghost" data-action="overview">一覧へ戻る</button>
-      <button type="button" class="cta" data-action="start-final">もう一度挑戦する</button>
+      <button type="button" class="${nextCourseAction ? "ghost secondaryCta" : "cta"}" data-action="start-final">もう一度挑戦する</button>
     </div>`;
 }
 

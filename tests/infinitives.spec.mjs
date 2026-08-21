@@ -89,17 +89,15 @@ test("名詞的用法には既存アプリで使用済みの主語・目的語�
   await expect(page.locator(".score")).toHaveText("3 / 3");
 });
 
-test("形式主語構文はto不定詞を中心に学び、that節を発展として開ける", async ({ page }) => {
+test("形式主語構文はto不定詞を中心に学び、that節の説明も最初から表示する", async ({ page }) => {
   await freshHome(page);
   await switchCourse(page, "infinitives");
   await page.getByRole("button", { name: /形式主語構文/ }).click();
 
   await expect(page.getByRole("heading", { name: "形式主語構文" })).toBeVisible();
   await expect(page.getByText("It is + 形容詞 + to + 動詞の原形", { exact: true })).toBeVisible();
-  const advanced = page.locator("details.section").filter({ hasText: "that節を使う形（発展）" });
-  await expect(advanced.locator("summary")).toHaveText("that節を使う形（発展）");
-  await expect(advanced.locator(".formula")).toBeHidden();
-  await advanced.locator("summary").click();
+  const advanced = page.locator(".section").filter({ hasText: "that節を使う形（発展）" });
+  await expect(advanced.locator(".sectionHeading")).toHaveText("that節を使う形（発展）");
   await expect(advanced.locator(".formula")).toBeVisible();
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
@@ -145,10 +143,8 @@ test("形式目的語構文の解説と3問を確認できる", async ({ page })
   await expect(page.getByText("主語 + 動詞 + it + 形容詞 + to + 動詞の原形", { exact: true })).toBeVisible();
   await expect(page.getByText("it が形式目的語", { exact: false }).first()).toBeVisible();
   await expect(page.locator("#session-content blockquote").filter({ hasText: "私には、その質問に答えるのが難しいと分かりました。" })).toBeVisible();
-  const advanced = page.locator("details.section").filter({ hasText: "that節を使う形（発展）" });
-  await expect(advanced.locator("summary")).toHaveText("that節を使う形（発展）");
-  await expect(advanced.locator(".formula")).toBeHidden();
-  await advanced.locator("summary").click();
+  const advanced = page.locator(".section").filter({ hasText: "that節を使う形（発展）" });
+  await expect(advanced.locator(".sectionHeading")).toHaveText("that節を使う形（発展）");
   await expect(advanced.locator(".formula")).toBeVisible();
 
   await page.getByRole("button", { name: "3問に挑戦" }).click();
@@ -499,10 +495,10 @@ test("不定詞の各単元を学び、それぞれの3問に取り組める", a
       await expect(page.locator("#session-content p, #session-content blockquote, #session-content li").filter({ hasText: bodyText }).first()).toBeVisible();
     }
     if (lesson.title === "使役動詞と原形不定詞") {
-      await expect(page.locator(".flashCard details.section > summary").filter({ hasText: "使役動詞の基本" })).toBeVisible();
+      await expect(page.locator(".flashCard .sectionHeading").filter({ hasText: "使役動詞の基本" })).toBeVisible();
     }
     if (lesson.title === "知覚動詞と原形不定詞") {
-      await expect(page.locator(".flashCard details.section > summary").filter({ hasText: "知覚動詞の基本" })).toBeVisible();
+      await expect(page.locator(".flashCard .sectionHeading").filter({ hasText: "知覚動詞の基本" })).toBeVisible();
       await expect(page.locator("#session-content")).toContainText("動作の全体");
       await expect(page.locator("#session-content")).toContainText("動作の途中");
     }
