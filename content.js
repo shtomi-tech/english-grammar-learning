@@ -15,6 +15,18 @@ const subjunctiveCourse = {
   overview: {
     title: "仮定法とは",
     html: `
+      <p class="overviewVisualIntro">仮定法は、「いつの話か」と「現実との距離」から形を選ぶ文法です。</p>
+      <section class="overviewVisual overviewVisual--decision" aria-labelledby="subjunctive-visual-title">
+        <div class="overviewDecisionAnchor"><span>時点</span><span class="overviewDecisionOperator">×</span><span>現実との距離</span></div>
+        <p id="subjunctive-visual-title" class="overviewVisualLead">形を一段ずらし、現実から距離を置く。</p>
+        <div class="overviewDecisionFlow">
+          <article class="overviewDecisionStep"><span>1</span><strong>いつの話か</strong><span>現在・過去・未来</span></article>
+          <article class="overviewDecisionStep"><span>2</span><strong>事実と一致するか</strong><span>現実／反事実</span></article>
+          <article class="overviewDecisionStep"><span>3</span><strong>どの表現か</strong><span>条件・願望・定型表現</span></article>
+          <article class="overviewDecisionStep"><span>4</span><strong>形を選ぶ</strong><span>過去形・had + p.p.・助動詞</span></article>
+        </div>
+        <p class="overviewVisualPrompt">まず「いつの話か」と「現実との距離」を見る。</p>
+      </section>
       <p>仮定法は、現在・過去の事実から距離を置いた想像、願望、後悔、または可能性を控えめに扱う未来の仮定を表します。</p>
       <p>現在について述べる場合でも、現実から距離を置くため過去形を使うことがあります。過去について事実と異なることを述べる場合は <code>had + 過去分詞</code> を使います。</p>
       <blockquote><p>If I have time tonight, I will read this book.<br>今夜時間ができる可能性があるので、時間があればこの本を読みます。</p></blockquote>
@@ -28,6 +40,15 @@ const subjunctiveCourse = {
       version: 1,
       title: "条件文と仮定法の違い",
       html: `
+        <section class="lessonVisual lessonVisual--distance" aria-labelledby="conditionals-vs-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>if + 現在形</code> → <code>will + 原形</code></span><span class="lessonVisualMeta">現実に起こり得る</span></div>
+          <p id="conditionals-vs-subjunctive-visual-title" class="lessonVisualLead">同じ <code>if</code> でも、現実との距離が違う。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現実的な条件</span><strong><code>If it rains</code> → <code>will stay</code></strong><span>現実に起こり得る未来</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">距離を置く仮定</span><strong><code>If it rained</code> → <code>would stay</code></strong><span>現実から距離を置く</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、<code>if</code> の有無ではなく、条件を現実的に扱っているかを見る。</p>
+        </section>
         <p><code>if</code> の有無だけで仮定法と判断してはいけません。まず、条件が現実に起こり得るものか、現実から距離を置いた仮定かを確認します。</p>
         <details class="section" open>
         <summary>現実に起こり得る条件</summary>
@@ -82,6 +103,15 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法過去",
       html: `
+        <section class="lessonVisual lessonVisual--distance" aria-labelledby="past-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If + 主語 + 過去形</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might + 原形</code></span></div>
+          <p id="past-subjunctive-visual-title" class="lessonVisualLead">過去形の形で、現在の事実から距離を置く。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><code>I am not you.</code></strong><span>いま分かっている現実</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">仮定法過去</span><strong><code>If I were you</code> → <code>would ...</code></strong><span><code>were</code> は標準形</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、いつの話か、現在の事実と反するかを見る。</p>
+        </section>
         <p>仮定法過去は、現在または未来について、事実と異なる状況や可能性を低く見た状況を表します。先に現実的な条件か仮定法かを判断し、現在の反事実ならこの形を使います。</p>
         <div class="formula">If + 主語 + 過去形, 主語 + would / could / might + 動詞の原形</div>
         <blockquote><p>If she knew the answer, she could help us.<br>実際には答えを知らないので、知っていれば助けられるのに。</p></blockquote>
@@ -126,6 +156,14 @@ const subjunctiveCourse = {
       version: 3,
       title: "仮定法過去完了",
       html: `
+        <section class="lessonVisual lessonVisual--timeline" aria-labelledby="past-perfect-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>THEN: had + 過去分詞</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might have + 過去分詞</code></span></div>
+          <p id="past-perfect-subjunctive-visual-title" class="lessonVisualLead">過去の条件から、過去の結果へ進む。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualTimeline">
+            <div class="lessonVisualTimePoint"><span>条件の時点</span><strong><code>had studied</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>結果の時点</span><strong><code>would have passed</code></strong></div>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、条件と結果が両方とも過去かを見る。</p>
+        </section>
         <p>仮定法過去完了は、過去の事実とは異なる条件を表します。条件だけでなく、結果がいつのことかも確認します。</p>
         <div class="formula">If + 主語 + had + 過去分詞, 主語 + would / could / might have + 過去分詞</div>
         <blockquote><p>If I had studied harder, I would have passed the exam.<br>もっと勉強していたら、試験に合格していただろうに。</p></blockquote>
@@ -169,6 +207,17 @@ const subjunctiveCourse = {
       version: 1,
       title: "I wish + 仮定法",
       html: `
+        <section class="lessonVisual lessonVisual--timeline" aria-labelledby="wish-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>wish + 形</code></span><span class="lessonVisualMeta">願う時点で選ぶ</span></div>
+          <p id="wish-subjunctive-visual-title" class="lessonVisualLead">願う内容と時点で、後ろの形を分ける。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--four">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の能力</span><strong><code>wish + could</code></strong><span>できたらいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><code>wish + would</code></strong><span>変わってくれれば</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、何を、いつのこととして願っているかを見る。</p>
+        </section>
         <p><code>I wish</code> の後ろでは、現在の事実に反する願望、現在の能力への願望、過去への後悔、状況の変化への願いを時点で区別します。</p>
         <details class="section" open><summary>現在の事実に反する願望</summary><div class="formula">wish + 主語 + 過去形</div><blockquote><p>I wish I had more free time.<br>もっと自由な時間があればいいのに。</p></blockquote></details>
         <details class="section" open><summary>現在の能力に関する願望</summary><div class="formula">wish + 主語 + could + 動詞の原形</div><blockquote><p>I wish I could speak English better.<br>もっと上手に英語を話せたらいいのに。</p></blockquote></details>
@@ -212,6 +261,16 @@ const subjunctiveCourse = {
       version: 1,
       title: "If only + 仮定法",
       html: `
+        <section class="lessonVisual lessonVisual--contrast" aria-labelledby="if-only-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If only + 形</code></span><span class="lessonVisualMeta">主節なしでも使える</span></div>
+          <p id="if-only-subjunctive-visual-title" class="lessonVisualLead"><code>I wish</code> と同じ時点選択を、強い感情で言う。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">強い現在の願望</span><strong><code>If only + 過去形!</code></strong><span>今そうならいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">能力</span><strong><code>If only + could!</code></strong><span>できさえすれば</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">強い過去の後悔</span><strong><code>If only + had + p.p.!</code></strong><span>してさえいれば</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、強い願望・後悔の時点を見る。</p>
+        </section>
         <p><code>If only</code> は、<code>I wish</code> とほぼ同じ時制選択で、願望・後悔をより強く感情的に表します。</p>
         <p><code>If only ...!</code> のように、主節なしで強い願望・後悔を表せます。ただし <code>If only</code> を含むすべての文を扱うのではなく、この単元では単独の願望表現に範囲を限定します。</p>
         <details class="section" open><summary>現在の強い願望</summary><div class="formula">If only + 主語 + 過去形</div><blockquote><p>If only she were here!<br>彼女がここにいてくれさえすれば。</p></blockquote></details>
@@ -255,6 +314,14 @@ const subjunctiveCourse = {
       version: 2,
       title: "ミックス仮定法",
       html: `
+        <section class="lessonVisual lessonVisual--timeline" aria-labelledby="mixed-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>THEN: had + p.p.</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>NOW: would / could / might + 原形</code></span></div>
+          <p id="mixed-subjunctive-visual-title" class="lessonVisualLead">過去の選択が、現在の結果へつながる。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualTimeline">
+            <div class="lessonVisualTimePoint"><span>THEN / 過去の条件</span><strong><code>had taken</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>NOW / 現在の結果</span><strong><code>would live</code></strong></div>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、条件と結果の時点が異なるかを見る。</p>
+        </section>
         <p>ミックス仮定法は、過去の条件と現在の結果を組み合わせます。<code>then</code> や <code>last year</code> は過去の条件、<code>now</code>・<code>today</code>・<code>at present</code> は現在の結果の手掛かりです。</p>
         <div class="formula">If + 主語 + had + 過去分詞, 主語 + would / could / might + 動詞の原形</div>
         <blockquote><p>If I had taken the job, I would live in Tokyo now.<br>あのときその仕事を引き受けていたら、今は東京に住んでいるだろうに。</p></blockquote>
@@ -299,6 +366,15 @@ const subjunctiveCourse = {
       version: 2,
       title: "If it were not for",
       html: `
+        <section class="lessonVisual lessonVisual--contrast" aria-labelledby="if-it-were-not-for-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>名詞がなければ</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could ...</code></span></div>
+          <p id="if-it-were-not-for-visual-title" class="lessonVisualLead">現在の話なら were not for、過去の話なら had not been for。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在</span><strong><code>If it were not for + 名詞</code></strong><span><code>without</code> + 主節の現在の結果</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">過去</span><strong><code>If it had not been for + 名詞</code></strong><span><code>without</code> + 主節の過去の結果</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、名詞が現在あるのか、過去にあったのかを見る。</p>
+        </section>
         <p><code>If it were not for + 名詞</code> は、現在の事実を前提に「もし～がなければ」と仮定する表現です。</p>
         <div class="formula">If it were not for + 名詞, 主語 + would / could / might + 動詞の原形</div>
         <blockquote><p>If it were not for your help, I could not finish this work.<br>実際にはあなたの助けがあるので、助けがなければ終えられないでしょう。</p></blockquote>
@@ -343,6 +419,16 @@ const subjunctiveCourse = {
       version: 2,
       title: "as if + 仮定法",
       html: `
+        <section class="lessonVisual lessonVisual--contrast" aria-labelledby="as-if-subjunctive-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>as if + 時点に合う形</code></span></div>
+          <p id="as-if-subjunctive-visual-title" class="lessonVisualLead">事実かどうかと、主節との時間関係を分けて読む。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">可能性あり</span><strong><code>as if it is going to rain</code></strong><span>本当にそうかもしれない</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">前の反事実</span><strong><code>as if he had known</code></strong><span>主節より前</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、事実でないか、主節より前かを見る。</p>
+        </section>
         <p><code>as if</code> 自体が必ず反事実を表すわけではありません。話し手が事実ではないと考える場合と、本当にそうかもしれない様子を述べる場合を分けます。</p>
         <details class="section" open><summary>事実ではないと考える場合</summary>
         <p>主節と同じ時点の反事実なら <code>as if + 過去形</code>、主節より前の反事実なら <code>as if + had + 過去分詞</code> を使います。</p>
@@ -393,6 +479,16 @@ const subjunctiveCourse = {
       version: 2,
       title: "It is time + 仮定法過去",
       html: `
+        <section class="lessonVisual lessonVisual--sentence" aria-labelledby="it-is-time-subjunctive-past-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>It is time ...</code></span><span class="lessonVisualMeta">語順で含みが変わる</span></div>
+          <p id="it-is-time-subjunctive-past-visual-title" class="lessonVisualLead">「もうする時期」と「まだしていない」を語順で分ける。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>to do</code></span><strong><code>time to start</code></strong><span>単なる時刻・行動</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>for 人 to do</code></span><strong><code>time for us to start</code></strong><span>行う人を明示</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>S + 過去形</code></span><strong><code>time we started</code></strong><span>まだしていない</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、まだしていない行動への催促があるかを見る。</p>
+        </section>
         <p>次の3形式は似ていますが、含みが異なります。</p>
         <ul><li><code>It is time to start the meeting.</code>：会議を始める時間だ。</li><li><code>It is time for us to start the meeting.</code>：私たちが会議を始める時間だ。</li><li><code>It is time we started the meeting.</code>：もう会議を始めてもよいころだ。まだ始めていないことを意識する。</li></ul>
         <div class="formula">It is time + 主語 + 過去形</div>
@@ -436,6 +532,14 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法未来（should）",
       html: `
+        <section class="lessonVisual lessonVisual--flow" aria-labelledby="future-subjunctive-should-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>if + S + should do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">主節</span></div>
+          <p id="future-subjunctive-should-visual-title" class="lessonVisualLead"><code>should</code> が、未来の条件を控えめに示す。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualFlow">
+            <div class="lessonVisualFlowNode"><span>条件</span><strong><code>should + 原形</code><br>万一・慎重な提示</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>結果・依頼</span><strong><code>will / would / can / could</code><br>または命令</strong></div>
+          </div><p class="lessonVisualAside"><code>should</code> はここでは義務ではない。</p></div>
+          <p class="lessonVisualPrompt">読むときは、<code>should</code> が義務ではなく条件を示しているかを見る。</p>
+        </section>
         <p><code>if + 主語 + should + 動詞の原形</code> は「万一」の意味を持つことが多く、可能性を低く見る場合に加え、慎重・控えめ・改まった条件提示にも使います。</p>
         <div class="formula">If + 主語 + should + 動詞の原形, 主語 + will / would / can / could + 動詞の原形</div>
         <blockquote><p>If it should rain tomorrow, we will cancel the picnic.</p></blockquote>
@@ -479,6 +583,15 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法未来（were to）",
       html: `
+        <section class="lessonVisual lessonVisual--distance" aria-labelledby="future-subjunctive-were-to-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If + S + were to do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might + 原形</code></span></div>
+          <p id="future-subjunctive-were-to-visual-title" class="lessonVisualLead">未来をいったん現実から切り離し、仮の案として考える。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">極端な想像</span><strong><code>If the sun were to disappear</code></strong><span>起こりそうにない状況</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">実務的な仮案</span><strong><code>If we were to reduce the price</code></strong><span>仮の案として検討する</span></article>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、未来の状況を仮案として切り離しているかを見る。</p>
+        </section>
         <p><code>were to</code> は、未来の状況をいったん現実から切り離し、仮の案として思い描く表現です。起こりそうにない極端な状況にも、実務的な仮案・慎重な検討にも使えます。</p>
         <div class="formula">If + 主語 + were to + 動詞の原形, 主語 + would / could / might + 動詞の原形</div>
         <blockquote><p>If the sun were to disappear, life on Earth would not survive.<br>極端な状況を仮に思い描いています。</p></blockquote>
@@ -522,6 +635,16 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法の倒置",
       html: `
+        <section class="lessonVisual lessonVisual--transform" aria-labelledby="subjunctive-inversion-visual-title">
+          <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If S + H/W/S</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>H/W/S + S</code></span><span class="lessonVisualMeta"><code>Had / Were / Should</code> を主語の前へ</span></div>
+          <p id="subjunctive-inversion-visual-title" class="lessonVisualLead"><code>if</code> を外し、形を主語の前へ移す。</p>
+          <div class="lessonVisualBody"><div class="lessonVisualTransform">
+            <div class="lessonVisualTransformRow"><div class="lessonVisualTransformSlot"><span>元の if節</span><strong><code>If I had known</code></strong></div><span class="lessonVisualTransformArrow" aria-hidden="true">→</span><div class="lessonVisualTransformSlot lessonVisualTransformSlot--accent"><span>倒置</span><strong><code>Had I known</code></strong></div></div>
+            <div class="lessonVisualTransformRow"><div class="lessonVisualTransformSlot"><span>元の if節</span><strong><code>If I were you</code></strong></div><span class="lessonVisualTransformArrow" aria-hidden="true">→</span><div class="lessonVisualTransformSlot lessonVisualTransformSlot--accent"><span>倒置</span><strong><code>Were I you</code></strong></div></div>
+            <div class="lessonVisualTransformRow"><div class="lessonVisualTransformSlot"><span>元の if節</span><strong><code>If you should need</code></strong></div><span class="lessonVisualTransformArrow" aria-hidden="true">→</span><div class="lessonVisualTransformSlot lessonVisualTransformSlot--accent"><span>倒置</span><strong><code>Should you need</code></strong></div></div>
+          </div></div>
+          <p class="lessonVisualPrompt">読むときは、文頭の <code>Had</code>・<code>Were</code>・<code>Should</code> をif節へ戻せるかを見る。</p>
+        </section>
         <p>倒置は意味を変えず、文章語的・改まった表現にします。疑問文と同じ語順ですが疑問ではありません。</p>
         <p>まず文頭の <code>Had / Were / Should</code> を見つけ、元の if節に戻します。</p>
         <details class="section" open><summary>Had の倒置</summary><p><code>If I had known ...</code> → <code>Had I known ...</code></p><blockquote><p>Had I known the truth, I would have told you.<br>もし真実を知っていたなら、あなたに伝えていただろうに。</p></blockquote><p>実際には真実を知らず、伝えなかったという反事実です。</p></details>
@@ -2188,6 +2311,19 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
     check(lessonIds.length === courseLessonIds.length && courseLessonIds.every(id => lessonIds.includes(id)), `${course.title}の章が全単元を重複なく覆うこと`);
     check(lessonIds.every(id => courseLessonIds.includes(id)), `${course.title}の章が存在する単元IDだけを参照すること`);
   });
+  const checkLessonVisualContract = (lesson, visualTypes, label = "") => {
+    const visualMatches = lesson.html.match(/<section class="lessonVisual\b/g) || [];
+    const visual = lesson.html.match(/<section class="lessonVisual\b[\s\S]*?<\/section>/)?.[0] || "";
+    const labelledBy = visual.match(/aria-labelledby="([^"]+)"/)?.[1] || "";
+    check(visualMatches.length === 1, `${label}${lesson.id}のlessonVisualが1件であること`);
+    check(visual.includes(`lessonVisual--${visualTypes[lesson.id]}`), `${label}${lesson.id}の図解型が契約どおりであること`);
+    ["lessonVisualAnchor", "lessonVisualLead", "lessonVisualBody", "lessonVisualPrompt"].forEach(slot => {
+      check((visual.match(new RegExp(`class="${slot}"`, "g")) || []).length === 1, `${label}${lesson.id}の${slot}が1件であること`);
+    });
+    check(Boolean(labelledBy) && visual.includes(`id="${labelledBy}" class="lessonVisualLead"`), `${label}${lesson.id}のaria-labelledbyがleadを参照すること`);
+    check(!/<(?:details|summary|button|input|select)\b/i.test(visual), `${label}${lesson.id}の図解に操作要素がないこと`);
+    return labelledBy;
+  };
   const infinitives = courses.find(course => course.id === "infinitives");
   const infinitiveVisualTypes = {
     "infinitive-nominal-use": "roles",
@@ -2211,17 +2347,40 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
     check(infinitives.lessons.flatMap(lesson => lesson.questions).length === 42, "不定詞が42問であること");
     check(infinitives.lessons.every(lesson => Object.prototype.hasOwnProperty.call(infinitiveVisualTypes, lesson.id)), "不定詞14単元の図解契約がそろっていること");
     infinitives.lessons.forEach(lesson => {
-      const visualMatches = lesson.html.match(/<section class="lessonVisual\b/g) || [];
-      const visual = lesson.html.match(/<section class="lessonVisual\b[\s\S]*?<\/section>/)?.[0] || "";
-      const labelledBy = visual.match(/aria-labelledby="([^"]+)"/)?.[1] || "";
-      check(visualMatches.length === 1, `${lesson.id}のlessonVisualが1件であること`);
-      check(visual.includes(`lessonVisual--${infinitiveVisualTypes[lesson.id]}`), `${lesson.id}の図解型が契約どおりであること`);
-      ["lessonVisualAnchor", "lessonVisualLead", "lessonVisualBody", "lessonVisualPrompt"].forEach(slot => {
-        check((visual.match(new RegExp(`class="${slot}"`, "g")) || []).length === 1, `${lesson.id}の${slot}が1件であること`);
-      });
-      check(Boolean(labelledBy) && visual.includes(`id="${labelledBy}" class="lessonVisualLead"`), `${lesson.id}のaria-labelledbyがleadを参照すること`);
-      check(!/<(?:details|summary|button|input|select)\b/i.test(visual), `${lesson.id}の図解に操作要素がないこと`);
+      checkLessonVisualContract(lesson, infinitiveVisualTypes);
     });
+  }
+  const subjunctiveVisualTypes = {
+    "conditionals-vs-subjunctive": "distance",
+    "past-subjunctive": "distance",
+    "past-perfect-subjunctive": "timeline",
+    "wish-subjunctive": "timeline",
+    "if-only-subjunctive": "contrast",
+    "mixed-subjunctive": "timeline",
+    "if-it-were-not-for": "contrast",
+    "as-if-subjunctive": "contrast",
+    "it-is-time-subjunctive-past": "sentence",
+    "future-subjunctive-should": "flow",
+    "future-subjunctive-were-to": "distance",
+    "subjunctive-inversion": "transform"
+  };
+  check(Boolean(subjunctive), "仮定法カテゴリが存在すること");
+  if (subjunctive) {
+    const overviewHtml = subjunctive.overview?.html || "";
+    const overviewMatches = overviewHtml.match(/<section class="overviewVisual\b/g) || [];
+    const decisionVisual = overviewHtml.match(/<section class="overviewVisual overviewVisual--decision\b[\s\S]*?<\/section>/)?.[0] || "";
+    const overviewLabelledBy = decisionVisual.match(/aria-labelledby="([^"]+)"/)?.[1] || "";
+    check(overviewMatches.length === 1, "仮定法概論のoverviewVisualが1件であること");
+    check(Boolean(decisionVisual), "仮定法概論の図解型がdecisionであること");
+    check((decisionVisual.match(/class="overviewVisualLead"/g) || []).length === 1, "仮定法概論のleadが1件であること");
+    check((decisionVisual.match(/class="overviewDecisionAnchor"/g) || []).length === 1, "仮定法概論の判断軸が1件であること");
+    check((decisionVisual.match(/class="overviewDecisionFlow"/g) || []).length === 1, "仮定法概論の判断フローが1件であること");
+    check((decisionVisual.match(/class="overviewDecisionStep"/g) || []).length === 4, "仮定法概論の判断手順が4段階であること");
+    check(Boolean(overviewLabelledBy) && decisionVisual.includes(`id="${overviewLabelledBy}" class="overviewVisualLead"`), "仮定法概論のaria-labelledbyがleadを参照すること");
+    check(!/<(?:details|summary|button|input|select)\b/i.test(decisionVisual), "仮定法概論の図解に操作要素がないこと");
+    check(subjunctive.lessons.every(lesson => Object.prototype.hasOwnProperty.call(subjunctiveVisualTypes, lesson.id)), "仮定法12単元の図解契約がそろっていること");
+    const labelledByIds = subjunctive.lessons.map(lesson => checkLessonVisualContract(lesson, subjunctiveVisualTypes, "仮定法"));
+    check(new Set(labelledByIds).size === subjunctive.lessons.length, "仮定法各論の図解IDが重複しないこと");
   }
   if (failures.length > 0) {
     failures.forEach(message => console.error(`CONTENT_CHECK_NG: ${message}`));

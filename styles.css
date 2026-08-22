@@ -369,6 +369,14 @@ blockquote p:last-child { margin-bottom: 0; }
 .overviewUseCard b { font-size: clamp(24px, 3vw, 34px); line-height: 1.15; }
 .overviewUseCard span:last-child { font-size: 14px; }
 .overviewVisualPrompt { margin: 18px 0 0; text-align: center; font-weight: 700; }
+.overviewDecisionAnchor { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 0 0 12px; font-size: clamp(28px, 5vw, 48px); font-weight: 900; line-height: 1.15; text-align: center; }
+.overviewDecisionAnchor > span:not(.overviewDecisionOperator) { padding: 8px 14px; border: 3px solid var(--ink); border-radius: var(--radius-container); background: var(--color-learning-form); }
+.overviewDecisionOperator { color: var(--color-accent-strong); }
+.overviewDecisionFlow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.overviewDecisionStep { display: grid; min-width: 0; align-content: start; gap: 4px; padding: 13px 11px; border: 3px solid var(--ink); border-radius: var(--radius-container); background: var(--color-canvas); text-align: center; }
+.overviewDecisionStep > span:first-child { display: inline-grid; width: 28px; height: 28px; align-items: center; justify-self: center; border: 2px solid var(--ink); border-radius: var(--radius-pill); font-weight: 900; }
+.overviewDecisionStep strong { font-size: 17px; line-height: 1.35; overflow-wrap: anywhere; }
+.overviewDecisionStep > span:last-child { color: var(--color-ink-secondary); font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
 
 /* 各論図解。一般式→中心概念→関係／対比→判断基準の順で読む。 */
 .lessonVisual { margin: 24px 0 30px; padding: 18px; border: 3px solid var(--ink); border-radius: var(--radius-container); background: var(--color-surface-subtle); }
@@ -381,6 +389,7 @@ blockquote p:last-child { margin-bottom: 0; }
 .lessonVisualCards { display: grid; gap: 10px; }
 .lessonVisualCards--two, .lessonVisualCards--contrast { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .lessonVisualCards--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lessonVisualCards--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .lessonVisualCard { display: grid; min-width: 0; align-content: start; gap: 5px; padding: 13px; border: 3px solid var(--ink); border-radius: var(--radius-container); background: var(--color-canvas); }
 .lessonVisualCard--accent { border-left-color: var(--color-accent); }
 .lessonVisualCardLabel { color: var(--color-accent-strong); font-size: 13px; font-weight: 800; line-height: 1.35; }
@@ -403,6 +412,13 @@ blockquote p:last-child { margin-bottom: 0; }
 .lessonVisualSlot strong { font-size: 17px; line-height: 1.25; overflow-wrap: anywhere; }
 .lessonVisualTimePoint { flex: 1 1 0; min-width: 0; padding: 13px; border: 2px solid var(--ink); border-radius: var(--radius-control); background: var(--color-canvas); text-align: center; }
 .lessonVisualTimePoint--accent { border-color: var(--color-accent); }
+.lessonVisualTransform { display: grid; gap: 8px; }
+.lessonVisualTransformRow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; }
+.lessonVisualTransformSlot { display: grid; min-width: 0; gap: 4px; padding: 11px 12px; border: 2px solid var(--ink); border-radius: var(--radius-control); background: var(--color-canvas); text-align: center; }
+.lessonVisualTransformSlot--accent { border-color: var(--color-accent); }
+.lessonVisualTransformSlot span { color: var(--color-ink-secondary); font-size: 13px; font-weight: 700; line-height: 1.35; }
+.lessonVisualTransformSlot strong { overflow-wrap: anywhere; }
+.lessonVisualTransformArrow { color: var(--color-accent-strong); font-size: 24px; font-weight: 900; line-height: 1; }
 .lessonVisualPrompt { margin: 16px 0 0; padding: 11px 13px; border-left: 4px solid var(--color-accent); background: var(--color-canvas); font-weight: 700; line-height: 1.55; overflow-wrap: anywhere; }
 .courseMeta { display: flex; flex-wrap: wrap; gap: 8px 0; margin: 20px 0 0; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 .courseMeta span + span::before { content: "·"; margin: 0 8px; color: var(--line); }
@@ -473,6 +489,13 @@ blockquote p:last-child { margin-bottom: 0; }
   .overviewUseCard strong { grid-area: role; border-right: 1px solid color-mix(in srgb, var(--ink) 24%, transparent); font-size: 15px; }
   .overviewUseCard b { grid-area: main; font-size: 20px; }
   .overviewUseCard span:last-child { grid-area: detail; font-size: 12px; }
+  .overviewDecisionAnchor { gap: 6px; font-size: 26px; }
+  .overviewDecisionAnchor > span:not(.overviewDecisionOperator) { padding: 7px 10px; }
+  .overviewDecisionFlow { grid-template-columns: 1fr; gap: 8px; }
+  .overviewDecisionStep { grid-template-columns: 30px minmax(0, 1fr); grid-template-areas: "number title" "number detail"; align-items: center; gap: 1px 9px; padding: 9px 10px; text-align: left; }
+  .overviewDecisionStep > span:first-child { grid-area: number; justify-self: start; }
+  .overviewDecisionStep strong { grid-area: title; font-size: 16px; }
+  .overviewDecisionStep > span:last-child { grid-area: detail; font-size: 13px; }
   .courseMeta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; }
   .courseMeta span + span::before { content: ""; margin: 0; }
   .courseMeta span { overflow-wrap: anywhere; }
@@ -499,7 +522,7 @@ blockquote p:last-child { margin-bottom: 0; }
   .lessonVisual { margin: 20px 0 26px; padding: 14px; }
   .lessonVisualAnchor { gap: 6px; margin-bottom: 10px; padding: 10px; font-size: 20px; }
   .lessonVisualLead { margin-bottom: 12px; font-size: 18px; }
-  .lessonVisualCards--two, .lessonVisualCards--three, .lessonVisualCards--contrast, .lessonVisualScale { grid-template-columns: 1fr; }
+  .lessonVisualCards--two, .lessonVisualCards--three, .lessonVisualCards--four, .lessonVisualCards--contrast, .lessonVisualScale { grid-template-columns: 1fr; }
   .lessonVisualCards, .lessonVisualScale { grid-auto-rows: 1fr; }
   .lessonVisualCard { grid-template-columns: minmax(58px, max-content) minmax(0, 1fr); grid-template-areas: "label title" "label detail"; align-items: start; padding: 10px; }
   .lessonVisualCardLabel { grid-area: label; display: flex; min-height: 100%; align-items: center; padding-right: 8px; border-right: 1px solid var(--color-border); }
@@ -512,5 +535,13 @@ blockquote p:last-child { margin-bottom: 0; }
   .lessonVisualSlots--three, .lessonVisualSlots--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lessonVisualSlot { padding: 9px 6px; }
   .lessonVisualSlot strong { font-size: 16px; }
+  .lessonVisualTransform { gap: 6px; }
+  .lessonVisualTransformRow { grid-template-columns: 1fr; gap: 4px; }
+  .lessonVisualTransformArrow { font-size: 0; text-align: center; }
+  .lessonVisualTransformArrow::before { content: "↓"; font-size: 18px; }
+  .lessonVisual--transform .lessonVisualAnchor { gap: 4px; padding: 8px; font-size: 18px; }
+  .lessonVisual--transform .lessonVisualTransformSlot { gap: 2px; padding: 4px 8px; }
+  .lessonVisual--transform .lessonVisualTransformSlot span { font-size: 12px; }
+  .lessonVisual--transform .lessonVisualTransformSlot strong { font-size: 16px; line-height: 1.25; }
   .lessonVisualPrompt { margin-top: 12px; padding: 10px 11px; font-size: 15px; }
 }

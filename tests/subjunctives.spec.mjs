@@ -29,6 +29,27 @@ const masteredSubjunctiveAnswers = {
   "future-subjunctive-were-to": [0, 2, 1],
   "subjunctive-inversion": [1, 2, 3]
 };
+const subjunctiveVisualContracts = [
+  { id: "conditionals-vs-subjunctive", type: "distance", cue: "現実に起こり得る", prompt: "現実的に扱っているか" },
+  { id: "past-subjunctive", type: "distance", cue: "If + 主語 + 過去形", prompt: "現在の事実と反するか" },
+  { id: "past-perfect-subjunctive", type: "timeline", cue: "had + 過去分詞", prompt: "条件と結果が両方とも過去か" },
+  { id: "wish-subjunctive", type: "timeline", cue: "could", prompt: "いつのこととして願っているか" },
+  { id: "if-only-subjunctive", type: "contrast", cue: "強い願望", prompt: "強い願望・後悔の時点" },
+  { id: "mixed-subjunctive", type: "timeline", cue: "THEN", prompt: "条件と結果の時点が異なるか" },
+  { id: "if-it-were-not-for", type: "contrast", cue: "had not been for", prompt: "名詞が現在あるのか、過去にあったのか" },
+  { id: "as-if-subjunctive", type: "contrast", cue: "本当にそうかもしれない", prompt: "事実でないか、主節より前か" },
+  { id: "it-is-time-subjunctive-past", type: "sentence", cue: "まだしていない", prompt: "まだしていない行動への催促" },
+  { id: "future-subjunctive-should", type: "flow", cue: "義務ではない", prompt: "義務ではなく条件" },
+  { id: "future-subjunctive-were-to", type: "distance", cue: "仮の案", prompt: "仮案として切り離しているか" },
+  { id: "subjunctive-inversion", type: "transform", cue: "Had", prompt: "if節へ戻せるか" }
+];
+const subjunctiveFormulaContracts = {
+  "past-subjunctive": "would / could / might + 原形",
+  "past-perfect-subjunctive": "would / could / might have + 過去分詞",
+  "mixed-subjunctive": "NOW: would / could / might + 原形",
+  "future-subjunctive-were-to": "would / could / might + 原形"
+};
+const complexSubjunctiveVisualTypes = new Set(["timeline", "transform"]);
 
 async function freshHome(page) {
   await page.goto("/");
@@ -96,6 +117,149 @@ test("概論は通常の条件文との対比と到達範囲を示す", async ({
   await expect(page.locator("#homePanel")).toContainText("If I have time tonight, I will read this book.");
   await expect(page.locator("#homePanel")).toContainText("I wish");
   await expect(page.locator("#homePanel")).toContainText("If only");
+});
+
+test("仮定法概論は時点と現実との距離から判断する図解を持つ", async ({ page }) => {
+  await freshHome(page);
+  await switchCourse(page, "subjunctive");
+
+  const visual = page.locator(".courseOverview .overviewVisual--decision");
+  await expect(visual).toHaveCount(1);
+  await expect(visual.locator(".overviewDecisionAnchor")).toContainText("時点");
+  await expect(visual.locator(".overviewDecisionAnchor")).toContainText("現実との距離");
+  await expect(visual.locator(".overviewDecisionFlow .overviewDecisionStep")).toHaveCount(4);
+  await expect(visual).toContainText("条件・願望・定型表現");
+  await expect(visual.locator(".overviewVisualPrompt")).toContainText("いつの話か");
+  await expect(page.locator(".courseOverview")).toContainText("if を使う文がすべて仮定法ではありません");
+  await expect(page.locator(".courseOverview")).toContainText("If I have time tonight, I will read this book.");
+  await expect(page.locator(".courseOverview")).toContainText("I wish");
+});
+
+test("仮定法12単元は固有の図解と常時表示の詳説を持つ", async ({ page }) => {
+  await freshHome(page);
+
+  for (const contract of subjunctiveVisualContracts) {
+    await page.goto(`/#/c/subjunctive/l/${contract.id}`);
+    const visual = page.locator("#session-content .lessonVisual");
+
+    await expect(visual).toHaveCount(1);
+    await expect(visual).toHaveClass(new RegExp(`lessonVisual--${contract.type}`));
+    await expect(visual.locator(".lessonVisualAnchor")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualLead")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualBody")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualPrompt")).toHaveCount(1);
+    await expect(visual).toContainText(contract.cue);
+    await expect(visual.locator(".lessonVisualPrompt")).toContainText(contract.prompt);
+    await expect(visual.locator("details, summary, button, input, select")).toHaveCount(0);
+
+    const labelledBy = await visual.getAttribute("aria-labelledby");
+    expect(labelledBy).toBeTruthy();
+    await expect(visual.locator(`#${labelledBy}`)).toHaveClass(/lessonVisualLead/);
+    await expect(page.locator(".flashCard details.section")).toHaveCount(0);
+    const sectionCount = await page.locator(".flashCard .sectionHeading").count();
+    await expect(page.locator(".lessonToc .lessonTocLink")).toHaveCount(sectionCount);
+    await expect(page.locator(".lessonTocInline .lessonTocLink")).toHaveCount(sectionCount);
+    await expect(page.locator(".flashCard > p").last()).toBeVisible();
+  }
+});
+
+test("仮定法図解の一般式と時点表現を詳説とそろえる", async ({ page }) => {
+  await freshHome(page);
+
+  for (const [lessonId, formula] of Object.entries(subjunctiveFormulaContracts)) {
+    await page.goto(`/#/c/subjunctive/l/${lessonId}`);
+    await expect(page.locator("#session-content .lessonVisualAnchor")).toContainText(formula);
+  }
+
+  await page.goto("/#/c/subjunctive/l/if-it-were-not-for");
+  const visual = page.locator("#session-content .lessonVisual");
+  await expect(visual.locator(".lessonVisualLead")).toContainText("現在の話なら were not for、過去の話なら had not been for。");
+  await expect(visual).toContainText("were not for");
+  await expect(visual).toContainText("had not been for");
+  await expect(visual).not.toContainText("現在形か過去形かを選ぶ");
+});
+
+test("仮定法概論の判断図解は320px以上で収まり、本文を押し出しすぎない", async ({ page }) => {
+  await freshHome(page);
+
+  for (const width of [320, 375, 640, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/#/c/subjunctive");
+    const measurements = await page.locator(".courseOverview .overviewVisual--decision").evaluate(element => ({
+      height: Math.round(element.getBoundingClientRect().height),
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth
+    }));
+    expect(measurements.height, `${width}pxの概論図解`).toBeLessThan(650);
+    expect(measurements.scrollWidth, `${width}px横幅`).toBeLessThanOrEqual(measurements.clientWidth);
+    await expect(page.locator(".courseOverview > p:not(.hint)").first()).toBeVisible();
+  }
+});
+
+test("仮定法の図解は320px以上で横スクロールせず、詳説を隠さない", async ({ page }) => {
+  await freshHome(page);
+
+  for (const width of [320, 375, 640, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const contract of subjunctiveVisualContracts) {
+      await page.goto(`/#/c/subjunctive/l/${contract.id}`);
+      const measurements = await page.locator("#session-content .lessonVisual").evaluate(element => ({
+        height: Math.round(element.getBoundingClientRect().height),
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth
+      }));
+      const limit = width === 320 && !complexSubjunctiveVisualTypes.has(contract.type) ? 650 : 720;
+      expect(measurements.height, `${contract.id} ${width}px`).toBeLessThan(limit);
+      expect(measurements.scrollWidth, `${contract.id} ${width}px横幅`).toBeLessThanOrEqual(measurements.clientWidth);
+      await expect(page.locator(".flashCard > p").last()).toBeVisible();
+    }
+  }
+});
+
+test("320pxの仮定法図解内の並列カードは内容依存で同じ行高になる", async ({ page }) => {
+  await freshHome(page);
+  await page.setViewportSize({ width: 320, height: 844 });
+
+  for (const contract of subjunctiveVisualContracts) {
+    await page.goto(`/#/c/subjunctive/l/${contract.id}`);
+    const cards = page.locator(".lessonVisualBody .lessonVisualCards > .lessonVisualCard, .lessonVisualBody .lessonVisualTimeline > .lessonVisualTimePoint, .lessonVisualBody .lessonVisualTransformRow");
+    const heights = await cards.evaluateAll(elements => elements.map(element => Math.round(element.getBoundingClientRect().height)));
+    if (heights.length < 2) continue;
+    expect(Math.max(...heights) - Math.min(...heights), `${contract.id}のカード高差`).toBeLessThanOrEqual(36);
+  }
+});
+
+test("仮定法図解の追加では保存済みの回答・復習・既読・修了テスト・位置を保持する", async ({ page }) => {
+  await freshHome(page);
+  await page.evaluate(() => {
+    const key = "englishGrammarLearning.v3";
+    const state = JSON.parse(localStorage.getItem(key));
+    state.courseId = "subjunctive";
+    state.stage = 2;
+    state.question = 2;
+    state.versions["past-subjunctive"] = 2;
+    state.courseStructureVersions.subjunctive = 2;
+    state.answers["past-subjunctive"] = [3, 1, 2];
+    state.review["past-subjunctive-q1"] = {
+      wrongCount: 1,
+      leitnerStage: 1,
+      nextReviewAt: "2099-01-02",
+      lastAnsweredAt: "2099-01-01"
+    };
+    state.visitedLessons.push("past-subjunctive");
+    state.finalChecks.subjunctive = { bestScore: 34, lastScore: 35, cleared: true, bestTotal: 36 };
+    state.coursePositions.subjunctive = { stage: 2, question: 2 };
+    localStorage.setItem(key, JSON.stringify(state));
+  });
+
+  await page.reload();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("englishGrammarLearning.v3")));
+  expect(saved.answers["past-subjunctive"]).toEqual([3, 1, 2]);
+  expect(saved.review["past-subjunctive-q1"].wrongCount).toBe(1);
+  expect(saved.visitedLessons).toContain("past-subjunctive");
+  expect(saved.finalChecks.subjunctive.cleared).toBe(true);
+  expect(saved.coursePositions.subjunctive).toEqual({ stage: 2, question: 2 });
+  expect(saved.courseStructureVersions.subjunctive).toBe(2);
 });
 
 test("条件文と仮定法の違いを3問で確認できる", async ({ page }) => {

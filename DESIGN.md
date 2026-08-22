@@ -181,10 +181,20 @@ Kinetics（参考: https://kinetics.colorion.co/）のAccordion Spring・Icon Mo
   | 対比 | `.lessonVisual--contrast` | for/of、全体/途中、否定範囲など |
   | 文型・語順 | `.lessonVisual--sentence` | it構文、使役、notの位置 |
   | 時間軸・程度 | `.lessonVisual--timeline` / `.lessonVisual--scale` | 結果、完了不定詞、too/enough |
+  | 現実との距離 | `.lessonVisual--distance` | 現実的な条件、反事実、未来の仮案 |
+  | 変換 | `.lessonVisual--transform` | if節からHad／Were／Should倒置への変換 |
 
 - 概論と同じ`12px`角丸、`3px`の主要罫線、影なしを使う。背景・強調は`--color-learning-*`と`--color-accent`を再利用し、色だけで関係を判断させない。ラベル、配置、矢印、枠線を必ず併用する。図解本文は`16px`を基本とし、補助語も`12px`未満にしない。
 - 641px以上ではカードを2〜3列または横向きの関係・時間軸にする。640px以下では対比・並列カードを短い横長行として1列にし、矢印は上下方向へ変換できる。320pxでも英文・文型を自然に折り返し、固定高さ・`white-space: nowrap`・`word-break: break-all`は使わない。図解の高さは単純型650px以下、複雑型720px未満を目安とする。
 - 図解追加だけでは`lesson.version`、`structureVersion`、単元ID・問題ID、回答・復習・修了テスト・コース位置を変更しない。詳説、例文、発展内容、見分け方は削除・要約せず、図解の後半へ常時表示する。
+
+### 仮定法図解教材
+
+- 仮定法概論の`.overviewVisual--decision`は、`時点 × 現実との距離`を大きな関係として示し、「いつの話か → 事実と一致するか → 条件・願望・定型表現のどれか → 必要な形」の4段階を順番に読む構造にする。条件文だけを仮定法全体の代表にしない。
+- 仮定法の図解では、動詞の形と実際の時点を同じものとして扱わない。現在の反事実に過去形を使う場合、図解のラベルは「現在の話」と「過去形の形」を別々に示す。
+- `.lessonVisual--distance`は現実との距離、`.lessonVisual--timeline`は条件と結果の時点、`.lessonVisual--contrast`は通常時制・現在／過去・用法の対比、`.lessonVisual--sentence`は語順と含み、`.lessonVisual--flow`は条件から主節への流れ、`.lessonVisual--transform`はif節からHad／Were／Should倒置への変換を表す。型を混ぜず、各単元の判断軸を一つに絞る。
+- `should`は義務用法、`were to`は単純な確率順位、`as if`は常時反事実、`without`は時制を持つ表現として図解しない。ラベル・例文・後半の詳説で、判断に必要な条件を残す。
+- 倒置型は疑問文として扱わず、`If S had` → `Had S`、`If S were` → `Were S`、`If S should` → `Should S`の対応を3行で示す。320px以下では各変換を元の形→倒置の上下方向に切り替える。
 
 ### 修了テスト解放
 
