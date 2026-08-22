@@ -519,12 +519,12 @@ blockquote p:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 640px) {
-  .lessonVisual { margin: 20px 0 26px; padding: 14px; }
-  .lessonVisualAnchor { gap: 6px; margin-bottom: 10px; padding: 10px; font-size: 20px; }
-  .lessonVisualLead { margin-bottom: 12px; font-size: 18px; }
+  .lessonVisual { margin: 20px 0 26px; padding: 12px; }
+  .lessonVisualAnchor { gap: 6px; margin-bottom: 8px; padding: 8px; font-size: 20px; }
+  .lessonVisualLead { margin-bottom: 8px; font-size: 18px; }
   .lessonVisualCards--two, .lessonVisualCards--three, .lessonVisualCards--four, .lessonVisualCards--contrast, .lessonVisualScale { grid-template-columns: 1fr; }
-  .lessonVisualCards, .lessonVisualScale { grid-auto-rows: 1fr; }
-  .lessonVisualCard { grid-template-columns: minmax(58px, max-content) minmax(0, 1fr); grid-template-areas: "label title" "label detail"; align-items: start; padding: 10px; }
+  .lessonVisualCards, .lessonVisualScale { grid-auto-rows: 1fr; gap: 6px; }
+  .lessonVisualCard { grid-template-columns: minmax(58px, max-content) minmax(0, 1fr); grid-template-areas: "label title" "label detail"; align-items: start; padding: 8px; }
   .lessonVisualCardLabel { grid-area: label; display: flex; min-height: 100%; align-items: center; padding-right: 8px; border-right: 1px solid var(--color-border); }
   .lessonVisualCard strong { grid-area: title; font-size: 16px; }
   .lessonVisualCard > span:last-child { grid-area: detail; font-size: 13px; }
@@ -543,5 +543,5 @@ blockquote p:last-child { margin-bottom: 0; }
   .lessonVisual--transform .lessonVisualTransformSlot { gap: 2px; padding: 4px 8px; }
   .lessonVisual--transform .lessonVisualTransformSlot span { font-size: 12px; }
   .lessonVisual--transform .lessonVisualTransformSlot strong { font-size: 16px; line-height: 1.25; }
-  .lessonVisualPrompt { margin-top: 12px; padding: 10px 11px; font-size: 15px; }
+  .lessonVisualPrompt { margin-top: 8px; padding: 8px 10px; font-size: 15px; }
 }
