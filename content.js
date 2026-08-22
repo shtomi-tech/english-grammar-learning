@@ -951,37 +951,42 @@ const curriculum = {
         html: `
           <section class="overviewVisual" aria-labelledby="infinitive-visual-title">
             <div class="overviewFormula" aria-label="to と動詞の原形">
-              <span class="overviewFormulaPart">to</span><span class="overviewFormulaPlus">＋</span><span class="overviewFormulaPart overviewFormulaPart--verb">study</span>
+              <span class="overviewFormulaPart">to</span><span class="overviewFormulaPlus">＋</span><span class="overviewFormulaPart overviewFormulaPart--verb">動詞の原形</span>
             </div>
-            <p id="infinitive-visual-title" class="overviewVisualLead">動詞を、別の仕事に変身させる。</p>
+            <p class="overviewFormulaExample">例：<code>to study</code></p>
+            <p id="infinitive-visual-title" class="overviewVisualLead">動詞を、文の部品や説明に変える。</p>
             <div class="overviewUseGrid">
-              <article class="overviewUseCard overviewUseCard--noun"><span class="overviewUseNumber">①</span><strong>名詞</strong><b>こと</b><span>〜すること</span></article>
-              <article class="overviewUseCard overviewUseCard--adjective"><span class="overviewUseNumber">②</span><strong>形容詞</strong><b>説明</b><span>〜するための／〜すべき</span></article>
-              <article class="overviewUseCard overviewUseCard--adverb"><span class="overviewUseNumber">③</span><strong>副詞</strong><b>目的</b><span>〜するために</span></article>
+              <article class="overviewUseCard overviewUseCard--noun"><strong>名詞</strong><b>文の部品</b><span>主語・目的語・補語</span></article>
+              <article class="overviewUseCard overviewUseCard--adjective"><strong>形容詞</strong><b>名詞を説明</b><span>どんな名詞か</span></article>
+              <article class="overviewUseCard overviewUseCard--adverb"><strong>副詞</strong><b>動詞などを説明</b><span>目的・原因・結果・程度</span></article>
             </div>
-            <p class="overviewVisualPrompt">読むときは、<code>to do</code> が何を説明しているかを見る。</p>
+            <p class="overviewVisualPrompt">読むときは、<code>to do</code> が文の中でどの仕事をしているかを見る。</p>
           </section>
           <p>不定詞は、<code>to + 動詞の原形</code> の形をした「動詞の変身形」です。動詞の意味を残したまま、名詞・形容詞・副詞のように働きます。</p>
           <p>大学受験では、まず <code>to + 動詞の原形</code> を見つけ、それが文の中で何をしているかを考えます。</p>
-          <details class="section" open>
-          <summary>基本の3用法</summary>
-          <ul>
-            <li><strong>名詞的用法</strong>：～すること　<code>I like to read books.</code></li>
-            <li><strong>形容詞的用法</strong>：～するための／～すべき　<code>a book to read</code></li>
-            <li><strong>副詞的用法</strong>：～するために　<code>I went to the library to study.</code></li>
-          </ul>
-          <p><code>to read books</code> は「本を読むこと」、<code>to read</code> は <code>a book</code> の内容、<code>to study</code> は図書館へ行った目的を表します。</p>
-          </details>
-          <details class="section" open>
-          <summary>入試でよく出る形</summary>
-          <ul>
-            <li><code>too ... to do</code>：あまりに～なので…できない</li>
-            <li><code>... enough to do</code>：～するのに十分…だ</li>
-            <li><code>what / how / where to do</code>：何を／どうやって／どこで～すべきか</li>
-            <li><code>for + 人 + to do</code>：人が～する</li>
-            <li><code>of + 人 + to do</code>：～するとは、その人は…だ</li>
-          </ul>
-          </details>
+          <section class="section">
+            <h4 class="sectionHeading">基本の3用法</h4>
+            <div class="sectionBody">
+              <ul>
+                <li><strong>名詞的用法</strong>：文の主語・目的語・補語になる　<code>I like to read books.</code></li>
+                <li><strong>形容詞的用法</strong>：名詞を後ろから説明する　<code>I need a book to read.</code></li>
+                <li><strong>副詞的用法</strong>：動詞・形容詞などに意味を加える　<code>I went to the library to study.</code></li>
+              </ul>
+              <p><code>to read books</code> は <code>like</code> の目的語、<code>to read</code> は <code>a book</code> を後ろから説明する語句、<code>to study</code> は図書館へ行った目的です。</p>
+            </div>
+          </section>
+          <section class="section">
+            <h4 class="sectionHeading">入試でよく出る形</h4>
+            <div class="sectionBody">
+              <ul>
+                <li><code>too ... to do</code>：あまりに～なので…できない</li>
+                <li><code>... enough to do</code>：～するのに十分…だ</li>
+                <li><code>what / how / where to do</code>：何を／どうやって／どこで～すべきか</li>
+                <li><code>for + 人 + to do</code>：人が～する</li>
+                <li><code>of + 人 + to do</code>：～するとは、その人は…だ</li>
+              </ul>
+            </div>
+          </section>
           <p>さらに、使役動詞や知覚動詞の後ろでは、<code>to</code> を付けない原形不定詞を使います。否定形は <code>not to do</code>、完了形は <code>to have done</code> です。</p>
           <p class="note">見分ける順番は「<code>to</code> の後ろが動詞の原形か」→「名詞・形容詞・副詞のどの働きか」です。<code>to</code> の後ろに名詞や動名詞が続く場合は前置詞なので、不定詞とは限りません。</p>`
       },

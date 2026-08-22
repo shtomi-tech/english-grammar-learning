@@ -30,6 +30,44 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
   await expect(page.locator(".choice")).toHaveCount(4);
 });
 
+test("不定詞の概論は正確な図解と常時表示の詳説を持つ", async ({ page }) => {
+  await freshHome(page);
+  await switchCourse(page, "infinitives");
+
+  const overview = page.locator(".courseOverview");
+  const visual = overview.locator(".overviewVisual");
+  await expect(visual.locator(".overviewFormula")).toContainText("to＋動詞の原形");
+  await expect(visual).toContainText("例：to study");
+  await expect(visual.locator(".overviewUseCard--noun")).toContainText("文の部品");
+  await expect(visual.locator(".overviewUseCard--noun")).toContainText("主語・目的語・補語");
+  await expect(visual.locator(".overviewUseCard--adjective")).toContainText("名詞を説明");
+  await expect(visual.locator(".overviewUseCard--adverb")).toContainText("目的・原因・結果・程度");
+  await expect(visual).toContainText("文の中でどの仕事をしているか");
+
+  await expect(overview.locator("details.section")).toHaveCount(0);
+  await expect(overview.getByRole("heading", { name: "基本の3用法", exact: true })).toBeVisible();
+  await expect(overview.getByRole("heading", { name: "入試でよく出る形", exact: true })).toBeVisible();
+});
+
+test("不定詞の図解はスマートフォンでコンパクトに読める", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 844 });
+  await freshHome(page);
+  await switchCourse(page, "infinitives");
+
+  const visual = page.locator(".overviewVisual");
+  for (const width of [375, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    const cardHeights = await visual.locator(".overviewUseCard").evaluateAll(cards =>
+      cards.map(card => Math.round(card.getBoundingClientRect().height))
+    );
+    const visualHeight = await visual.evaluate(element => Math.round(element.getBoundingClientRect().height));
+
+    expect(Math.max(...cardHeights), `${width}pxの分類カード`).toBeLessThanOrEqual(112);
+    expect(visualHeight, `${width}pxの図解全体`).toBeLessThan(650);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
 test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({ page }) => {
   await freshHome(page);
   await switchCourse(page, "infinitives");
