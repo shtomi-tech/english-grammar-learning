@@ -16,7 +16,10 @@ test("不定詞カテゴリから名詞的用法の3問まで進められる", a
   await switchCourse(page, "infinitives");
   await expect(page.getByRole("heading", { name: "不定詞", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "不定詞とは", exact: true })).toBeVisible();
-  await expect(page.locator("#homePanel")).toContainText("使役動詞と知覚動詞の後ろに");
+  await expect(page.locator(".overviewVisual")).toBeVisible();
+  await expect(page.locator(".overviewUseCard")).toHaveCount(3);
+  await expect(page.locator(".overviewFormula")).toContainText("to");
+  await expect(page.locator("#homePanel")).toContainText("使役動詞や知覚動詞の後ろでは");
 
   await page.getByRole("button", { name: "不定詞の名詞的用法へ" }).click();
   await expect(page.getByRole("heading", { name: "不定詞の名詞的用法" })).toBeVisible();
