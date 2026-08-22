@@ -10,6 +10,25 @@ async function switchCourse(page, courseId) {
   await page.goto(`/#/c/${courseId}`);
 }
 
+const infinitiveVisualContracts = [
+  { id: "infinitive-nominal-use", type: "roles", cue: "主語・目的語・補語", prompt: "どの位置にいるか" },
+  { id: "infinitive-adjective-use", type: "relation", cue: "名詞を後ろから説明", prompt: "説明される名詞" },
+  { id: "infinitive-adverbial-purpose", type: "flow", cue: "何のために", prompt: "目的" },
+  { id: "infinitive-adverbial-reason", type: "flow", cue: "感情・判断", prompt: "理由" },
+  { id: "infinitive-adverbial-result", type: "timeline", cue: "実際の結果", prompt: "その後どうなったか" },
+  { id: "infinitive-adverbial-degree", type: "scale", cue: "できない", prompt: "程度から結果" },
+  { id: "infinitive-logical-subject-for", type: "roles", cue: "for + 人", prompt: "誰がするのか" },
+  { id: "infinitive-of-adjective-evaluation", type: "contrast", cue: "for = 動作主", prompt: "人自身を評価" },
+  { id: "dummy-subject-it", type: "sentence", cue: "先頭の空席", prompt: "後ろに本当の内容" },
+  { id: "dummy-object-it", type: "sentence", cue: "S + V + it + C + to do", prompt: "it の後ろに補語" },
+  { id: "bare-infinitive", type: "sentence", cue: "make / let / have", prompt: "能動・受動" },
+  { id: "perception-bare-infinitive", type: "contrast", cue: "動作全体", prompt: "全体か、途中か" },
+  { id: "infinitive-negative-form", type: "sentence", cue: "not → to → do", prompt: "どちらを否定" },
+  { id: "infinitive-perfect-form", type: "timeline", cue: "主節より前", prompt: "先か" }
+];
+
+const complexInfinitiveVisualTypes = new Set(["sentence", "timeline", "scale"]);
+
 test("不定詞カテゴリから名詞的用法の3問まで進められる", async ({ page }) => {
   await freshHome(page);
 
@@ -66,6 +85,112 @@ test("不定詞の図解はスマートフォンでコンパクトに読める",
     expect(visualHeight, `${width}pxの図解全体`).toBeLessThan(650);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
   }
+});
+
+test("不定詞14単元は図解と詳説の二段構成を持つ", async ({ page }) => {
+  await freshHome(page);
+
+  for (const contract of infinitiveVisualContracts) {
+    await page.goto(`/#/c/infinitives/l/${contract.id}`);
+    const visual = page.locator("#session-content .lessonVisual");
+
+    await expect(visual).toHaveCount(1);
+    await expect(visual).toHaveClass(new RegExp(`lessonVisual--${contract.type}`));
+    await expect(visual.locator(".lessonVisualAnchor")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualLead")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualBody")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualPrompt")).toHaveCount(1);
+    await expect(visual).toContainText(contract.cue);
+    await expect(visual.locator(".lessonVisualPrompt")).toContainText(contract.prompt);
+    await expect(visual.locator("details, summary, button, input, select")).toHaveCount(0);
+
+    const labelledBy = await visual.getAttribute("aria-labelledby");
+    expect(labelledBy).toBeTruthy();
+    await expect(visual.locator(`#${labelledBy}`)).toHaveClass(/lessonVisualLead/);
+    await expect(page.locator(".flashCard details.section")).toHaveCount(0);
+    const sectionCount = await page.locator(".flashCard .sectionHeading").count();
+    await expect(page.locator(".lessonToc .lessonTocLink")).toHaveCount(sectionCount);
+    await expect(page.locator(".lessonTocInline .lessonTocLink")).toHaveCount(sectionCount);
+    await expect(page.locator(".flashCard .sectionBody").last()).toBeVisible();
+  }
+});
+
+test("不定詞各論の図解は320px以上で横スクロールせず、本文を隠さない", async ({ page }) => {
+  await freshHome(page);
+
+  for (const width of [320, 375, 640, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const contract of infinitiveVisualContracts) {
+      await page.goto(`/#/c/infinitives/l/${contract.id}`);
+      const measurements = await page.locator("#session-content .lessonVisual").evaluate(element => ({
+        height: Math.round(element.getBoundingClientRect().height),
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth
+      }));
+      const limit = width === 320 && !complexInfinitiveVisualTypes.has(contract.type) ? 650 : 720;
+      expect(measurements.height, `${contract.id} ${width}px`).toBeLessThan(limit);
+      expect(measurements.scrollWidth, `${contract.id} ${width}px横幅`).toBeLessThanOrEqual(measurements.clientWidth);
+      await expect(page.locator(".flashCard .sectionBody").last()).toBeVisible();
+    }
+  }
+});
+
+test("形容詞的用法の動作主カードは不定詞の動作主を明示する", async ({ page }) => {
+  await freshHome(page);
+  await page.goto("/#/c/infinitives/l/infinitive-adjective-use");
+
+  const visual = page.locator("#session-content .lessonVisual");
+  const actorCard = visual.locator(".lessonVisualCard").filter({ hasText: "動作主" });
+  await expect(actorCard).toContainText("someone");
+  await expect(actorCard).toContainText("to help me");
+  await expect(actorCard).toContainText("手伝うのは someone");
+});
+
+test("320pxの図解内の並列カードは内容依存で同じ行高になる", async ({ page }) => {
+  await freshHome(page);
+  await page.setViewportSize({ width: 320, height: 844 });
+
+  for (const contract of infinitiveVisualContracts) {
+    await page.goto(`/#/c/infinitives/l/${contract.id}`);
+    const cards = page.locator(".lessonVisualBody .lessonVisualCards > .lessonVisualCard, .lessonVisualBody .lessonVisualScale > .lessonVisualCard");
+    const heights = await cards.evaluateAll(elements => elements.map(element => Math.round(element.getBoundingClientRect().height)));
+    if (heights.length < 2) continue;
+    expect(Math.max(...heights) - Math.min(...heights), `${contract.id}のカード高差`).toBeLessThanOrEqual(36);
+  }
+});
+
+test("図解追加では保存済みの回答・復習・既読・修了テスト・位置を保持する", async ({ page }) => {
+  await freshHome(page);
+  await expect(page.locator("#homePanel")).not.toHaveAttribute("aria-busy");
+  await page.evaluate(() => {
+    const key = "englishGrammarLearning.v3";
+    const state = JSON.parse(localStorage.getItem(key));
+    state.courseId = "infinitives";
+    state.stage = 1;
+    state.question = 2;
+    state.versions["infinitive-nominal-use"] = 2;
+    state.courseStructureVersions.infinitives = 1;
+    state.answers["infinitive-nominal-use"] = [0, 1, 3];
+    state.review["infinitive-nominal-use-q1"] = {
+      wrongCount: 1,
+      leitnerStage: 1,
+      nextReviewAt: "2099-01-02",
+      lastAnsweredAt: "2099-01-01"
+    };
+    state.visitedLessons.push("infinitive-nominal-use");
+    state.finalChecks.infinitives = { bestScore: 40, lastScore: 41, cleared: true, bestTotal: 42 };
+    state.coursePositions.infinitives = { stage: 1, question: 2 };
+    localStorage.setItem(key, JSON.stringify(state));
+  });
+
+  await page.reload();
+  await page.goto("/#/c/infinitives/l/infinitive-nominal-use");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("englishGrammarLearning.v3")));
+  expect(saved.answers["infinitive-nominal-use"]).toEqual([0, 1, 3]);
+  expect(saved.review["infinitive-nominal-use-q1"].wrongCount).toBe(1);
+  expect(saved.visitedLessons).toContain("infinitive-nominal-use");
+  expect(saved.finalChecks.infinitives.cleared).toBe(true);
+  expect(saved.coursePositions.infinitives).toEqual({ stage: 1, question: 2 });
 });
 
 test("不定詞の単元は前提知識が積み上がる順に並ぶ", async ({ page }) => {

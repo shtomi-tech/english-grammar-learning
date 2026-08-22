@@ -996,6 +996,16 @@ const curriculum = {
           version: 2,
           title: "不定詞の名詞的用法",
           html: `
+            <section class="lessonVisual lessonVisual--roles" aria-labelledby="infinitive-nominal-use-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>to + 動詞の原形</code></span><span class="lessonVisualMeta">＝ 1つの文の部品</span></div>
+              <p id="infinitive-nominal-use-visual-title" class="lessonVisualLead">「～すること」を、文の中の3つの位置に置く。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">主語</span><strong><code>To study</code> is useful.</strong><span>文の「何が」にあたる</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">目的語</span><strong>I want <code>to study</code>.</strong><span>動詞の内容になる</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">補語</span><strong>My plan is <code>to study</code>.</strong><span>主語の内容を説明する</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、<code>to do</code> を「～すること」に置き換え、主語・目的語・補語のどの位置にいるかを見る。</p>
+            </section>
             <p>不定詞の名詞的用法は、<code>to + 動詞の原形</code> のまとまりが名詞と同じように働き、「～すること」を表す用法です。文中で主語・目的語・補語になります。</p>
             <details class="section" open>
             <summary>主語になる場合</summary>
@@ -1077,6 +1087,16 @@ const curriculum = {
           version: 2,
           title: "不定詞の形容詞的用法",
           html: `
+            <section class="lessonVisual lessonVisual--relation" aria-labelledby="infinitive-adjective-use-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">名詞</span><span class="lessonVisualConnector">←</span><span class="lessonVisualToken"><code>to do</code></span></div>
+              <p id="infinitive-adjective-use-visual-title" class="lessonVisualLead">不定詞が、前の名詞を後ろから説明する。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">対象</span><strong><code>something</code> ← <code>to eat</code></strong><span>食べるもの</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">動作主</span><strong><code>someone</code> ← <code>to help me</code></strong><span>手伝うのは someone</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">前置詞</span><strong><code>a chair</code> ← <code>to sit on</code></strong><span>前置詞が残る</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、不定詞の直前にある「説明される名詞」を見つける。</p>
+            </section>
             <p>不定詞の形容詞的用法は、<code>to + 動詞の原形</code> が名詞を説明する用法です。「～するための」「～すべき」「～する」という意味になります。</p>
             <details class="section" open>
             <summary>名詞を説明する基本の形</summary>
@@ -1148,6 +1168,14 @@ const curriculum = {
           version: 1,
           title: "不定詞の副詞的用法（目的）",
           html: `
+            <section class="lessonVisual lessonVisual--flow" aria-labelledby="infinitive-adverbial-purpose-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">主節の動作</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">何のために？</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>to do</code></span></div>
+              <p id="infinitive-adverbial-purpose-visual-title" class="lessonVisualLead">主節の動作から、「何のために」をたどる。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualFlow">
+                <div class="lessonVisualFlowNode"><span>動作</span><strong>went to the library</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>目的</span><strong>to study</strong></div>
+              </div><p class="lessonVisualAside"><code>in order to</code> / <code>so as to</code> も目的を示す。</p></div>
+              <p class="lessonVisualPrompt">読むときは、<code>to do</code> が主節の動作の目的を答えているかを見る。</p>
+            </section>
             <p>不定詞の副詞的用法（目的）は、<code>to + 動詞の原形</code> が動詞や文全体を説明し、「何のためにその動作をするのか」という目的を表す用法です。「～するために」と訳します。</p>
             <details class="section" open>
             <summary>目的を表す基本の形</summary>
@@ -1214,6 +1242,12 @@ const curriculum = {
           version: 1,
           title: "不定詞の副詞的用法（原因・理由）",
           html: `
+            <section class="lessonVisual lessonVisual--flow" aria-labelledby="infinitive-adverbial-reason-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>to do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">感情・判断</span></div>
+              <p id="infinitive-adverbial-reason-visual-title" class="lessonVisualLead">不定詞は、感情や判断が生じた理由を示す。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualRelationLine lessonVisualRelationLine--reverse"><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>理由</span><strong>to see you</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode"><span>感情</span><strong>am glad</strong></div></div><p class="lessonVisualAside">目的は「動作 → to do」、理由は「to do → 感情・判断」と向きが違う。</p></div>
+              <p class="lessonVisualPrompt">読むときは、<code>to do</code> が「なぜその感情・判断になったか」という理由かを見る。</p>
+            </section>
             <p>不定詞の副詞的用法（原因・理由）は、<code>to + 動詞の原形</code> が、感情や判断が生じた原因・理由を表す用法です。「～して」「～なので」「～したことを」と訳します。</p>
             <details class="section" open>
             <summary>感情を表す形容詞の後ろ</summary>
@@ -1280,6 +1314,15 @@ const curriculum = {
           version: 2,
           title: "不定詞の副詞的用法（結果）",
           html: `
+            <section class="lessonVisual lessonVisual--timeline" aria-labelledby="infinitive-adverbial-result-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">主節の出来事</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">実際の結果</span></div>
+              <p id="infinitive-adverbial-result-visual-title" class="lessonVisualLead">目的は意図、結果はその後に起きた事実。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">目的</span><strong>何のために？</strong><span>主節の動作で意図したこと</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">結果</span><strong>その後、実際にどうなったか</strong><span><code>grow up to be ...</code> など</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、「何のために」ではなく「その後どうなったか」で読めるかを見る。</p>
+            </section>
             <p>不定詞の副詞的用法（結果）は、<code>to + 動詞の原形</code> が、ある動作のあとに起こった結果を表す用法です。「～して、その結果…」と訳します。</p>
             <details class="section" open>
             <summary>結果を表す基本の考え方</summary>
@@ -1355,6 +1398,15 @@ const curriculum = {
           version: 1,
           title: "不定詞の副詞的用法（程度・結果）",
           html: `
+            <section class="lessonVisual lessonVisual--scale" aria-labelledby="infinitive-adverbial-degree-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>too ... to do</code></span><span class="lessonVisualConnector">↔</span><span class="lessonVisualToken"><code>... enough to do</code></span></div>
+              <p id="infinitive-adverbial-degree-visual-title" class="lessonVisualLead">程度が、できない／できるという結果を生む。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualScale">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">必要ラインを越える</span><strong><code>too heavy</code></strong><span>→ <b>できない</b>：to carry</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">必要ラインに届く</span><strong><code>large enough</code></strong><span>→ <b>できる</b>：to hold fifty</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、形容詞の程度から結果として、動作の可能・不可能が出ているかを見る。</p>
+            </section>
             <p>不定詞の副詞的用法（程度・結果）は、<code>too ... to ～</code> や <code>... enough to ～</code> を使い、ある状態の程度と、その結果として可能か不可能かを表す用法です。</p>
             <details class="section" open>
             <summary><code>too ... to ～</code></summary>
@@ -1417,6 +1469,15 @@ const curriculum = {
           version: 1,
           title: "不定詞の意味上の主語",
           html: `
+            <section class="lessonVisual lessonVisual--roles" aria-labelledby="infinitive-logical-subject-for-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>for + 人 + to do</code></span></div>
+              <p id="infinitive-logical-subject-for-visual-title" class="lessonVisualLead"><code>to do</code> を実際にする担当者を示す。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--two">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><code>for him</code> → <code>to study</code></strong><span>勉強するのは him</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><code>for children</code> → <code>to understand</code></strong><span>理解するのは children</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、<code>to do</code> を実際にするのは誰がするのかを見る。</p>
+            </section>
             <p>不定詞が表す動作を「誰がするのか」を示す語を、意味上の主語と呼びます。文の主語とは別に、不定詞の動作主を示したいときに <code>for + 人</code> を使います。</p>
             <details class="section" open>
             <summary>基本の形</summary>
@@ -1483,6 +1544,15 @@ const curriculum = {
           version: 1,
           title: "人の性質を表す形容詞と不定詞",
           html: `
+            <section class="lessonVisual lessonVisual--contrast" aria-labelledby="infinitive-of-adjective-evaluation-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>for / of + 人 + to do</code></span></div>
+              <p id="infinitive-of-adjective-evaluation-visual-title" class="lessonVisualLead"><code>for</code> は動作主、<code>of</code> は人の性質・行動の評価。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>for</code> = 動作主</span><strong>important <code>for him to study</code></strong><span>勉強する人を示す</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>of</code> = 人の評価</span><strong>careless <code>of him to forget</code></strong><span>him の行動を評価する</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、形容詞が人自身を評価しているか、それとも動作主を示すだけかを見る。</p>
+            </section>
             <p>人の性質や行動を評価する形容詞の後ろでは、<code>of + 人 + to + 動詞の原形</code> の形を使います。「～するとは、その人は…だ」「～して、その人は…だ」と訳します。</p>
             <details class="section" open>
             <summary>基本の形</summary>
@@ -1572,6 +1642,16 @@ const curriculum = {
           version: 2,
           title: "形式主語構文",
           html: `
+            <section class="lessonVisual lessonVisual--sentence" aria-labelledby="dummy-subject-it-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>it</code> + be + 形容詞 + <code>to do</code></span></div>
+              <p id="dummy-subject-it-visual-title" class="lessonVisualLead">長い内容を後ろへ送り、先頭の空席を<code>it</code>が埋める。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualSlots lessonVisualSlots--three">
+                <div class="lessonVisualSlot"><span>先頭の席</span><strong><code>It</code></strong><small>形式主語</small></div>
+                <div class="lessonVisualSlot"><span>判断</span><strong>is important</strong><small>形容詞</small></div>
+                <div class="lessonVisualSlot lessonVisualSlot--accent"><span>本当の内容</span><strong><code>to study</code></strong><small>後ろへ移動</small></div>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、<code>it</code> が具体物を指さず、後ろに本当の内容があるかを見る。</p>
+            </section>
             <p>英語では、主語が長くなると、文の形を整えるために <code>it</code> を主語の位置に置き、内容を表す不定詞句やthat節を文の後ろに置くことがあります。これを形式主語構文といいます。</p>
             <details class="section" open>
             <summary>不定詞を使う形</summary>
@@ -1643,6 +1723,14 @@ const curriculum = {
           version: 2,
           title: "形式目的語構文",
           html: `
+            <section class="lessonVisual lessonVisual--sentence" aria-labelledby="dummy-object-it-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>S + V + it + C + to do</code></span></div>
+              <p id="dummy-object-it-visual-title" class="lessonVisualLead">目的語の位置に<code>it</code>を置き、判断内容を後ろへ送る。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualSlots lessonVisualSlots--five">
+                <div class="lessonVisualSlot"><span>主語</span><strong>S</strong></div><div class="lessonVisualSlot"><span>動詞</span><strong>V</strong></div><div class="lessonVisualSlot lessonVisualSlot--accent"><span>仮の目的語</span><strong><code>it</code></strong></div><div class="lessonVisualSlot"><span>補語</span><strong>C</strong></div><div class="lessonVisualSlot lessonVisualSlot--accent"><span>内容</span><strong><code>to do</code></strong></div>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、<code>it</code> の後ろに補語があり、さらに後ろに判断内容があるかを見る。</p>
+            </section>
             <p>目的語になる不定詞句やthat節が長い場合、英語では目的語の位置に <code>it</code> を置き、内容を表す不定詞句やthat節を後ろに置くことがあります。これを形式目的語構文といいます。</p>
             <details class="section" open>
             <summary>不定詞を使う基本の形</summary>
@@ -1710,6 +1798,16 @@ const curriculum = {
           version: 3,
           title: "使役動詞と原形不定詞",
           html: `
+            <section class="lessonVisual lessonVisual--sentence" aria-labelledby="bare-infinitive-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>make / let / have + 人 + do</code></span></div>
+              <p id="bare-infinitive-visual-title" class="lessonVisualLead">使役では、動作主の後ろに原形を置く。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>make</code></span><strong>強制</strong><span><code>make + 人 + do</code></span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>let</code></span><strong>許可</strong><span><code>let + 人 + do</code></span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>have</code></span><strong>依頼・手配</strong><span><code>have + 人 + do</code></span></article>
+              </div><p class="lessonVisualAside">受動の <code>be made to do</code> では <code>to</code> が戻る。</p></div>
+              <p class="lessonVisualPrompt">読むときは、前の動詞・動作主・能動・受動の3点を見る。</p>
+            </section>
             <p>使役動詞は、主語が別の人やものに動作をさせる関係を表します。<code>make</code>・<code>let</code>・<code>have</code> の後ろに「動作をする人・もの」を置き、その後ろに原形不定詞を続けます。</p>
             <details class="section" open>
             <summary>使役動詞の基本</summary>
@@ -1792,6 +1890,15 @@ const curriculum = {
           version: 1,
           title: "知覚動詞と原形不定詞",
           html: `
+            <section class="lessonVisual lessonVisual--contrast" aria-labelledby="perception-bare-infinitive-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>see + 人 + do / doing</code></span></div>
+              <p id="perception-bare-infinitive-visual-title" class="lessonVisualLead">知覚した時間幅で、全体か途中かを分ける。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>do</code></span><strong>動作全体</strong><span><code>I saw him cross.</code></span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>doing</code></span><strong>動作の途中</strong><span><code>I saw him crossing.</code></span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、誰が何をしたかに加え、知覚したのが全体か、途中かを見る。</p>
+            </section>
             <p>知覚動詞は、目や耳などで人やものの動作を捉える表現です。<code>see</code>・<code>watch</code>・<code>hear</code>・<code>feel</code> などの後ろに、動作をする人・ものと原形不定詞を置きます。</p>
             <details class="section" open>
             <summary>知覚動詞の基本</summary>
@@ -1863,6 +1970,15 @@ const curriculum = {
           version: 2,
           title: "不定詞の否定形",
           html: `
+            <section class="lessonVisual lessonVisual--sentence" aria-labelledby="infinitive-negative-form-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>not</code> → <code>to</code> → <code>do</code></span></div>
+              <p id="infinitive-negative-form-visual-title" class="lessonVisualLead">否定する範囲を、<code>not</code>の位置で見分ける。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">不定詞を否定</span><strong>decide <code>not to buy</code></strong><span>買わないと決める</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">主節を否定</span><strong>do <code>not</code> decide to buy</strong><span>買うと決めない</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">読むときは、<code>not</code> が主節と不定詞のどちらを否定しているかを見る。</p>
+            </section>
             <p>不定詞を否定するときは、<code>to</code> の前に <code>not</code> を置きます。基本の形は <code>not to + 動詞の原形</code> で、「～しないこと」「～しないために」などを表します。</p>
             <details class="section" open>
             <summary>基本の形</summary>
@@ -1948,6 +2064,14 @@ const curriculum = {
           version: 2,
           title: "完了不定詞",
           html: `
+            <section class="lessonVisual lessonVisual--timeline" aria-labelledby="infinitive-perfect-form-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>to have + 過去分詞</code></span></div>
+              <p id="infinitive-perfect-form-visual-title" class="lessonVisualLead">完了不定詞の出来事は、主節より前に起きている。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualTimeline">
+                <div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>先の出来事</span><strong><code>to have met</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint"><span>基準時</span><strong>am happy now</strong></div>
+              </div><p class="lessonVisualAside">受動は <code>to have been done</code>。</p></div>
+              <p class="lessonVisualPrompt">読むときは、主節の時点と比べて、不定詞の出来事が先かを見る。</p>
+            </section>
             <p>完了不定詞は、<code>to have + 過去分詞</code> の形で、基準となる時点より前の動作や状態を表します。「～した」「～していた」などと訳します。</p>
             <details class="section" open>
             <summary>基本の形</summary>
@@ -2064,6 +2188,41 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
     check(lessonIds.length === courseLessonIds.length && courseLessonIds.every(id => lessonIds.includes(id)), `${course.title}の章が全単元を重複なく覆うこと`);
     check(lessonIds.every(id => courseLessonIds.includes(id)), `${course.title}の章が存在する単元IDだけを参照すること`);
   });
+  const infinitives = courses.find(course => course.id === "infinitives");
+  const infinitiveVisualTypes = {
+    "infinitive-nominal-use": "roles",
+    "infinitive-adjective-use": "relation",
+    "infinitive-adverbial-purpose": "flow",
+    "infinitive-adverbial-reason": "flow",
+    "infinitive-adverbial-result": "timeline",
+    "infinitive-adverbial-degree": "scale",
+    "infinitive-logical-subject-for": "roles",
+    "infinitive-of-adjective-evaluation": "contrast",
+    "dummy-subject-it": "sentence",
+    "dummy-object-it": "sentence",
+    "bare-infinitive": "sentence",
+    "perception-bare-infinitive": "contrast",
+    "infinitive-negative-form": "sentence",
+    "infinitive-perfect-form": "timeline"
+  };
+  check(Boolean(infinitives), "不定詞カテゴリが存在すること");
+  if (infinitives) {
+    check(infinitives.lessons.length === 14, "不定詞が14単元であること");
+    check(infinitives.lessons.flatMap(lesson => lesson.questions).length === 42, "不定詞が42問であること");
+    check(infinitives.lessons.every(lesson => Object.prototype.hasOwnProperty.call(infinitiveVisualTypes, lesson.id)), "不定詞14単元の図解契約がそろっていること");
+    infinitives.lessons.forEach(lesson => {
+      const visualMatches = lesson.html.match(/<section class="lessonVisual\b/g) || [];
+      const visual = lesson.html.match(/<section class="lessonVisual\b[\s\S]*?<\/section>/)?.[0] || "";
+      const labelledBy = visual.match(/aria-labelledby="([^"]+)"/)?.[1] || "";
+      check(visualMatches.length === 1, `${lesson.id}のlessonVisualが1件であること`);
+      check(visual.includes(`lessonVisual--${infinitiveVisualTypes[lesson.id]}`), `${lesson.id}の図解型が契約どおりであること`);
+      ["lessonVisualAnchor", "lessonVisualLead", "lessonVisualBody", "lessonVisualPrompt"].forEach(slot => {
+        check((visual.match(new RegExp(`class="${slot}"`, "g")) || []).length === 1, `${lesson.id}の${slot}が1件であること`);
+      });
+      check(Boolean(labelledBy) && visual.includes(`id="${labelledBy}" class="lessonVisualLead"`), `${lesson.id}のaria-labelledbyがleadを参照すること`);
+      check(!/<(?:details|summary|button|input|select)\b/i.test(visual), `${lesson.id}の図解に操作要素がないこと`);
+    });
+  }
   if (failures.length > 0) {
     failures.forEach(message => console.error(`CONTENT_CHECK_NG: ${message}`));
     process.exitCode = 1;

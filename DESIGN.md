@@ -168,6 +168,24 @@ Kinetics（参考: https://kinetics.colorion.co/）のAccordion Spring・Icon Mo
 - 文法説明は`section.section`として見出し（`.sectionHeading`）と本文を常時表示する。説明を隠すクリック操作やキーボード操作は置かない。
 - 既存教材の`<details class="section">`記法は描画時に静的な`section`へ正規化する。教材データの本文を欠落させず、発展内容も初期表示する。
 
+### 各論図解教材
+
+- 各論の`lesson.html`は、単元見出し直後に`.lessonVisual`を1件置き、その後へ既存の導入段落と詳説を続ける。図解は「一般式・関係 → 一文の中心概念 → 2〜4個の並列情報または関係図 → 例文を読むときの判断基準」の順にする。
+- 図解の必須スロットは`.lessonVisualAnchor`、`.lessonVisualLead`、`.lessonVisualBody`、`.lessonVisualPrompt`の各1件とする。`aria-labelledby`は同じ図解内の`.lessonVisualLead`を参照する。図解内には`details`・`summary`・ボタンなどの操作要素を置かず、`.sectionHeading`も置かない（ページ内目次は既存の詳説節だけを対象にする）。
+- 図解型は、文中の関係を表すクラスとして次を使い分ける。見た目のテーマを単元ごとに増やさず、単元の判断手順を型として示す。
+
+  | 型 | クラス | 主な判断対象 |
+  | --- | --- | --- |
+  | 役割・スロット | `.lessonVisual--roles` | 主語・目的語・補語・動作主 |
+  | 関係・流れ | `.lessonVisual--relation` / `.lessonVisual--flow` | 名詞との関係、目的・理由の矢印 |
+  | 対比 | `.lessonVisual--contrast` | for/of、全体/途中、否定範囲など |
+  | 文型・語順 | `.lessonVisual--sentence` | it構文、使役、notの位置 |
+  | 時間軸・程度 | `.lessonVisual--timeline` / `.lessonVisual--scale` | 結果、完了不定詞、too/enough |
+
+- 概論と同じ`12px`角丸、`3px`の主要罫線、影なしを使う。背景・強調は`--color-learning-*`と`--color-accent`を再利用し、色だけで関係を判断させない。ラベル、配置、矢印、枠線を必ず併用する。図解本文は`16px`を基本とし、補助語も`12px`未満にしない。
+- 641px以上ではカードを2〜3列または横向きの関係・時間軸にする。640px以下では対比・並列カードを短い横長行として1列にし、矢印は上下方向へ変換できる。320pxでも英文・文型を自然に折り返し、固定高さ・`white-space: nowrap`・`word-break: break-all`は使わない。図解の高さは単純型650px以下、複雑型720px未満を目安とする。
+- 図解追加だけでは`lesson.version`、`structureVersion`、単元ID・問題ID、回答・復習・修了テスト・コース位置を変更しない。詳説、例文、発展内容、見分け方は削除・要約せず、図解の後半へ常時表示する。
+
 ### 修了テスト解放
 
 - `.courseAssessment`の一時的な強調（unlock表現）は、その操作の直前直後で状態が「未解放→解放」に変わったときだけ再生する。永続的な「演出済み」フラグは保存データに追加せず、現在操作内の前後比較だけで判定する。
