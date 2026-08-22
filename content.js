@@ -15,12 +15,55 @@ const subjunctiveCourse = {
   overview: {
     title: "仮定法とは",
     html: `
-      <p>仮定法は、現在・過去の事実から距離を置いた想像、願望、後悔、または可能性を控えめに扱う未来の仮定を表します。</p>
-      <p>現在について述べる場合でも、現実から距離を置くため過去形を使うことがあります。過去について事実と異なることを述べる場合は <code>had + 過去分詞</code> を使います。</p>
-      <blockquote><p>If I have time tonight, I will read this book.<br>今夜時間ができる可能性があるので、時間があればこの本を読みます。</p></blockquote>
-      <blockquote><p>If I had more time, I would read more books.<br>実際には十分な時間がないので、もっと時間があればもっと多くの本を読むのに。</p></blockquote>
-      <p><code>if</code> を使う文がすべて仮定法ではありません。願望は <code>I wish</code>、より強い願望・後悔は <code>If only</code> の単元で扱います。</p>
-      <p class="note">判断順は「いつの話か → 現実との関係 → 条件・願望・定型表現のどれか → 必要な形」です。</p>`
+      <p class="overviewLead">仮定法は、現実との距離を表す言い方です。</p>
+      <figure class="overviewVisual" aria-labelledby="subjunctive-map-title">
+        <svg viewBox="0 0 960 420" role="img" aria-labelledby="subjunctive-map-title subjunctive-map-desc">
+          <title id="subjunctive-map-title">現実との距離で見る仮定法</title>
+          <desc id="subjunctive-map-desc">現実に近い通常の条件文から、現在の想像、過去の後悔へ向かって距離が広がる図</desc>
+          <defs>
+            <linearGradient id="distanceLine" x1="0" x2="1">
+              <stop offset="0" stop-color="#7b9d91" />
+              <stop offset="1" stop-color="#b06e54" />
+            </linearGradient>
+            <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+              <path d="M0,0 L12,6 L0,12 Z" fill="#8a8175" />
+            </marker>
+          </defs>
+          <text class="overviewSvgKicker" x="60" y="46">現実との距離</text>
+          <text class="overviewSvgSide" x="60" y="82">近い</text>
+          <text class="overviewSvgSide" x="900" y="82" text-anchor="end">遠い</text>
+          <line class="overviewSvgLine" x1="92" y1="112" x2="868" y2="112" stroke="url(#distanceLine)" marker-end="url(#arrow)" />
+          <circle class="overviewSvgDot overviewSvgDot--real" cx="116" cy="112" r="14" />
+          <circle class="overviewSvgDot overviewSvgDot--now" cx="492" cy="112" r="14" />
+          <circle class="overviewSvgDot overviewSvgDot--past" cx="844" cy="112" r="14" />
+          <g class="overviewSvgCard">
+            <rect x="40" y="160" width="260" height="190" rx="18" />
+            <text class="overviewSvgTitle" x="70" y="204">通常の条件</text>
+            <text class="overviewSvgFormula" x="70" y="252">If + 現在形</text>
+            <text class="overviewSvgExample" x="70" y="292">If it rains, I will stay home.</text>
+            <text class="overviewSvgCaption" x="70" y="326">起こり得る話</text>
+          </g>
+          <g class="overviewSvgCard overviewSvgCard--active">
+            <rect x="350" y="160" width="260" height="190" rx="18" />
+            <text class="overviewSvgTitle" x="380" y="204">現在の想像</text>
+            <text class="overviewSvgFormula" x="380" y="252">If + 過去形</text>
+            <text class="overviewSvgExample" x="380" y="292">If I had time, I would read.</text>
+            <text class="overviewSvgCaption" x="380" y="326">今はそうではない</text>
+          </g>
+          <g class="overviewSvgCard overviewSvgCard--past">
+            <rect x="660" y="160" width="260" height="190" rx="18" />
+            <text class="overviewSvgTitle" x="690" y="204">過去の後悔</text>
+            <text class="overviewSvgFormula" x="690" y="252">If + had + 過去分詞</text>
+            <text class="overviewSvgExample" x="690" y="292">If I had known, I would have called.</text>
+            <text class="overviewSvgCaption" x="690" y="326">もう変えられない</text>
+          </g>
+        </svg>
+        <figcaption>まず「いつの話か」、次に「現実との距離」を見ます。</figcaption>
+      </figure>
+      <div class="overviewKeys" aria-label="概要の要点">
+        <p><strong>if</strong> があっても、すべて仮定法ではありません。</p>
+        <p><strong>wish</strong> は願い、<strong>If only</strong> は強い願い・後悔です。</p>
+      </div>`
   },
   lessons: [
     {

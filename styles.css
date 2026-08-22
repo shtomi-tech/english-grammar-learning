@@ -349,6 +349,26 @@ blockquote p:last-child { margin-bottom: 0; }
 .courseOverview { border-top: 3px solid var(--color-accent); }
 .courseOverview h3 { margin-bottom: 4px; font-family: var(--serif); font-size: clamp(25px, 3vw, 30px); line-height: 1.25; }
 .courseOverview > .hint { margin-bottom: 20px; }
+.courseOverview .overviewLead { margin: 0 0 22px; font-size: clamp(20px, 3vw, 28px); font-weight: 800; line-height: 1.35; }
+.overviewVisual { margin: 24px 0 26px; padding: 14px 14px 12px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); }
+.overviewVisual svg { display: block; width: 100%; height: auto; }
+.overviewVisual figcaption { margin: 10px 4px 0; color: var(--muted); font-size: .92rem; }
+.overviewSvgKicker { fill: var(--ink); font-size: 24px; font-weight: 800; }
+.overviewSvgSide, .overviewSvgCaption { fill: var(--muted); font-size: 16px; font-weight: 700; }
+.overviewSvgLine { fill: none; stroke-width: 5; }
+.overviewSvgDot { stroke: var(--paper); stroke-width: 6; }
+.overviewSvgDot--real { fill: #7b9d91; }
+.overviewSvgDot--now { fill: var(--clay); }
+.overviewSvgDot--past { fill: #b06e54; }
+.overviewSvgCard rect { fill: var(--parchment); stroke: var(--line); stroke-width: 2; }
+.overviewSvgCard--active rect { fill: #f3e8d5; stroke: var(--clay); stroke-width: 4; }
+.overviewSvgCard--past rect { fill: #f1e3dc; }
+.overviewSvgTitle { fill: var(--ink); font-size: 24px; font-weight: 800; }
+.overviewSvgFormula { fill: var(--ink); font-family: var(--mono); font-size: 17px; font-weight: 800; }
+.overviewSvgExample { fill: var(--ink); font-family: var(--serif); font-size: 15px; }
+.overviewKeys { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.overviewKeys p { margin: 0; padding: 14px 16px; border-radius: var(--radius-control); background: var(--parchment); }
+.overviewKeys strong { color: var(--clay); }
 .courseMeta { display: flex; flex-wrap: wrap; gap: 8px 0; margin: 20px 0 0; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 .courseMeta span + span::before { content: "·"; margin: 0 8px; color: var(--line); }
 .courseObjectives ul { margin: 12px 0 0; padding-left: 22px; }
@@ -409,6 +429,9 @@ blockquote p:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 640px) {
+  .overviewVisual { margin-left: -4px; margin-right: -4px; padding: 8px 8px 10px; }
+  .overviewVisual figcaption { font-size: .86rem; }
+  .overviewKeys { grid-template-columns: 1fr; gap: 8px; }
   .courseMeta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; }
   .courseMeta span + span::before { content: ""; margin: 0; }
   .courseMeta span { overflow-wrap: anywhere; }

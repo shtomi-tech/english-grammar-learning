@@ -92,9 +92,11 @@ test("仮定法コースは12単元を指定順で持ち、修了テストは単
 test("概論は通常の条件文との対比と到達範囲を示す", async ({ page }) => {
   await freshHome(page);
   await switchCourse(page, "subjunctive");
-  await expect(page.locator("#homePanel")).toContainText("if を使う文がすべて仮定法ではありません");
-  await expect(page.locator("#homePanel")).toContainText("If I have time tonight, I will read this book.");
-  await expect(page.locator("#homePanel")).toContainText("I wish");
+  await expect(page.locator("#homePanel")).toContainText("現実との距離を表す言い方です");
+  await expect(page.locator(".overviewVisual")).toBeVisible();
+  await expect(page.locator(".overviewVisual svg")).toHaveAttribute("role", "img");
+  await expect(page.locator("#homePanel")).toContainText("if があっても、すべて仮定法ではありません");
+  await expect(page.locator("#homePanel")).toContainText("wish は願い");
   await expect(page.locator("#homePanel")).toContainText("If only");
 });
 
