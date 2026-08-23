@@ -394,6 +394,8 @@ blockquote p:last-child { margin-bottom: 0; }
 .lessonVisualCard--accent { border-left-color: var(--color-accent); }
 .lessonVisualCardLabel { color: var(--color-accent-strong); font-size: 13px; font-weight: 800; line-height: 1.35; }
 .lessonVisualCard strong { font-size: 17px; line-height: 1.35; overflow-wrap: anywhere; }
+.lessonVisualIcon { display: block; margin: 0 auto 6px; color: var(--color-accent-strong); line-height: 0; }
+.lessonVisualIcon svg { display: block; width: auto; max-width: 100%; height: clamp(32px, 5vw, 48px); }
 .lessonVisualCard > span:last-child { font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
 .lessonVisualFlow, .lessonVisualRelationLine, .lessonVisualTimeline { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .lessonVisualFlowNode { flex: 1 1 0; min-width: 0; padding: 13px; border: 2px solid var(--ink); border-radius: var(--radius-control); background: var(--color-canvas); text-align: center; }

@@ -158,6 +158,19 @@ test("分詞各論の図解は単元ごとの判断軸を示す", async ({ page 
   }
 });
 
+test("過去分詞の壊れた窓カードにKoboyo SVGを添え、文法ラベルを保つ", async ({ page }) => {
+  await openParticipleUnit(page, 1);
+  const card = page.locator("#sessionPanel .lessonVisualCard").filter({ hasText: "a broken window" });
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText("動作を受ける");
+
+  const icon = card.locator(".lessonVisualIcon");
+  await expect(icon).toHaveCount(1);
+  await expect(icon).toHaveAttribute("aria-hidden", "true");
+  await expect(icon.locator("svg")).toHaveAttribute("data-koboyo-slug", "window-shown-whole-broken");
+  await expect(icon.locator("svg")).toHaveAttribute("viewBox", /\S+/);
+});
+
 test("分詞図解の一般式と補語関係を正確に示す", async ({ page }) => {
   await openParticipleUnit(page, 3);
   const complementVisual = page.locator("#sessionPanel .lessonVisual");
