@@ -171,6 +171,47 @@ test("過去分詞の壊れた窓カードにKoboyo SVGを添え、文法ラベ�
   await expect(icon.locator("svg")).toHaveAttribute("viewBox", /\S+/);
 });
 
+test("分詞の意味対応が必要な各論カードにKoboyo SVGを添える", async ({ page }) => {
+  const expected = [
+    { index: 0, text: "the girl dancing on the stage", slug: "person-dancing" },
+    { index: 2, text: "The movie was exciting.", slug: "solid-movie-projector" },
+    { index: 3, selector: ".lessonVisualAside", text: "window = broken", slug: "window-shown-whole-broken" },
+    { index: 4, text: "O が動作する", slug: "dog-running" }
+  ];
+
+  for (const item of expected) {
+    await openParticipleUnit(page, item.index);
+    const target = page.locator("#sessionPanel " + (item.selector || ".lessonVisualCard, #sessionPanel .lessonVisualSlot")).filter({ hasText: item.text });
+    await expect(target).toHaveCount(1);
+    const asset = target.locator('svg[data-koboyo-slug="' + item.slug + '"]');
+    await expect(asset).toHaveCount(1);
+    const icon = asset.locator("..");
+    await expect(icon).toHaveAttribute("aria-hidden", "true");
+    await expect(asset).toHaveAttribute("data-koboyo-slug", item.slug);
+    await expect(asset).toHaveAttribute("viewBox", /\S+/);
+  }
+});
+
+test("適合度中のKoboyo候補を具体例へ対応付ける", async ({ page }) => {
+  const expected = [
+    { index: 2, selector: ".lessonVisualCard", text: "I was excited.", slug: "older-person-looking-excited" },
+    { index: 3, selector: ".lessonVisualAside", text: "door = locked", slug: "locked-door" },
+    { index: 4, selector: "blockquote", text: "We heard someone knocking on the door.", slug: "knocking-door" }
+  ];
+
+  for (const item of expected) {
+    await openParticipleUnit(page, item.index);
+    const target = page.locator("#sessionPanel " + item.selector).filter({ hasText: item.text });
+    await expect(target).toHaveCount(1);
+    const asset = target.locator('[data-koboyo-slug="' + item.slug + '"]');
+    await expect(asset).toHaveCount(1);
+    const icon = asset.locator("..");
+    await expect(icon).toHaveAttribute("aria-hidden", "true");
+    await expect(asset).toHaveAttribute("data-koboyo-slug", item.slug);
+    await expect(asset).toHaveAttribute("src", new RegExp(item.slug + "\\.svg$"));
+  }
+});
+
 test("分詞図解の一般式と補語関係を正確に示す", async ({ page }) => {
   await openParticipleUnit(page, 3);
   const complementVisual = page.locator("#sessionPanel .lessonVisual");
