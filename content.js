@@ -214,7 +214,7 @@ const subjunctiveCourse = {
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-praying-outdoors.svg" alt="" data-koboyo-slug="person-praying-outdoors"></span><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の能力</span><strong><code>wish + could</code></strong><span>できたらいいのに</span></article>
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>wish + would</code></strong><span>変わってくれれば</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><code>wish + would</code></strong><span>変わってくれれば</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、何を、いつのこととして願っているかを見る。</p>
         </section>
