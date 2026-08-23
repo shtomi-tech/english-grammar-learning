@@ -715,6 +715,19 @@ const curriculum = {
       overview: {
         title: "分詞とは",
         html: `
+          <section class="overviewVisual overviewVisual--decision" aria-labelledby="participles-visual-title">
+            <div class="overviewDecisionAnchor">
+              <span>説明する語</span><span class="overviewDecisionOperator">×</span><span>動作との関係</span>
+            </div>
+            <p id="participles-visual-title" class="overviewVisualLead">何を説明し、その語が動作とどう関わるかを見る。</p>
+            <div class="overviewDecisionFlow">
+              <article class="overviewDecisionStep"><span>1</span><strong>分詞を見つける</strong><span><code>-ing</code>／過去分詞</span></article>
+              <article class="overviewDecisionStep"><span>2</span><strong>説明される語を探す</strong><span>名詞／主語／目的語</span></article>
+              <article class="overviewDecisionStep"><span>3</span><strong>動作との関係を読む</strong><span>する側／受ける側・動作後の状態</span></article>
+              <article class="overviewDecisionStep"><span>4</span><strong>形を選ぶ</strong><span>現在分詞／過去分詞</span></article>
+            </div>
+            <p class="overviewVisualPrompt">まず「何を説明しているか」を見る。</p>
+          </section>
           <p>分詞は、動詞の性質を残しながら、名詞を説明したり、主語・目的語の状態を説明したりする形です。このコースでは、次の3つの用法を順に学びます。</p>
           <ol>
             <li>名詞を直接説明する分詞（形容詞的用法）</li>
@@ -734,6 +747,15 @@ const curriculum = {
           version: 2,
           title: "分詞の形容詞的用法（現在分詞）",
           html: `
+            <section class="lessonVisual lessonVisual--relation" aria-labelledby="participles-as-adjectives-present-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">名詞が動作をする</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>-ing</code></span></div>
+              <p id="participles-as-adjectives-present-visual-title" class="lessonVisualLead">説明される名詞が動作をする側なら、現在分詞を選ぶ。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--two">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">一語・前が基本</span><strong><code>a sleeping baby</code></strong><span>baby が動作をする</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">語句・後ろが基本</span><strong><code>the girl dancing on the stage</code></strong><span>girl が動作をする</span></article>
+              </div><p class="lessonVisualAside">前置／後置は配置の基本であり、絶対規則ではない。</p></div>
+              <p class="lessonVisualPrompt">分詞がどの名詞を説明し、その名詞が動作をする側かを見る。</p>
+            </section>
             <p>現在分詞は、動詞の原形に <code>-ing</code> を付けた形で、名詞を説明する形容詞のように使われます。説明される名詞が、その動作を「する側」であることがポイントです。</p>
             <details class="section" open>
             <summary>名詞の前に置く場合（基本形）</summary>
@@ -800,6 +822,16 @@ const curriculum = {
           version: 2,
           title: "分詞の形容詞的用法（過去分詞）",
           html: `
+            <section class="lessonVisual lessonVisual--relation" aria-labelledby="participles-as-adjectives-past-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">名詞が動作を受ける／動作後の状態</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">過去分詞</span></div>
+              <p id="participles-as-adjectives-past-visual-title" class="lessonVisualLead">過去分詞は、受ける側または動作後の状態にある名詞を説明する。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">動作を受ける</span><strong><code>a broken window</code></strong><span>window が壊される</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">語句・後ろが基本</span><strong><code>books written in English</code></strong><span>books が書かれる</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">動作後の状態</span><strong><code>fallen leaves</code></strong><span>落ちた後の leaves</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">受ける側か、動作後の状態かを見て、過去分詞を選ぶ。</p>
+            </section>
             <p>過去分詞は、名詞を説明する形容詞のように使われます。説明される名詞が、動作を「される側」であることや、動作が完了した後の状態であることを表します。</p>
             <p>過去分詞は <code>-ed</code> 形だけでなく、不規則変化もあります。</p>
             <blockquote><p>broken（壊れた）・written（書かれた）・stolen（盗まれた）</p></blockquote>
@@ -876,6 +908,15 @@ const curriculum = {
           version: 2,
           title: "感情動詞の分詞化",
           html: `
+            <section class="lessonVisual lessonVisual--contrast" aria-labelledby="emotion-verb-participles-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken">感情を起こす側 → <code>-ing</code></span><span class="lessonVisualConnector">／</span><span class="lessonVisualToken">感情を感じる側 → <code>-ed</code></span></div>
+              <p id="emotion-verb-participles-visual-title" class="lessonVisualLead">人・物ではなく、感情との関係で形を選ぶ。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">感情を起こす側</span><strong><code>The movie was exciting.</code></strong><span>movie → 人</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">感情を感じる側</span><strong><code>I was excited.</code></strong><span>I ← 感情</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">主語が感情を起こす側か、感情を感じる側かを見る。</p>
+            </section>
             <p>感情を表す動詞は、日本語の「～する」という感覚とは発想が異なり、多くが「人を～させる」という意味です。</p>
             <blockquote><p>excite：人をわくわくさせる<br>interest：人に興味を持たせる</p></blockquote>
             <p>そのため、これらの動詞から作られた分詞は、<code>-ing</code> が感情を引き起こす側、<code>-ed</code> がその感情を感じる側を表す形容詞になります。</p>
@@ -924,6 +965,15 @@ const curriculum = {
           version: 1,
           title: "補語としての分詞",
           html: `
+            <section class="lessonVisual lessonVisual--roles" aria-labelledby="participle-complements-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>S + V + C</code></span><span class="lessonVisualConnector">／</span><span class="lessonVisualToken"><code>S + V + O + C</code></span></div>
+              <p id="participle-complements-visual-title" class="lessonVisualLead">補語の分詞は、主語または目的語の状態を説明する。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualSlots lessonVisualSlots--two">
+                <div class="lessonVisualSlot"><span>主格補語</span><strong><code>S = C</code></strong><small>Cは主語の状態</small></div>
+                <div class="lessonVisualSlot lessonVisualSlot--accent"><span>目的格補語</span><strong><code>O = C</code></strong><small>Cは目的語の状態</small></div>
+              </div><p class="lessonVisualAside">説明対象がする側なら <code>-ing</code>、受ける側・動作後の状態なら過去分詞。</p></div>
+              <p class="lessonVisualPrompt">分詞が主語と目的語のどちらを説明しているかを見る。</p>
+            </section>
             <p>分詞は、名詞を直接説明するだけでなく、文の要素である「補語」として、主語や目的語の状態を説明することがあります。</p>
             <details class="section" open>
             <summary>補語とは</summary>
@@ -989,6 +1039,16 @@ const curriculum = {
           version: 1,
           title: "知覚動詞 + 目的語 + 分詞",
           html: `
+            <section class="lessonVisual lessonVisual--flow" aria-labelledby="perception-verb-participles-visual-title">
+              <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>知覚動詞 + O + -ing / p.p. / 原形</code></span></div>
+              <p id="perception-verb-participles-visual-title" class="lessonVisualLead">目的語と動作の関係を、途中・受動・一連の動作で分ける。</p>
+              <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>-ing</code></span><strong>O が動作する</strong><span>動作の途中</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去分詞</span><strong>O が動作を受ける</strong><span><code>O + p.p.</code></span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">原形不定詞</span><strong><code>O + 原形</code></strong><span>一連の動作</span></article>
+              </div></div>
+              <p class="lessonVisualPrompt">まず目的語を見つけ、する側か動作を受ける側か、途中か一連かを判断する。</p>
+            </section>
             <p><code>see / hear / watch / feel / notice</code> などの知覚動詞は、目的語の後ろに分詞を置いて、「目的語が～しているのを見る（聞く）」という意味を表します。</p>
             <details class="section" open>
             <summary>基本の形</summary>
@@ -2324,6 +2384,36 @@ if (typeof process !== "undefined" && process.argv.includes("--check")) {
     check(!/<(?:details|summary|button|input|select)\b/i.test(visual), `${label}${lesson.id}の図解に操作要素がないこと`);
     return labelledBy;
   };
+  const participles = courses.find(course => course.id === "participles");
+  const participleVisualTypes = {
+    "participles-as-adjectives-present": "relation",
+    "participles-as-adjectives-past": "relation",
+    "emotion-verb-participles": "contrast",
+    "participle-complements": "roles",
+    "perception-verb-participles": "flow"
+  };
+  check(Boolean(participles), "分詞カテゴリが存在すること");
+  if (participles) {
+    check(participles.lessons.length === 5, "分詞が5単元であること");
+    check(participles.lessons.flatMap(lesson => lesson.questions).length === 15, "分詞が15問であること");
+    check(!Object.prototype.hasOwnProperty.call(participles, "structureVersion"), "分詞にstructureVersionを新設しないこと");
+    const overviewHtml = participles.overview?.html || "";
+    const overviewMatches = overviewHtml.match(/<section class="overviewVisual\b/g) || [];
+    const decisionVisual = overviewHtml.match(/<section class="overviewVisual overviewVisual--decision\b[\s\S]*?<\/section>/)?.[0] || "";
+    const overviewLabelledBy = decisionVisual.match(/aria-labelledby="([^"]+)"/)?.[1] || "";
+    check(overviewMatches.length === 1, "分詞概論のoverviewVisualが1件であること");
+    check(Boolean(decisionVisual), "分詞概論の図解型がdecisionであること");
+    check((decisionVisual.match(/class="overviewVisualLead"/g) || []).length === 1, "分詞概論のleadが1件であること");
+    check((decisionVisual.match(/class="overviewDecisionAnchor"/g) || []).length === 1, "分詞概論の判断軸が1件であること");
+    check((decisionVisual.match(/class="overviewDecisionFlow"/g) || []).length === 1, "分詞概論の判断フローが1件であること");
+    check((decisionVisual.match(/class="overviewDecisionStep"/g) || []).length === 4, "分詞概論の判断手順が4段階であること");
+    check((decisionVisual.match(/class="overviewVisualPrompt"/g) || []).length === 1, "分詞概論の判断基準が1件であること");
+    check(Boolean(overviewLabelledBy) && decisionVisual.includes(`id="${overviewLabelledBy}" class="overviewVisualLead"`), "分詞概論のaria-labelledbyがleadを参照すること");
+    check(!/<(?:details|summary|button|input|select)\b/i.test(decisionVisual), "分詞概論の図解に操作要素がないこと");
+    check(participles.lessons.every(lesson => Object.prototype.hasOwnProperty.call(participleVisualTypes, lesson.id)), "分詞5単元の図解契約がそろっていること");
+    const labelledByIds = participles.lessons.map(lesson => checkLessonVisualContract(lesson, participleVisualTypes, "分詞"));
+    check(new Set(labelledByIds).size === participles.lessons.length, "分詞各論の図解IDが重複しないこと");
+  }
   const infinitives = courses.find(course => course.id === "infinitives");
   const infinitiveVisualTypes = {
     "infinitive-nominal-use": "roles",

@@ -87,6 +87,163 @@ test("概論は補語・知覚動詞への到達範囲と、分詞構文を扱�
   await expect(page.locator("#homePanel")).toContainText("分詞構文は扱いません");
 });
 
+test("分詞概論は説明対象と動作との関係を4段階で図解する", async ({ page }) => {
+  await freshHome(page);
+  await switchCourse(page, "participles");
+
+  const visual = page.locator("#homePanel .courseOverview .overviewVisual");
+  await expect(visual).toHaveCount(1);
+  await expect(visual).toHaveClass(/overviewVisual--decision/);
+  await expect(visual.locator(".overviewDecisionAnchor")).toContainText("説明する語");
+  await expect(visual.locator(".overviewDecisionAnchor")).toContainText("動作との関係");
+  await expect(visual.locator(".overviewVisualLead")).toContainText("何を説明し");
+  await expect(visual.locator(".overviewDecisionStep")).toHaveCount(4);
+  await expect(visual).toContainText("分詞を見つける");
+  await expect(visual).toContainText("する側／受ける側・動作後の状態");
+  await expect(visual).toContainText("まず「何を説明しているか」を見る");
+
+  const ids = await visual.evaluate(element => ({
+    labelledBy: element.getAttribute("aria-labelledby"),
+    leadId: element.querySelector(".overviewVisualLead")?.id,
+    hasControls: Boolean(element.querySelector("details, summary, button, input, select"))
+  }));
+  expect(ids.labelledBy).toBe(ids.leadId);
+  expect(ids.hasControls).toBe(false);
+});
+
+test("分詞5単元は図解の必須スロットと常時表示の詳説を維持する", async ({ page }) => {
+  const expected = [
+    { index: 0, headingCount: 4 },
+    { index: 1, headingCount: 5 },
+    { index: 2, headingCount: 0 },
+    { index: 3, headingCount: 4 },
+    { index: 4, headingCount: 4 }
+  ];
+
+  for (const item of expected) {
+    await openParticipleUnit(page, item.index);
+    const visual = page.locator("#sessionPanel .lessonVisual");
+    await expect(visual).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualAnchor")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualLead")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualBody")).toHaveCount(1);
+    await expect(visual.locator(".lessonVisualPrompt")).toHaveCount(1);
+    await expect(visual.locator("details, summary, button, input, select, .sectionHeading")).toHaveCount(0);
+    await expect(page.locator("#sessionPanel section.section")).toHaveCount(item.headingCount);
+    await expect(page.locator("#sessionPanel .lessonToc .lessonTocLink")).toHaveCount(item.headingCount);
+
+    const ids = await visual.evaluate(element => ({
+      labelledBy: element.getAttribute("aria-labelledby"),
+      leadId: element.querySelector(".lessonVisualLead")?.id
+    }));
+    expect(ids.labelledBy).toBe(ids.leadId);
+  }
+});
+
+test("分詞各論の図解は単元ごとの判断軸を示す", async ({ page }) => {
+  const expected = [
+    { index: 0, markers: ["名詞が動作をする", "-ing", "基本"] },
+    { index: 1, markers: ["動作を受ける", "動作後の状態", "fallen leaves"] },
+    { index: 2, markers: ["感情を起こす側", "感情を感じる側"] },
+    { index: 3, markers: ["主語の状態", "目的語の状態"] },
+    { index: 4, markers: ["動作の途中", "動作を受ける", "一連の動作"] }
+  ];
+
+  for (const item of expected) {
+    await openParticipleUnit(page, item.index);
+    const visual = page.locator("#sessionPanel .lessonVisual");
+    for (const marker of item.markers) {
+      await expect(visual).toContainText(marker);
+    }
+  }
+});
+
+test("分詞図解の一般式と補語関係を正確に示す", async ({ page }) => {
+  await openParticipleUnit(page, 3);
+  const complementVisual = page.locator("#sessionPanel .lessonVisual");
+  await expect(complementVisual).toContainText("S = C");
+  await expect(complementVisual).toContainText("O = C");
+  await expect(complementVisual).toContainText("Cは主語の状態");
+  await expect(complementVisual).toContainText("Cは目的語の状態");
+  await expect(complementVisual).not.toContainText("S → C");
+  await expect(complementVisual).not.toContainText("O → C");
+
+  await openParticipleUnit(page, 4);
+  const perceptionVisual = page.locator("#sessionPanel .lessonVisual");
+  await expect(perceptionVisual.locator(".lessonVisualAnchor")).toContainText("知覚動詞 + O + -ing / p.p. / 原形");
+  await expect(perceptionVisual.locator(".lessonVisualAnchor")).not.toContainText("see / hear + O");
+  await expect(page.locator("#sessionPanel")).toContainText("see / hear / watch / feel / notice");
+  await expect(page.locator("#sessionPanel section.section")).toHaveCount(4);
+  await expect(page.locator("#sessionPanel .lessonToc .lessonTocLink")).toHaveCount(4);
+});
+
+test("分詞の概論と各論図解は主要幅で横スクロールせず、モバイルで収まる", async ({ page }) => {
+  const widths = [320, 375, 640, 1280];
+  const complexUnits = new Set([1, 3, 4]);
+
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 900 });
+    await freshHome(page);
+    await switchCourse(page, "participles");
+
+    const overviewMetrics = await page.locator("#homePanel .overviewVisual").evaluate(element => ({
+      height: element.getBoundingClientRect().height,
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth
+    }));
+    expect(overviewMetrics.scrollWidth).toBeLessThanOrEqual(overviewMetrics.clientWidth);
+    expect(overviewMetrics.height).toBeLessThanOrEqual(720);
+
+    for (let index = 0; index < 5; index += 1) {
+      await openParticipleUnit(page, index);
+      const metrics = await page.locator("#sessionPanel .lessonVisual").evaluate(element => {
+        const cards = Array.from(element.querySelectorAll(".lessonVisualCard, .lessonVisualSlot"));
+        const heights = cards.map(card => card.getBoundingClientRect().height);
+        return {
+          height: element.getBoundingClientRect().height,
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+          cardHeightDelta: heights.length > 1 ? Math.max(...heights) - Math.min(...heights) : 0
+        };
+      });
+      expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
+      expect(metrics.height).toBeLessThan(complexUnits.has(index) ? 720 : 650);
+      if (width === 320) expect(metrics.cardHeightDelta).toBeLessThanOrEqual(36);
+    }
+  }
+});
+
+test("図解追加後も分詞の回答・復習・既読・修了テスト・位置を保持する", async ({ page }) => {
+  const reviewRecord = {
+    wrongCount: 1,
+    leitnerStage: 2,
+    nextReviewAt: "2030-01-01T00:00:00.000Z",
+    lastAnsweredAt: "2026-08-23T00:00:00.000Z"
+  };
+  await seedProgress(page, {
+    courseId: "participles",
+    stage: 2,
+    question: 1,
+    answers: masteredParticiplesAnswers,
+    versions: participlesVersions,
+    visitedLessons: Object.keys(masteredParticiplesAnswers),
+    review: { "participles-as-adjectives-present-q1": reviewRecord },
+    finalChecks: { participles: { bestScore: 15, lastScore: 15, cleared: true, bestTotal: 15 } },
+    coursePositions: { participles: { stage: 2, question: 1 } },
+    courseStructureVersions: {}
+  });
+
+  await page.goto("/#/c/participles/l/participles-as-adjectives-present");
+  const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
+  expect(saved.answers["participles-as-adjectives-present"]).toEqual(masteredParticiplesAnswers["participles-as-adjectives-present"]);
+  expect(saved.review["participles-as-adjectives-present-q1"]).toEqual(reviewRecord);
+  expect(saved.visitedLessons).toEqual(Object.keys(masteredParticiplesAnswers));
+  expect(saved.finalChecks.participles).toEqual({ bestScore: 15, lastScore: 15, cleared: true, bestTotal: 15 });
+  expect(saved.coursePositions.participles).toEqual({ stage: 2, question: 1 });
+  expect(saved.versions).toMatchObject(participlesVersions);
+  expect(saved.courseStructureVersions.participles).toBeUndefined();
+});
+
 test("概論と過去分詞単元は動作完了後の状態をfallen leavesで示す", async ({ page }) => {
   await freshHome(page);
   await switchCourse(page, "participles");

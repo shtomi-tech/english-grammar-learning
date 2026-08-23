@@ -404,6 +404,7 @@ blockquote p:last-child { margin-bottom: 0; }
 .lessonVisualAside { margin: 10px 0 0; color: var(--color-ink-secondary); font-size: 14px; text-align: center; }
 .lessonVisualScale { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .lessonVisualSlots { display: grid; gap: 8px; }
+.lessonVisualSlots--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .lessonVisualSlots--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .lessonVisualSlots--five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .lessonVisualSlot { display: grid; min-width: 0; align-content: center; gap: 3px; padding: 10px 8px; border: 2px solid var(--ink); border-radius: var(--radius-control); background: var(--color-canvas); text-align: center; }
@@ -532,7 +533,7 @@ blockquote p:last-child { margin-bottom: 0; }
   .lessonVisualFlowArrow, .lessonVisualTimelineArrow { width: 100%; font-size: 0; text-align: center; }
   .lessonVisualFlowArrow::before, .lessonVisualTimelineArrow::before { content: "↓"; font-size: 22px; }
   .lessonVisualFlowNode, .lessonVisualTimePoint { flex: none; padding: 10px; }
-  .lessonVisualSlots--three, .lessonVisualSlots--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lessonVisualSlots--two, .lessonVisualSlots--three, .lessonVisualSlots--five { grid-template-columns: 1fr; }
   .lessonVisualSlot { padding: 9px 6px; }
   .lessonVisualSlot strong { font-size: 16px; }
   .lessonVisualTransform { gap: 6px; }
