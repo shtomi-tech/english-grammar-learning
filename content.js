@@ -44,8 +44,8 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>if + 現在形</code> → <code>will + 原形</code></span><span class="lessonVisualMeta">現実に起こり得る</span></div>
           <p id="conditionals-vs-subjunctive-visual-title" class="lessonVisualLead">同じ <code>if</code> でも、現実との距離が違う。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現実的な条件</span><strong><code>If it rains</code> → <code>will stay</code></strong><span>現実に起こり得る未来</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">距離を置く仮定</span><strong><code>If it rained</code> → <code>would stay</code></strong><span>現実から距離を置く</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現実的な条件</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/umbrella.svg" alt="" data-koboyo-slug="umbrella"></span><code>If it rains</code> → <code>will stay</code></strong><span>現実に起こり得る未来</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">距離を置く仮定</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>If it rained</code> → <code>would stay</code></strong><span>現実から距離を置く</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、<code>if</code> の有無ではなく、条件を現実的に扱っているかを見る。</p>
         </section>
@@ -108,7 +108,7 @@ const subjunctiveCourse = {
           <p id="past-subjunctive-visual-title" class="lessonVisualLead">過去形の形で、現在の事実から距離を置く。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><code>I am not you.</code></strong><span>いま分かっている現実</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">仮定法過去</span><strong><code>If I were you</code> → <code>would ...</code></strong><span><code>were</code> は標準形</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">仮定法過去</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-sitting-thinking.svg" alt="" data-koboyo-slug="person-sitting-thinking"></span><code>If I were you</code> → <code>would ...</code></strong><span><code>were</code> は標準形</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、いつの話か、現在の事実と反するかを見る。</p>
         </section>
@@ -160,7 +160,7 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>THEN: had + 過去分詞</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might have + 過去分詞</code></span></div>
           <p id="past-perfect-subjunctive-visual-title" class="lessonVisualLead">過去の条件から、過去の結果へ進む。</p>
           <div class="lessonVisualBody"><div class="lessonVisualTimeline">
-            <div class="lessonVisualTimePoint"><span>条件の時点</span><strong><code>had studied</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>結果の時点</span><strong><code>would have passed</code></strong></div>
+            <div class="lessonVisualTimePoint"><span>条件の時点</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>had studied</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>結果の時点</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/clock.svg" alt="" data-koboyo-slug="clock"></span><code>would have passed</code></strong></div>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、条件と結果が両方とも過去かを見る。</p>
         </section>
@@ -211,10 +211,10 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>wish + 形</code></span><span class="lessonVisualMeta">願う時点で選ぶ</span></div>
           <p id="wish-subjunctive-visual-title" class="lessonVisualLead">願う内容と時点で、後ろの形を分ける。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--four">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-praying-outdoors.svg" alt="" data-koboyo-slug="person-praying-outdoors"></span><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の能力</span><strong><code>wish + could</code></strong><span>できたらいいのに</span></article>
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><code>wish + would</code></strong><span>変わってくれれば</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>wish + would</code></strong><span>変わってくれれば</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、何を、いつのこととして願っているかを見る。</p>
         </section>
@@ -265,9 +265,9 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If only + 形</code></span><span class="lessonVisualMeta">主節なしでも使える</span></div>
           <p id="if-only-subjunctive-visual-title" class="lessonVisualLead"><code>I wish</code> と同じ時点選択を、強い感情で言う。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">強い現在の願望</span><strong><code>If only + 過去形!</code></strong><span>今そうならいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">強い現在の願望</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-praying-outdoors.svg" alt="" data-koboyo-slug="person-praying-outdoors"></span><code>If only + 過去形!</code></strong><span>今そうならいいのに</span></article>
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">能力</span><strong><code>If only + could!</code></strong><span>できさえすれば</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">強い過去の後悔</span><strong><code>If only + had + p.p.!</code></strong><span>してさえいれば</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">強い過去の後悔</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>If only + had + p.p.!</code></strong><span>してさえいれば</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、強い願望・後悔の時点を見る。</p>
         </section>
@@ -318,7 +318,7 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>THEN: had + p.p.</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>NOW: would / could / might + 原形</code></span></div>
           <p id="mixed-subjunctive-visual-title" class="lessonVisualLead">過去の選択が、現在の結果へつながる。</p>
           <div class="lessonVisualBody"><div class="lessonVisualTimeline">
-            <div class="lessonVisualTimePoint"><span>THEN / 過去の条件</span><strong><code>had taken</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>NOW / 現在の結果</span><strong><code>would live</code></strong></div>
+            <div class="lessonVisualTimePoint"><span>THEN / 過去の条件</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>had taken</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>NOW / 現在の結果</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/clock.svg" alt="" data-koboyo-slug="clock"></span><code>would live</code></strong></div>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、条件と結果の時点が異なるかを見る。</p>
         </section>
@@ -370,8 +370,8 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>名詞がなければ</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could ...</code></span></div>
           <p id="if-it-were-not-for-visual-title" class="lessonVisualLead">現在の話なら were not for、過去の話なら had not been for。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在</span><strong><code>If it were not for + 名詞</code></strong><span><code>without</code> + 主節の現在の結果</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">過去</span><strong><code>If it had not been for + 名詞</code></strong><span><code>without</code> + 主節の過去の結果</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/hand-helping.svg" alt="" data-koboyo-slug="hand-helping"></span><code>If it were not for + 名詞</code></strong><span><code>without</code> + 主節の現在の結果</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">過去</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>If it had not been for + 名詞</code></strong><span><code>without</code> + 主節の過去の結果</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、名詞が現在あるのか、過去にあったのかを見る。</p>
         </section>
@@ -423,9 +423,9 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>as if + 時点に合う形</code></span></div>
           <p id="as-if-subjunctive-visual-title" class="lessonVisualLead">事実かどうかと、主節との時間関係を分けて読む。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">可能性あり</span><strong><code>as if it is going to rain</code></strong><span>本当にそうかもしれない</span></article>
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">前の反事実</span><strong><code>as if he had known</code></strong><span>主節より前</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">可能性あり</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>as if it is going to rain</code></strong><span>本当にそうかもしれない</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-sitting-thinking.svg" alt="" data-koboyo-slug="person-sitting-thinking"></span><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">前の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/ghost.svg" alt="" data-koboyo-slug="ghost"></span><code>as if he had known</code></strong><span>主節より前</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、事実でないか、主節より前かを見る。</p>
         </section>
@@ -536,7 +536,7 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>if + S + should do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">主節</span></div>
           <p id="future-subjunctive-should-visual-title" class="lessonVisualLead"><code>should</code> が、未来の条件を控えめに示す。</p>
           <div class="lessonVisualBody"><div class="lessonVisualFlow">
-            <div class="lessonVisualFlowNode"><span>条件</span><strong><code>should + 原形</code><br>万一・慎重な提示</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>結果・依頼</span><strong><code>will / would / can / could</code><br>または命令</strong></div>
+            <div class="lessonVisualFlowNode"><span>条件</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>should + 原形</code><br>万一・慎重な提示</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>結果・依頼</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/phone-call.svg" alt="" data-koboyo-slug="phone-call"></span><code>will / would / can / could</code><br>または命令</strong></div>
           </div><p class="lessonVisualAside"><code>should</code> はここでは義務ではない。</p></div>
           <p class="lessonVisualPrompt">読むときは、<code>should</code> が義務ではなく条件を示しているかを見る。</p>
         </section>
@@ -587,8 +587,8 @@ const subjunctiveCourse = {
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If + S + were to do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might + 原形</code></span></div>
           <p id="future-subjunctive-were-to-visual-title" class="lessonVisualLead">未来をいったん現実から切り離し、仮の案として考える。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">極端な想像</span><strong><code>If the sun were to disappear</code></strong><span>起こりそうにない状況</span></article>
-            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">実務的な仮案</span><strong><code>If we were to reduce the price</code></strong><span>仮の案として検討する</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">極端な想像</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/sun.svg" alt="" data-koboyo-slug="sun"></span><code>If the sun were to disappear</code></strong><span>起こりそうにない状況</span></article>
+            <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">実務的な仮案</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/price-tag.svg" alt="" data-koboyo-slug="price-tag"></span><code>If we were to reduce the price</code></strong><span>仮の案として検討する</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、未来の状況を仮案として切り離しているかを見る。</p>
         </section>
@@ -1275,8 +1275,8 @@ const curriculum = {
               <p id="infinitive-adjective-use-visual-title" class="lessonVisualLead">不定詞が、前の名詞を後ろから説明する。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
                 <article class="lessonVisualCard"><span class="lessonVisualCardLabel">対象</span><strong><code>something</code> ← <code>to eat</code></strong><span>食べるもの</span></article>
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">動作主</span><strong><code>someone</code> ← <code>to help me</code></strong><span>手伝うのは someone</span></article>
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">前置詞</span><strong><code>a chair</code> ← <code>to sit on</code></strong><span>前置詞が残る</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">動作主</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-helping-another.svg" alt="" data-koboyo-slug="person-helping-another"></span><code>someone</code> ← <code>to help me</code></strong><span>手伝うのは someone</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">前置詞</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/chair.svg" alt="" data-koboyo-slug="chair"></span><code>a chair</code> ← <code>to sit on</code></strong><span>前置詞が残る</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、不定詞の直前にある「説明される名詞」を見つける。</p>
             </section>
@@ -1355,7 +1355,7 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken">主節の動作</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">何のために？</span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>to do</code></span></div>
               <p id="infinitive-adverbial-purpose-visual-title" class="lessonVisualLead">主節の動作から、「何のために」をたどる。</p>
               <div class="lessonVisualBody"><div class="lessonVisualFlow">
-                <div class="lessonVisualFlowNode"><span>動作</span><strong>went to the library</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>目的</span><strong>to study</strong></div>
+                <div class="lessonVisualFlowNode"><span>動作</span><strong>went to the library</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>目的</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/student-library.svg" alt="" data-koboyo-slug="student-library"></span>to study</strong></div>
               </div><p class="lessonVisualAside"><code>in order to</code> / <code>so as to</code> も目的を示す。</p></div>
               <p class="lessonVisualPrompt">読むときは、<code>to do</code> が主節の動作の目的を答えているかを見る。</p>
             </section>
@@ -1428,7 +1428,7 @@ const curriculum = {
             <section class="lessonVisual lessonVisual--flow" aria-labelledby="infinitive-adverbial-reason-visual-title">
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>to do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">感情・判断</span></div>
               <p id="infinitive-adverbial-reason-visual-title" class="lessonVisualLead">不定詞は、感情や判断が生じた理由を示す。</p>
-              <div class="lessonVisualBody"><div class="lessonVisualRelationLine lessonVisualRelationLine--reverse"><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>理由</span><strong>to see you</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode"><span>感情</span><strong>am glad</strong></div></div><p class="lessonVisualAside">目的は「動作 → to do」、理由は「to do → 感情・判断」と向きが違う。</p></div>
+              <div class="lessonVisualBody"><div class="lessonVisualRelationLine lessonVisualRelationLine--reverse"><div class="lessonVisualFlowNode lessonVisualFlowNode--accent"><span>理由</span><strong>to see you</strong></div><span class="lessonVisualFlowArrow" aria-hidden="true">→</span><div class="lessonVisualFlowNode"><span>感情</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/happy-smiling.svg" alt="" data-koboyo-slug="happy-smiling"></span>am glad</strong></div></div><p class="lessonVisualAside">目的は「動作 → to do」、理由は「to do → 感情・判断」と向きが違う。</p></div>
               <p class="lessonVisualPrompt">読むときは、<code>to do</code> が「なぜその感情・判断になったか」という理由かを見る。</p>
             </section>
             <p>不定詞の副詞的用法（原因・理由）は、<code>to + 動詞の原形</code> が、感情や判断が生じた原因・理由を表す用法です。「～して」「～なので」「～したことを」と訳します。</p>
@@ -1502,7 +1502,7 @@ const curriculum = {
               <p id="infinitive-adverbial-result-visual-title" class="lessonVisualLead">目的は意図、結果はその後に起きた事実。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
                 <article class="lessonVisualCard"><span class="lessonVisualCardLabel">目的</span><strong>何のために？</strong><span>主節の動作で意図したこと</span></article>
-                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">結果</span><strong>その後、実際にどうなったか</strong><span><code>grow up to be ...</code> など</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">結果</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/room-empty.svg" alt="" data-koboyo-slug="room-empty"></span>その後、実際にどうなったか</strong><span><code>grow up to be ...</code> など</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、「何のために」ではなく「その後どうなったか」で読めるかを見る。</p>
             </section>
@@ -1585,8 +1585,8 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>too ... to do</code></span><span class="lessonVisualConnector">↔</span><span class="lessonVisualToken"><code>... enough to do</code></span></div>
               <p id="infinitive-adverbial-degree-visual-title" class="lessonVisualLead">程度が、できない／できるという結果を生む。</p>
               <div class="lessonVisualBody"><div class="lessonVisualScale">
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">必要ラインを越える</span><strong><code>too heavy</code></strong><span>→ <b>できない</b>：to carry</span></article>
-                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">必要ラインに届く</span><strong><code>large enough</code></strong><span>→ <b>できる</b>：to hold fifty</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">必要ラインを越える</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/lifting-heavy-box.svg" alt="" data-koboyo-slug="lifting-heavy-box"></span><code>too heavy</code></strong><span>→ <b>できない</b>：to carry</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">必要ラインに届く</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-driving-car.svg" alt="" data-koboyo-slug="person-driving-car"></span><code>large enough</code></strong><span>→ <b>できる</b>：to hold fifty</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、形容詞の程度から結果として、動作の可能・不可能が出ているかを見る。</p>
             </section>
@@ -1656,8 +1656,8 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>for + 人 + to do</code></span></div>
               <p id="infinitive-logical-subject-for-visual-title" class="lessonVisualLead"><code>to do</code> を実際にする担当者を示す。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--two">
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><code>for him</code> → <code>to study</code></strong><span>勉強するのは him</span></article>
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><code>for children</code> → <code>to understand</code></strong><span>理解するのは children</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-studying-low-desk.svg" alt="" data-koboyo-slug="person-studying-low-desk"></span><code>for him</code> → <code>to study</code></strong><span>勉強するのは him</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">担当者</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/student-tablet.svg" alt="" data-koboyo-slug="student-tablet"></span><code>for children</code> → <code>to understand</code></strong><span>理解するのは children</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、<code>to do</code> を実際にするのは誰がするのかを見る。</p>
             </section>
@@ -1731,8 +1731,8 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>for / of + 人 + to do</code></span></div>
               <p id="infinitive-of-adjective-evaluation-visual-title" class="lessonVisualLead"><code>for</code> は動作主、<code>of</code> は人の性質・行動の評価。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>for</code> = 動作主</span><strong>important <code>for him to study</code></strong><span>勉強する人を示す</span></article>
-                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>of</code> = 人の評価</span><strong>careless <code>of him to forget</code></strong><span>him の行動を評価する</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>for</code> = 動作主</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-studying-low-desk.svg" alt="" data-koboyo-slug="person-studying-low-desk"></span>important <code>for him to study</code></strong><span>勉強する人を示す</span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>of</code> = 人の評価</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-correcting-mistake.svg" alt="" data-koboyo-slug="person-correcting-mistake"></span>careless <code>of him to forget</code></strong><span>him の行動を評価する</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、形容詞が人自身を評価しているか、それとも動作主を示すだけかを見る。</p>
             </section>
@@ -2077,8 +2077,8 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>see + 人 + do / doing</code></span></div>
               <p id="perception-bare-infinitive-visual-title" class="lessonVisualLead">知覚した時間幅で、全体か途中かを分ける。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>do</code></span><strong>動作全体</strong><span><code>I saw him cross.</code></span></article>
-                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>doing</code></span><strong>動作の途中</strong><span><code>I saw him crossing.</code></span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel"><code>do</code></span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/winking-eye-slight-angle.svg" alt="" data-koboyo-slug="winking-eye-slight-angle"></span>動作全体</strong><span><code>I saw him cross.</code></span></article>
+                <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel"><code>doing</code></span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/ear.svg" alt="" data-koboyo-slug="ear"></span>動作の途中</strong><span><code>I saw him crossing.</code></span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、誰が何をしたかに加え、知覚したのが全体か、途中かを見る。</p>
             </section>
@@ -2157,7 +2157,7 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>not</code> → <code>to</code> → <code>do</code></span></div>
               <p id="infinitive-negative-form-visual-title" class="lessonVisualLead">否定する範囲を、<code>not</code>の位置で見分ける。</p>
               <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">
-                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">不定詞を否定</span><strong>decide <code>not to buy</code></strong><span>買わないと決める</span></article>
+                <article class="lessonVisualCard"><span class="lessonVisualCardLabel">不定詞を否定</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/ban.svg" alt="" data-koboyo-slug="ban"></span>decide <code>not to buy</code></strong><span>買わないと決める</span></article>
                 <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">主節を否定</span><strong>do <code>not</code> decide to buy</strong><span>買うと決めない</span></article>
               </div></div>
               <p class="lessonVisualPrompt">読むときは、<code>not</code> が主節と不定詞のどちらを否定しているかを見る。</p>
@@ -2251,7 +2251,7 @@ const curriculum = {
               <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>to have + 過去分詞</code></span></div>
               <p id="infinitive-perfect-form-visual-title" class="lessonVisualLead">完了不定詞の出来事は、主節より前に起きている。</p>
               <div class="lessonVisualBody"><div class="lessonVisualTimeline">
-                <div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>先の出来事</span><strong><code>to have met</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint"><span>基準時</span><strong>am happy now</strong></div>
+                <div class="lessonVisualTimePoint lessonVisualTimePoint--accent"><span>先の出来事</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>to have met</code></strong></div><span class="lessonVisualTimelineArrow" aria-hidden="true">→</span><div class="lessonVisualTimePoint"><span>基準時</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/clock.svg" alt="" data-koboyo-slug="clock"></span>am happy now</strong></div>
               </div><p class="lessonVisualAside">受動は <code>to have been done</code>。</p></div>
               <p class="lessonVisualPrompt">読むときは、主節の時点と比べて、不定詞の出来事が先かを見る。</p>
             </section>

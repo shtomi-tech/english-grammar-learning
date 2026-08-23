@@ -163,6 +163,58 @@ test("仮定法12単元は固有の図解と常時表示の詳説を持つ", asy
   }
 });
 
+test("仮定法の判断軸に適合するKoboyoアイコンを対応付ける", async ({ page }) => {
+  await freshHome(page);
+  const runtimeErrors = [];
+  const assetFailures = [];
+  page.on("console", message => {
+    if (["error", "warning"].includes(message.type())) runtimeErrors.push(message.text());
+  });
+  page.on("pageerror", error => runtimeErrors.push(error.message));
+  page.on("requestfailed", request => {
+    if (request.url().includes("koboyo.com/icons/svg/")) assetFailures.push(request.url());
+  });
+
+  const expected = [
+    { id: "conditionals-vs-subjunctive", selector: ".lessonVisualCard", text: "現実に起こり得る未来", slug: "umbrella" },
+    { id: "conditionals-vs-subjunctive", selector: ".lessonVisualCard", text: "現実から距離を置く", slug: "rain-cloud" },
+    { id: "past-subjunctive", selector: ".lessonVisualCard", text: "were は標準形", slug: "person-sitting-thinking" },
+    { id: "past-perfect-subjunctive", selector: ".lessonVisualTimePoint", text: "条件の時点", slug: "calendar-page" },
+    { id: "past-perfect-subjunctive", selector: ".lessonVisualTimePoint", text: "結果の時点", slug: "clock" },
+    { id: "wish-subjunctive", selector: ".lessonVisualCard", text: "現在の事実", slug: "person-praying-outdoors" },
+    { id: "wish-subjunctive", selector: ".lessonVisualCard", text: "過去の後悔", slug: "calendar-page" },
+    { id: "wish-subjunctive", selector: ".lessonVisualCard", text: "状況の変化", slug: "rain-cloud" },
+    { id: "if-only-subjunctive", selector: ".lessonVisualCard", text: "強い現在の願望", slug: "person-praying-outdoors" },
+    { id: "if-only-subjunctive", selector: ".lessonVisualCard", text: "強い過去の後悔", slug: "calendar-page" },
+    { id: "mixed-subjunctive", selector: ".lessonVisualTimePoint", text: "THEN / 過去の条件", slug: "calendar-page" },
+    { id: "mixed-subjunctive", selector: ".lessonVisualTimePoint", text: "NOW / 現在の結果", slug: "clock" },
+    { id: "if-it-were-not-for", selector: ".lessonVisualCard", text: "現在", slug: "hand-helping" },
+    { id: "if-it-were-not-for", selector: ".lessonVisualCard", text: "過去", slug: "calendar-page" },
+    { id: "as-if-subjunctive", selector: ".lessonVisualCard", text: "可能性あり", slug: "rain-cloud" },
+    { id: "as-if-subjunctive", selector: ".lessonVisualCard", text: "同時点の反事実", slug: "person-sitting-thinking" },
+    { id: "as-if-subjunctive", selector: ".lessonVisualCard", text: "前の反事実", slug: "ghost" },
+    { id: "future-subjunctive-should", selector: ".lessonVisualFlowNode", text: "条件", slug: "rain-cloud" },
+    { id: "future-subjunctive-should", selector: ".lessonVisualFlowNode", text: "結果・依頼", slug: "phone-call" },
+    { id: "future-subjunctive-were-to", selector: ".lessonVisualCard", text: "極端な想像", slug: "sun" },
+    { id: "future-subjunctive-were-to", selector: ".lessonVisualCard", text: "実務的な仮案", slug: "price-tag" }
+  ];
+
+  for (const item of expected) {
+    await page.goto(`/#/c/subjunctive/l/${item.id}`);
+    const target = page.locator(`#session-content ${item.selector}`).filter({ hasText: item.text });
+    await expect(target).toHaveCount(1);
+    const asset = target.locator(`[data-koboyo-slug="${item.slug}"]`);
+    await expect(asset).toHaveCount(1);
+    await expect(asset).toHaveAttribute("src", new RegExp(`${item.slug}\\.svg$`));
+    await expect(asset).toHaveAttribute("alt", "");
+    await expect(asset.locator("..")).toHaveAttribute("aria-hidden", "true");
+    await expect.poll(() => asset.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  }
+
+  expect(assetFailures).toEqual([]);
+  expect(runtimeErrors).toEqual([]);
+});
+
 test("仮定法図解の一般式と時点表現を詳説とそろえる", async ({ page }) => {
   await freshHome(page);
 

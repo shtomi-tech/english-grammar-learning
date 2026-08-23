@@ -115,6 +115,53 @@ test("不定詞14単元は図解と詳説の二段構成を持つ", async ({ pag
   }
 });
 
+test("不定詞の判断軸に適合するKoboyoアイコンを対応付ける", async ({ page }) => {
+  await freshHome(page);
+  const runtimeErrors = [];
+  const assetFailures = [];
+  page.on("console", message => {
+    if (message.type() === "error") runtimeErrors.push(message.text());
+  });
+  page.on("pageerror", error => runtimeErrors.push(error.message));
+  page.on("requestfailed", request => {
+    if (request.url().includes("koboyo.com/icons/svg/")) assetFailures.push(request.url());
+  });
+
+  const expected = [
+    { id: "infinitive-adjective-use", selector: ".lessonVisualCard", text: "手伝うのは someone", slug: "person-helping-another" },
+    { id: "infinitive-adjective-use", selector: ".lessonVisualCard", text: "前置詞が残る", slug: "chair" },
+    { id: "infinitive-adverbial-purpose", selector: ".lessonVisualFlowNode", text: "目的", slug: "student-library" },
+    { id: "infinitive-adverbial-reason", selector: ".lessonVisualFlowNode", text: "感情", slug: "happy-smiling" },
+    { id: "infinitive-adverbial-result", selector: ".lessonVisualCard", text: "その後、実際にどうなったか", slug: "room-empty" },
+    { id: "infinitive-adverbial-degree", selector: ".lessonVisualCard", text: "できない", slug: "lifting-heavy-box" },
+    { id: "infinitive-adverbial-degree", selector: ".lessonVisualCard", text: "できる", slug: "person-driving-car" },
+    { id: "infinitive-logical-subject-for", selector: ".lessonVisualCard", text: "勉強するのは him", slug: "person-studying-low-desk" },
+    { id: "infinitive-logical-subject-for", selector: ".lessonVisualCard", text: "理解するのは children", slug: "student-tablet" },
+    { id: "infinitive-of-adjective-evaluation", selector: ".lessonVisualCard", text: "勉強する人を示す", slug: "person-studying-low-desk" },
+    { id: "infinitive-of-adjective-evaluation", selector: ".lessonVisualCard", text: "him の行動を評価する", slug: "person-correcting-mistake" },
+    { id: "perception-bare-infinitive", selector: ".lessonVisualCard", text: "動作全体", slug: "winking-eye-slight-angle" },
+    { id: "perception-bare-infinitive", selector: ".lessonVisualCard", text: "動作の途中", slug: "ear" },
+    { id: "infinitive-negative-form", selector: ".lessonVisualCard", text: "不定詞を否定", slug: "ban" },
+    { id: "infinitive-perfect-form", selector: ".lessonVisualTimePoint", text: "先の出来事", slug: "calendar-page" },
+    { id: "infinitive-perfect-form", selector: ".lessonVisualTimePoint", text: "基準時", slug: "clock" }
+  ];
+
+  for (const item of expected) {
+    await page.goto(`/#/c/infinitives/l/${item.id}`);
+    const target = page.locator(`#session-content ${item.selector}`).filter({ hasText: item.text });
+    await expect(target).toHaveCount(1);
+    const asset = target.locator(`[data-koboyo-slug="${item.slug}"]`);
+    await expect(asset).toHaveCount(1);
+    await expect(asset).toHaveAttribute("src", new RegExp(`${item.slug}\\.svg$`));
+    await expect(asset).toHaveAttribute("alt", "");
+    await expect(asset.locator("..")).toHaveAttribute("aria-hidden", "true");
+    await expect.poll(() => asset.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  }
+
+  expect(assetFailures).toEqual([]);
+  expect(runtimeErrors).toEqual([]);
+});
+
 test("不定詞各論の図解は320px以上で横スクロールせず、本文を隠さない", async ({ page }) => {
   await freshHome(page);
 
