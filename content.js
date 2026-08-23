@@ -424,7 +424,7 @@ const subjunctiveCourse = {
           <p id="as-if-subjunctive-visual-title" class="lessonVisualLead">事実かどうかと、主節との時間関係を分けて読む。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">可能性あり</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>as if it is going to rain</code></strong><span>本当にそうかもしれない</span></article>
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-sitting-thinking.svg" alt="" data-koboyo-slug="person-sitting-thinking"></span><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
             <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">前の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/ghost.svg" alt="" data-koboyo-slug="ghost"></span><code>as if he had known</code></strong><span>主節より前</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、事実でないか、主節より前かを見る。</p>
