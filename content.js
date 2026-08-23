@@ -207,13 +207,13 @@ const subjunctiveCourse = {
       version: 1,
       title: "I wish + 仮定法",
       html: `
-        <section class="lessonVisual lessonVisual--timeline" aria-labelledby="wish-subjunctive-visual-title">
+        <section class="lessonVisual lessonVisual--timeline lessonVisual--mobile-compact" aria-labelledby="wish-subjunctive-visual-title">
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>wish + 形</code></span><span class="lessonVisualMeta">願う時点で選ぶ</span></div>
           <p id="wish-subjunctive-visual-title" class="lessonVisualLead">願う内容と時点で、後ろの形を分ける。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--four">
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-praying-outdoors.svg" alt="" data-koboyo-slug="person-praying-outdoors"></span><code>wish + 過去形</code></strong><span>今こうならいいのに</span></article>
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">現在の能力</span><strong><code>wish + could</code></strong><span>できたらいいのに</span></article>
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">過去の後悔</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/calendar-page.svg" alt="" data-koboyo-slug="calendar-page"></span><code>wish + had + p.p.</code></strong><span>しておけばよかった</span></article>
             <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">状況の変化</span><strong><code>wish + would</code></strong><span>変わってくれれば</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、何を、いつのこととして願っているかを見る。</p>
@@ -261,7 +261,7 @@ const subjunctiveCourse = {
       version: 1,
       title: "If only + 仮定法",
       html: `
-        <section class="lessonVisual lessonVisual--contrast" aria-labelledby="if-only-subjunctive-visual-title">
+        <section class="lessonVisual lessonVisual--contrast lessonVisual--mobile-compact" aria-labelledby="if-only-subjunctive-visual-title">
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If only + 形</code></span><span class="lessonVisualMeta">主節なしでも使える</span></div>
           <p id="if-only-subjunctive-visual-title" class="lessonVisualLead"><code>I wish</code> と同じ時点選択を、強い感情で言う。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
@@ -419,12 +419,12 @@ const subjunctiveCourse = {
       version: 2,
       title: "as if + 仮定法",
       html: `
-        <section class="lessonVisual lessonVisual--contrast" aria-labelledby="as-if-subjunctive-visual-title">
+        <section class="lessonVisual lessonVisual--contrast lessonVisual--mobile-compact" aria-labelledby="as-if-subjunctive-visual-title">
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>as if + 時点に合う形</code></span></div>
           <p id="as-if-subjunctive-visual-title" class="lessonVisualLead">事実かどうかと、主節との時間関係を分けて読む。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--three">
             <article class="lessonVisualCard"><span class="lessonVisualCardLabel">可能性あり</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/rain-cloud.svg" alt="" data-koboyo-slug="rain-cloud"></span><code>as if it is going to rain</code></strong><span>本当にそうかもしれない</span></article>
-            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
+            <article class="lessonVisualCard"><span class="lessonVisualCardLabel">同時点の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/person-sitting-thinking.svg" alt="" data-koboyo-slug="person-sitting-thinking"></span><code>as if he knew</code></strong><span>主節と同じ時点</span></article>
             <article class="lessonVisualCard lessonVisualCard--accent"><span class="lessonVisualCardLabel">前の反事実</span><strong><span class="lessonVisualIcon" aria-hidden="true"><img src="https://koboyo.com/icons/svg/ghost.svg" alt="" data-koboyo-slug="ghost"></span><code>as if he had known</code></strong><span>主節より前</span></article>
           </div></div>
           <p class="lessonVisualPrompt">読むときは、事実でないか、主節より前かを見る。</p>
@@ -532,7 +532,7 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法未来（should）",
       html: `
-        <section class="lessonVisual lessonVisual--flow" aria-labelledby="future-subjunctive-should-visual-title">
+        <section class="lessonVisual lessonVisual--flow lessonVisual--mobile-compact" aria-labelledby="future-subjunctive-should-visual-title">
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>if + S + should do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken">主節</span></div>
           <p id="future-subjunctive-should-visual-title" class="lessonVisualLead"><code>should</code> が、未来の条件を控えめに示す。</p>
           <div class="lessonVisualBody"><div class="lessonVisualFlow">
@@ -583,7 +583,7 @@ const subjunctiveCourse = {
       version: 2,
       title: "仮定法未来（were to）",
       html: `
-        <section class="lessonVisual lessonVisual--distance" aria-labelledby="future-subjunctive-were-to-visual-title">
+        <section class="lessonVisual lessonVisual--distance lessonVisual--mobile-compact" aria-labelledby="future-subjunctive-were-to-visual-title">
           <div class="lessonVisualAnchor"><span class="lessonVisualToken"><code>If + S + were to do</code></span><span class="lessonVisualConnector">→</span><span class="lessonVisualToken"><code>would / could / might + 原形</code></span></div>
           <p id="future-subjunctive-were-to-visual-title" class="lessonVisualLead">未来をいったん現実から切り離し、仮の案として考える。</p>
           <div class="lessonVisualBody"><div class="lessonVisualCards lessonVisualCards--contrast">

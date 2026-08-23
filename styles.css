@@ -547,5 +547,6 @@ blockquote p:last-child { margin-bottom: 0; }
   .lessonVisual--transform .lessonVisualTransformSlot { gap: 2px; padding: 4px 8px; }
   .lessonVisual--transform .lessonVisualTransformSlot span { font-size: 12px; }
   .lessonVisual--transform .lessonVisualTransformSlot strong { font-size: 16px; line-height: 1.25; }
+  .lessonVisual--mobile-compact .lessonVisualIcon { display: none; }
   .lessonVisualPrompt { margin-top: 8px; padding: 8px 10px; font-size: 15px; }
 }
