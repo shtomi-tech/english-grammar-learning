@@ -1735,7 +1735,16 @@ async function boot() {
     appId: APP_ID,
     configPath: CONFIG_PATH,
     getPayload: () => persistedState(),
-    applyLoaded: (progress) => { loadedFromCloud = progress; },
+    applyLoaded: (progress, { reason } = {}) => {
+      if (reason === "init" || !reason) {
+        loadedFromCloud = progress;
+        return;
+      }
+      // 他端末の保存を取り込んだ（タブ復帰・保存競合）。画面の状態も読み直す。
+      if (!mergeCloudProgress(progress)) return;
+      localStorage.setItem(storageKey, JSON.stringify(persistedState()));
+      render();
+    },
     onStatus: (message, tone) => updateSaveStatus(message, tone),
   });
   const session = await cloud.init();

@@ -265,7 +265,7 @@ test("クラウドからの旧形式データもコース位置を補完する",
   };
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
-  await page.route("**/vendor/harness/cloud.js", route => route.fulfill({
+  await page.route("**/vendor/harness/cloud.js*", route => route.fulfill({
     status: 200,
     contentType: "application/javascript",
     body: ""

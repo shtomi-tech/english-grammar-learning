@@ -717,7 +717,7 @@ test.describe("保存状態のモーション", () => {
   });
 
   test("クラウド保存成功でsave-status-savedが付く", async ({ page }) => {
-    await page.route("**/vendor/harness/cloud.js", route => route.fulfill({
+    await page.route("**/vendor/harness/cloud.js*", route => route.fulfill({
       status: 200,
       contentType: "application/javascript",
       body: ""
